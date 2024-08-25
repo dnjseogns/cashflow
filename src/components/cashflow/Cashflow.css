@@ -1,0 +1,109 @@
+/* #164863  #427D9D  #9BBEC8  #DDF2FD */
+/* global 비율*/
+.header{height: 2%;}
+.cf-wrap{display: flex; width: 100%; height: 95%; }
+.cf-left{width: 13%; height: 100%; min-width: 150px; border-right: 1px solid #9BBEC8; margin: 0px 0px 0px 20px; }
+.cf-right{width: 87%; height: 100%; padding: 0px 0px 0px 0px;}
+.footer{height: 3%;}
+
+/* global 글자크기 */
+.cf-left{ font-size: 20px;}
+.cf-right{ font-size: 20px;}
+.cf-right table tbody{ font-size: 16px;}
+/*******************************************/
+/* left 간격*/
+.cf-left .left-title{margin-bottom:20px; font-weight: 600;}
+.cf-left ul{margin: 5px 0px 5px 0px; padding: 5px 0px 5px 5px; list-style: none; font-weight: 600;}
+.cf-left ul li{margin: 5px 0px 5px 10px; padding: 5px 0px 5px 5px;}
+
+/* left mouse hover */
+.cf-left .guide:hover,
+.cf-left .basic li:hover,
+.cf-left .add li:hover{color:#427D9D; background: #F1F1F1; cursor: pointer;}
+/* left click */
+.cf-left .on{color:#427D9D; background: #F1F1F1;}
+/* left click 꺽쇠 */
+.cf-left ul.guide,
+.cf-left ul.basic li,
+.cf-left ul.add li{display: flex; justify-content: space-between;}
+.cf-left ul li span{margin-right: 10px;}
+/* left complete 체크 */
+.cf-left ul li{position:relative;}
+.cf-left ul li span::before{content:""; width: 40px; height: 40px;
+    background-image: url('../../images/check_01.png'); background-size: 40px 40px; background-repeat: no-repeat;
+    display: inline-block; position:absolute; top:-7px; left:-8px;}
+
+
+/*******************************************/
+/* right overflow*/
+.cf-right {overflow: auto;}
+
+/* right position */
+.cf-right{ position: relative; }
+.cf-right .cf-content .survey-area,
+.cf-right .cf-content .data-area{position: absolute;}
+
+
+/*******************************************/
+/* survey */
+.cf-right .survey-area{ background: #F1F1F1; border: 1px solid #9BBEC8; border-left: 0px solid #9BBEC8; 
+    width: 60%; min-width: 500px; height: auto; z-index: 10; } /*border-radius:10px;*/
+/* survey title */
+.cf-right .survey-area .survey-title{padding: 20px; background-color: #427D9D; font-weight: 600; color:white;}
+/* survey tail*/
+.cf-right .survey-area .survey-tail{padding: 20px; font-weight: 600; color:white; display: flex; justify-content: flex-end;}
+.cf-right .survey-area .survey-tail button.complete{padding: 6px 30px 6px 30px; font-weight: 600; background-color: #427D9D; color: white;
+    border: none; border-radius: 10px;}
+/* survey content */
+.cf-right .survey-area .survey-content{padding: 20px;}
+.cf-right .survey-area .survey-content div{margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #9BBEC8;}
+
+/* survey common 설정 */
+.cf-right .survey-area .survey-content p{ margin: 0px; padding: 0px; }
+/* survey 버튼 */
+.cf-right .survey-area .survey-content input{ text-align: right; padding-right: 5px;
+    border:0px; border-bottom: 1px solid black;
+    background: white; }
+/* .cf-right .survey-area input{ text-align: right; } */
+/* .cf-right .basic div select{ font-size: 0.85em; } */
+/* .cf-right .survey-area .basic label{margin-right: 15px;} */
+
+/* .cf-right .d1{ margin-left: 20px; }
+.cf-right .d2{ margin-left: 40px; }
+.cf-right .d3{ margin-left: 60px; }
+.cf-right .explain{ color: blueviolet;}
+.cf-right .h20{height: 20px;}
+.cf-right .w30{width: 30px;}
+.cf-right .w60{width: 60px;}
+.cf-right .w90{width: 90px;}
+.cf-right .w120{width: 120px;}
+.cf-right .w150{width: 150px;}
+.cf-right .w180{width: 180px;} */
+
+
+/*******************************************/
+/* table 테두리 */
+.cf-right .data-area { width:98%; margin-left:20px;}
+.cf-right .data-area table {border-collapse: collapse; width:100%}
+.cf-right .data-area table,
+.cf-right .data-area table thead tr,
+.cf-right .data-area table thead th,
+.cf-right .data-area table tbody tr,
+.cf-right .data-area table tbody td{border: 1px solid #c7cdd6;}
+/* table head 배경 */
+.cf-right .data-area table thead tr,
+.cf-right .data-area table thead th{text-align: center; background: #DDF2FD; font-weight: 600;}
+
+ /* table tbody */
+ .cf-right .data-area table tbody tr,
+ .cf-right .data-area table tbody td{text-align: right;}
+
+/* table tbody 맨 각 왼쪽셀 */
+.cf-right .data-area table tbody tr td:nth-child(1),
+.cf-right .data-area table tbody tr td:nth-child(2){text-align: center; background: #DDF2FD; font-weight: 600;}
+
+/* table tbody sum */
+.cf-right .data-area table tbody tr td.sum{font-weight: 600;}
+/* table tbody gap */
+.cf-right .data-area table thead tr th.gap,
+.cf-right .data-area table tbody tr td.gap{background-color: white; border-top: 1px solid white; border-bottom: 1px solid white; }

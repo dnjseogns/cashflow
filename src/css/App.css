@@ -1,0 +1,14 @@
+@font-face {
+    font-family: 'GowunDodum-Regular';
+    src: url('@/fonts/GowunDodum-Regular.ttf') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+ html,body,div#root {
+    height: 100%; 
+    font-family: GowunDodum-Regular; 
+    color:#333333;
+    /* transform : rotate(0.04deg); */
+    font-weight: 400;
+    /* font-family: nanumsquare; font-size: 1.2em; font-weight: bolder; */
+}
