@@ -1,14 +1,25 @@
 import './Cashflow.css';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import {useSelector, useDispatch} from "react-redux";
 import {SvSave, SvClean} from '@/redux/action/SurveyAction';
 import {CfSave, CfClean} from '@/redux/action/CashflowAction';
+import useEffectNoMount from '../../hooks/useEffectNoMount';
 
 /* 입력해주신 자료는 이번 계산에만 활용합니다. 이 사이트는 어떤 개인 정보도 저장하지 않습니다. */
 
-function CashflowSurvey({surveyDiv,surveyTitle}){
+function CashflowSurvey({surveyDiv,setSurveyDiv, surveyTitle}){
+    const surveyData = useSelector((store) => store.Survey).data;
     const dispatch = useDispatch();
-
+    const [completeBtnClickCnt,setCompleteBtnClickCnt] = useState(0);
+    const commonCompleteLogic = () => {
+        //완료
+        const isSurveyCompleted = surveyData.isCompleted;
+        isSurveyCompleted[surveyDiv] = true;
+        surveyData.isCompleted = isSurveyCompleted;
+        dispatch(SvSave(surveyData));
+        //survey창닫기
+        setSurveyDiv("");
+    }
     return (
     <Fragment>
         {surveyDiv===""
@@ -18,21 +29,21 @@ function CashflowSurvey({surveyDiv,surveyTitle}){
                 <div className='survey-title'>{surveyTitle}</div>
                 <div className='survey-content'>
                 {surveyDiv==="guide"?<GuideSurvey/>
-                :surveyDiv==="index"?<BasicIndexSurvey/>
-                :surveyDiv==="age"?<BasicAgeSurvey/>
-                :surveyDiv==="house"?<BasicHouseSurvey/>
-                :surveyDiv==="salary"?<BasicSalarySurvey/>
-                :surveyDiv==="saving"?<BasicSavingSurvey/>
-                :surveyDiv==="asset"?<BasicAssetSurvey/>
-                :surveyDiv==="marry"?<AddMarry/>
-                :surveyDiv==="baby"?<AddBaby/>
-                :surveyDiv==="retire"?<AddRetire/>
-                :surveyDiv==="parent"?<AddParent/>
-                :surveyDiv==="lotto"?<AddLotto/>
+                :surveyDiv==="index"?<BasicIndexSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                :surveyDiv==="age"?<BasicAgeSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                :surveyDiv==="house"?<BasicHouseSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                :surveyDiv==="salary"?<BasicSalarySurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                :surveyDiv==="saving"?<BasicSavingSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                :surveyDiv==="asset"?<BasicAssetSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                :surveyDiv==="marry"?<AddMarry completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                :surveyDiv==="baby"?<AddBaby completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                :surveyDiv==="retire"?<AddRetire completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                :surveyDiv==="parent"?<AddParent completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                :surveyDiv==="lotto"?<AddLotto completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                 :null}
                 </div>
                 <div className='survey-tail'>
-                    <button className='complete'>완료</button>
+                    <button className='complete' onClick={()=>{setCompleteBtnClickCnt(completeBtnClickCnt+1)}}>완료</button>
                 </div>
             </article>
             </Fragment>
@@ -60,29 +71,35 @@ function GuideSurvey(){
 }
 
 //가정 지표
-function BasicIndexSurvey(){
-    //redux
+function BasicIndexSurvey({completeBtnClickCnt, commonCompleteLogic}){
     const surveyData = useSelector((store) => store.Survey).data;
     const dispatch = useDispatch();
+    
+    useEffectNoMount(()=>{
+        dispatch(SvSave(surveyData));
+        commonCompleteLogic();
+    },[completeBtnClickCnt]);
 
     const DataChange = (div, e) => {
         surveyData.base[div] = e.target.value;
-        dispatch(SvSave(surveyData));
     };
+
     return(
-    <>
+    <Fragment>
         <div>
             <p>(1) 물가상승률을 입력해주세요.</p>
-            <p><input defaultValue={surveyData.base["indexInflation"]} onChange={(e)=>{DataChange("indexInflation", e)}}/>%</p>
-            <p>※ 2000년 ~ 2023년 평균 물가상승률은 x.x입니다.</p>
+            <p><input defaultValue={surveyData.base?.["indexInflation"] ?? 3.5} onChange={(e)=>{DataChange("indexInflation", e)}}/>%</p>
+            <p>※ 2000년 ~ 2023년 평균 물가상승률은 약 3.5%입니다.(통계청 소비자물가지수 참고)</p>
         </div>
         <div>
             <p>(2) 은행예금 금리를 입력해주세요.</p>
-            <p><input defaultValue={surveyData.base["indexBankInterest"]} onChange={(e)=>{DataChange("indexBankInterest", e)}}/>%</p>
+            <p><input defaultValue={surveyData.base?.["indexBankInterest"] ?? 3.0} onChange={(e)=>{DataChange("indexBankInterest", e)}}/>%</p>
+            <p>※ 2000년 ~ 2023년 한국은행 기준금리는 약 2.5%입니다.</p>
         </div>
         <div>
             <p>(3) 대출 금리를 입력해주세요.</p>
-            <p><input defaultValue={surveyData.base["indexLoanInterest"]} onChange={(e)=>{DataChange("indexLoanInterest", e)}}/>%</p>
+            <p><input defaultValue={surveyData.base?.["indexLoanInterest"] ?? 6.0} onChange={(e)=>{DataChange("indexLoanInterest", e)}}/>%</p>
+            <p>※ 2000년 ~ 2023년 한국은행 기준금리는 약 2.5%입니다.</p>
         </div>
         {/* 이거 옮기는게 좋을 뜻
         <div>
@@ -91,36 +108,42 @@ function BasicIndexSurvey(){
             <p>※ 은행예적금/실거주 주택은 별도로 계산하므로 투자수익률에서 제외합니다.</p>
             <p>※ 세계적인 투자자 워런버핏의 수익률이 20%라고 하죠. 투자수익률은 미래 자산에 큰 영향도를 미치므로, 현실적인 수치를 입력해주시길 바랍니다.</p>
         </div> */}
-    </>);
+    </Fragment>);
 }
 //나이
-function BasicAgeSurvey(){
-    //redux
+function BasicAgeSurvey({completeBtnClickCnt, commonCompleteLogic}){
     const surveyData = useSelector((store) => store.Survey).data;
     const dispatch = useDispatch();
-
+    useEffectNoMount(()=>{
+        dispatch(SvSave(surveyData));
+        commonCompleteLogic();
+    },[completeBtnClickCnt]);
     const DataChange = (div, e) => {
         surveyData.base[div] = e.target.value;
-        dispatch(SvSave(surveyData));
     };
-    return(<><div>
-        <span>1. 나이 : 만 </span>
-        <input className='h20 w60' defaultValue={surveyData.base["age"]} onChange={(e)=>{DataChange("age", e)}}></input>
-        <span> 세</span><br/>
-    </div>
-    </>);
+
+    return(
+    <Fragment>
+        <div>
+            <span>1. 나이 : 만 </span>
+            <input className='h20 w60' defaultValue={surveyData.base["age"]} onChange={(e)=>{DataChange("age", e)}}></input>
+            <span> 세</span><br/>
+        </div>
+    </Fragment>);
 }
-function BasicHouseSurvey(){
-    //redux
+function BasicHouseSurvey({completeBtnClickCnt, commonCompleteLogic}){
     const surveyData = useSelector((store) => store.Survey).data;
     const dispatch = useDispatch();
-
+    useEffectNoMount(()=>{
+        dispatch(SvSave(surveyData));
+        commonCompleteLogic();
+    },[completeBtnClickCnt]);
     const DataChange = (div, e) => {
         surveyData.base[div] = e.target.value;
-        dispatch(SvSave(surveyData));
     };
 
-    return(<>
+    return(
+    <Fragment>
     <div>
         <span>※ 실거주 형태를 먼저 파악하여, 자산과 소비금액을 세부적으로 나누도록 하겠습니다.</span><br/>
         <span>1. 실거주 형태</span><br/>
@@ -175,7 +198,7 @@ function BasicHouseSurvey(){
         <input className='h20 w60' defaultValue={surveyData.base["age"]} onChange={(e)=>{DataChange("age", e)}}></input>
         <span> 세</span><br/> */}
     </div>
-    </>);
+    </Fragment>);
 
     // <div>
             
@@ -231,31 +254,110 @@ function BasicHouseSurvey(){
     //         </Fragment>
     //         :<Fragment></Fragment>}
     //     </div>
+    // return(<>BasicHouseSurvey</>);
+}
+function BasicSalarySurvey({completeBtnClickCnt, commonCompleteLogic}){
+    const surveyData = useSelector((store) => store.Survey).data;
+    const dispatch = useDispatch();
+    useEffectNoMount(()=>{
+        dispatch(SvSave(surveyData));
+        commonCompleteLogic();
+    },[completeBtnClickCnt]);
+    const DataChange = (div, e) => {
+        surveyData.base[div] = e.target.value;
+    };
 
-    return(<>BasicHouseSurvey</>);
+    return(<Fragment>BasicSalarySurvey</Fragment>);
 }
-function BasicSalarySurvey(){
-    return(<>BasicSalarySurvey</>);
+function BasicSavingSurvey({completeBtnClickCnt, commonCompleteLogic}){
+    const surveyData = useSelector((store) => store.Survey).data;
+    const dispatch = useDispatch();
+    useEffectNoMount(()=>{
+        dispatch(SvSave(surveyData));
+        commonCompleteLogic();
+    },[completeBtnClickCnt]);
+    const DataChange = (div, e) => {
+        surveyData.base[div] = e.target.value;
+    };
+
+    return(<Fragment>BasicSavingSurvey</Fragment>);
 }
-function BasicSavingSurvey(){
-    return(<>BasicSavingSurvey</>);
+function BasicAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
+    const surveyData = useSelector((store) => store.Survey).data;
+    const dispatch = useDispatch();
+    useEffectNoMount(()=>{
+        dispatch(SvSave(surveyData));
+        commonCompleteLogic();
+    },[completeBtnClickCnt]);
+    const DataChange = (div, e) => {
+        surveyData.base[div] = e.target.value;
+    };
+
+    return(<Fragment>BasicAssetSurvey</Fragment>);
 }
-function BasicAssetSurvey(){
-    return(<>BasicAssetSurvey</>);
+function AddMarry({completeBtnClickCnt, commonCompleteLogic}){
+    const surveyData = useSelector((store) => store.Survey).data;
+    const dispatch = useDispatch();
+    useEffectNoMount(()=>{
+        dispatch(SvSave(surveyData));
+        commonCompleteLogic();
+    },[completeBtnClickCnt]);
+    const DataChange = (div, e) => {
+        surveyData.base[div] = e.target.value;
+    };
+
+    return(<Fragment>AddMarry</Fragment>);
 }
-function AddMarry(){
-    return(<>AddMarry</>);
+function AddBaby({completeBtnClickCnt, commonCompleteLogic}){
+    const surveyData = useSelector((store) => store.Survey).data;
+    const dispatch = useDispatch();
+    useEffectNoMount(()=>{
+        dispatch(SvSave(surveyData));
+        commonCompleteLogic();
+    },[completeBtnClickCnt]);
+    const DataChange = (div, e) => {
+        surveyData.base[div] = e.target.value;
+    };
+
+    return(<Fragment>AddBaby</Fragment>);
 }
-function AddBaby(){
-    return(<>AddBaby</>);
+function AddRetire({completeBtnClickCnt, commonCompleteLogic}){
+    const surveyData = useSelector((store) => store.Survey).data;
+    const dispatch = useDispatch();
+    useEffectNoMount(()=>{
+        dispatch(SvSave(surveyData));
+        commonCompleteLogic();
+    },[completeBtnClickCnt]);
+    const DataChange = (div, e) => {
+        surveyData.base[div] = e.target.value;
+    };
+
+    return(<Fragment>AddRetire</Fragment>);
 }
-function AddRetire(){
-    return(<>AddRetire</>);
+function AddParent({completeBtnClickCnt, commonCompleteLogic}){
+    const surveyData = useSelector((store) => store.Survey).data;
+    const dispatch = useDispatch();
+    useEffectNoMount(()=>{
+        dispatch(SvSave(surveyData));
+        commonCompleteLogic();
+    },[completeBtnClickCnt]);
+    const DataChange = (div, e) => {
+        surveyData.base[div] = e.target.value;
+    };
+
+    return(<Fragment>AddParent</Fragment>);
 }
-function AddParent(){
-    return(<>AddParent</>);
-}
-function AddLotto(){
-    return(<>AddLotto</>);
+function AddLotto({completeBtnClickCnt, commonCompleteLogic}){
+    const surveyData = useSelector((store) => store.Survey).data;
+    const dispatch = useDispatch();
+    useEffectNoMount(()=>{
+        dispatch(SvSave(surveyData));
+        commonCompleteLogic();
+    },[completeBtnClickCnt]);
+    const DataChange = (div, e) => {
+        surveyData.base[div] = e.target.value;
+    };
+
+    return(<Fragment>AddLotto</Fragment>);
 }
 export default CashflowSurvey;

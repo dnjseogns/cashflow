@@ -25,7 +25,7 @@ function Cashflow(){
             <div className='cf-header'></div>
             <div className='cf-content'>
                 {/* <article */}
-                <CashflowSurvey surveyDiv={surveyDiv} surveyTitle={surveyTitle}/>
+                <CashflowSurvey surveyDiv={surveyDiv} setSurveyDiv={setSurveyDiv} surveyTitle={surveyTitle}/>
                 {/* <article */}
 
                 <article className='data-area'>
