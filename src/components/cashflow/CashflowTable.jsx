@@ -18,13 +18,13 @@ function CashflowTable(){
             <table>
                 <colgroup>
                     <col width="40px"/>
-                    <col width="60px"/>
 
                     <col width="80px"/>
                     <col width="80px"/>
                     <col width="80px"/>
                     <col width="100px"/>
 
+                    <col width="80px"/>
                     <col width="80px"/>
                     <col width="80px"/>
                     <col width="80px"/>
@@ -42,22 +42,22 @@ function CashflowTable(){
                 </colgroup>
                 <thead>
                     <tr>
-                        <th colSpan="2"></th>
-                        <th colSpan="4">노동소득</th>
-                        <th colSpan="4">소비금액</th>
-                        <th colSpan="1">저축<br/>(노동 - 소비)</th>
+                        <th colSpan="1"></th>
+                        <th colSpan="4">소득</th>
+                        <th colSpan="5">소비</th>
+                        <th colSpan="1">저축<br/>(소득 - 소비)</th>
                         <th colSpan="1" className='gap'></th>
                         <th colSpan="5">누적자산(저축 + 자본소득)</th>
                     </tr>
                     <tr>
                         <th>나이</th>
-                        <th>인플레</th>
 
-                        <th>연봉상승률(가릴예정)</th>
-                        <th>주소득</th>
-                        <th>부소득</th>
+                        <th>연봉상승률(누적)</th>
+                        <th>연봉<br/></th>
+                        <th>부업<br/></th>
                         <th>합계</th>
 
+                        <th>물가상승(누적)</th>
                         <th>소비</th>
                         <th>주거비</th>
                         <th>차량비</th>
@@ -76,34 +76,37 @@ function CashflowTable(){
                     </tr>
                 </thead>
                 <tbody>
-                    {/* {cashflowData.timeline.map((row, i) => {
+                    {cashflowData?.timeline.map((row, i) => {
                     return(
                         <tr key={i}>
-                            <td>{row.age}</td>
-                            <td>{row.inflationStack}</td>
+                            <td>{row?.age}</td>
 
-                            <td>{row.incomeRiseRateStack}</td>
-                            <td>{row.incomeAfterTaxYearly}</td>
-                            <td>{row.additionalIncomeYearly}</td>
-                            <td className='sum'>{row.incomeAfterTaxYearly + row.additionalIncomeYearly}</td>
+                            <td>{row?.salaryRiseRateStack}</td>
+                            <td>{row?.salaryYearly?.toLocaleString('ko-KR')}</td>
+                            <td>{row?.sideJobYearly?.toLocaleString('ko-KR')}</td>
+                            <td className='sum'>{row?.salaryYearly && (row?.salaryYearly + (row?.sideJobYearly??0))}</td>
+                            {/* <td className='sum'>합계</td> */}
                             
-                            <td>{row.consumAmountYearly}</td>
-                            <td>{row.houseCostYearly}</td>
-                            <td>{row.carCostYearly}</td>
-                            <td className='sum'>{row.consumAmountYearly + row.houseCostYearly + row.carCostYearly}</td>
+                            <td>{row?.inflationStack}</td>
+                            <td>{row?.consumAmountYearly}</td>
+                            <td>{row?.houseCostYearly}</td>
+                            <td>{row?.carCostYearly}</td>
+                            {/* <td className='sum'>{row?.consumAmountYearly + row?.houseCostYearly + row?.carCostYearly}</td> */}
+                            <td className='sum'>합계</td>
 
-                            <td className='sum'>{Math.round( ((row.workIncomeTotSum - row.consumTotSum)) * 1)}</td>
+                            {/* <td className='sum'>{Math.round( ((row?.workIncomeTotSum - row?.consumTotSum)) * 1)}</td> */}
+                            <td className='sum'>합계</td>
 
                             <td className='gap'></td>
 
-                            <td>내용1</td>
-                            <td>{row.assetSaving}</td>
-                            <td>{row.assetInvest}</td>
-                            <td>{row.houseGuarantee}</td>
+                            <td></td>
+                            <td>{row?.assetSaving}</td>
+                            <td>{row?.assetInvest}</td>
+                            <td>{row?.houseGuarantee}</td>
                             <td className='sum'>합계</td>
                         </tr>
                     ) 
-                    })} */}
+                    })}
                 </tbody>
             </table>
         </Fragment>

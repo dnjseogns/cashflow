@@ -2,29 +2,93 @@ import { useEffect } from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {SvSave, SvClean} from '@/redux/action/SurveyAction';
 import {CfSave, CfClean} from '@/redux/action/CashflowAction';
+import { numRound } from "@/utils/util";
 
 export const useCashflowTableData = () => {
     //redux
     const dispatch = useDispatch();
-    const surveyData = useSelector((store) => store.Survey).data;
+    const surveyDataOrgin = useSelector((store) => store.Survey).data;
     const cashflowData = useSelector((store) => store.Cashflow).data;
 
-    console.log("surveyData",surveyData);
-    console.log("cashflowData",cashflowData);
-
+    const surveyData = JSON.parse(JSON.stringify(surveyDataOrgin));
+    //
     //cfRedux 값 세팅
     useEffect(()=>{
-        let svBasic = surveyData.base;
-        let initTimeLine = [];
+        console.log("surveyData",surveyData);
+        console.log("cashflowData",cashflowData);
 
-        // 누적 변수
+        let base = surveyData.base;
+        let rows = [];
+        //누적 변수
         let loopCnt = 0;
+        let salaryRiseRateStack = 1.0;
         let inflationStack = 1.0;
-        let incomeRiseRateStack = 1;
-        // 이전 변수
-        let assetSavingPrev = 0;
-        let assetInvestPrev = 0;
+        
         for(var i=0; i<=100; i++){
+            let row = {};
+
+            //나이(age)
+            if(!surveyData.base?.age){
+                return;
+            }
+            else if(i < base?.age){
+                continue;
+            }else{
+                row.age = i;   
+                loopCnt++;
+            }
+
+            //소득(salaryRiseRateStack)
+            if(base?.salaryRiseRate1 && base?.salaryRiseRate25 && base?.workYear){
+                const salaryRiseRateGap = (base?.salaryRiseRate1 - base?.salaryRiseRate25) / 25;
+                let salaryRiseRate = base?.salaryRiseRate1 - salaryRiseRateGap * (base?.workYear + loopCnt - 3) // 1년차 + loop (1) - 3
+                salaryRiseRate = salaryRiseRate < base?.salaryRiseRate25 ? base?.salaryRiseRate25 : salaryRiseRate;
+                if(loopCnt === 1){
+                    salaryRiseRateStack = 1.0;
+                }else {
+                    salaryRiseRateStack = numRound(salaryRiseRateStack * (1 + salaryRiseRate/100),3);
+                }
+                row.salaryRiseRateStack = salaryRiseRateStack;
+            }
+            
+            //소득(salartYearly)
+            if(base?.salaryMonthly){
+                row.salaryYearly = Math.round((base?.salaryMonthly * 12) * salaryRiseRateStack);
+            }
+
+            //소득(sideJobMonthly)
+            console.log("base?.sideJobMonthly",base?.sideJobMonthly);
+            if(base?.sideJobMonthly){
+                row.sideJobYearly = Math.round(base?.sideJobMonthly * 12);
+            }
+
+            //기초(인플레)
+            if(base?.indexInflation){
+                if(loopCnt <= 1){
+                    inflationStack = 1.0;
+                }else{
+                    inflationStack = inflationStack * (1 + base.indexInflation/100);
+                    inflationStack = Math.round(inflationStack * 10000) / 10000;
+                }
+                row.inflationStack = inflationStack;
+            }
+
+            //결과 넣기
+            rows.push(row);
+        }
+        cashflowData.timeline = rows;
+        dispatch(CfSave(cashflowData));
+
+
+        
+        // // 누적 변수
+        // let loopCnt = 0;
+        // let inflationStack = 1.0;
+        // let incomeRiseRateStack = 1;
+        // // 이전 변수
+        // let assetSavingPrev = 0;
+        // let assetInvestPrev = 0;
+        // for(var i=0; i<=100; i++){
             // //기초(나이)
             // if(i < svBasic.age){
             //     continue;
@@ -141,9 +205,7 @@ export const useCashflowTableData = () => {
             //             assetInvest : assetInvest,
             //             };
             // initTimeLine.push(result);
-        }
-        cashflowData.timeline = initTimeLine;
-        dispatch(CfSave(cashflowData));
-    },[surveyData]);
+        // }
+    },[surveyDataOrgin]);
 
 }
