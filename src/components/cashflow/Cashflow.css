@@ -57,6 +57,7 @@
 /* survey content */
 .cf-right .survey-area .survey-content{padding: 20px;}
 .cf-right .survey-area .survey-content div{margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #9BBEC8;}
+.cf-right .survey-area .survey-content div p{margin-bottom: 1px;}
 
 /* survey common 설정 */
 .cf-right .survey-area .survey-content p{ margin: 0px; padding: 0px; }
@@ -99,8 +100,7 @@
  .cf-right .data-area table tbody td{text-align: right;}
 
 /* table tbody 맨 각 왼쪽셀 */
-.cf-right .data-area table tbody tr td:nth-child(1),
-.cf-right .data-area table tbody tr td:nth-child(2){text-align: center; background: #DDF2FD; font-weight: 600;}
+.cf-right .data-area table tbody tr td:nth-child(1){text-align: center; background: #DDF2FD; font-weight: 600;}
 
 /* table tbody sum */
 .cf-right .data-area table tbody tr td.sum{font-weight: 600;}

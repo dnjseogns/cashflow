@@ -11,6 +11,7 @@ function BaseSalarySurvey({completeBtnClickCnt, commonCompleteLogic}){
     const [workYear, setWorkYear] = useState(surveyData.base?.workYear ?? 1);
     const [salaryRiseRate1, setSalaryRiseRate1] = useState(surveyData.base?.salaryRiseRate1 ?? 7);
     const [salaryRiseRate25, setSalaryRiseRate25] = useState(surveyData.base?.salaryRiseRate25 ?? 2);
+    const [retireAge, setRetireAge] = useState(surveyData.base?.retireAge ?? 55);
     const [sideJobMonthly, setSideJobMonthly] = useState(surveyData.base?.sideJobMonthly ?? 0);
     
     const surveyOnChange = (e, div) => {
@@ -66,7 +67,20 @@ function BaseSalarySurvey({completeBtnClickCnt, commonCompleteLogic}){
                 setSalaryRiseRate25(0);
                 return;
             }
-        } else if(div === "sideJobMonthly"){
+        } else if(div === "retireAge"){
+            const number = e.target.value.replaceAll(",",""); //쉼표제거
+            if(isNaN(number)){return;} //문자 체크
+            const valInt = Math.floor(number); //정수변환
+
+            if(0 <= valInt && valInt <= 100){
+                setRetireAge(valInt);
+            }else if(100 < valInt){
+                return;
+            }else{
+                setRetireAge(0);
+                return;
+            }
+        }else if(div === "sideJobMonthly"){
             const number = e.target.value.replaceAll(",",""); //쉼표제거
             if(isNaN(number)){return;} //문자 체크
             const valInt = Math.floor(number); //정수변환
@@ -87,6 +101,7 @@ function BaseSalarySurvey({completeBtnClickCnt, commonCompleteLogic}){
         surveyData.base.workYear = workYear;
         surveyData.base.salaryRiseRate1 = salaryRiseRate1;
         surveyData.base.salaryRiseRate25 = salaryRiseRate25;
+        surveyData.base.retireAge = retireAge;
         surveyData.base.sideJobMonthly = sideJobMonthly;
 
         dispatch(SvSave(surveyData));
@@ -114,7 +129,11 @@ function BaseSalarySurvey({completeBtnClickCnt, commonCompleteLogic}){
             <p className='note'>※ 참고사이트 : 임금직무정보시스템(https://www.wage.go.kr/whome/index.do)</p>
         </div>
         <div>
-            <p>(4) 부업을 하고 계시다면, 입력해주세요.</p>
+            <p>(4) 은퇴 나이를 입력해주세요.</p>
+            <p><input value={retireAge.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"retireAge")}}/> 세</p>
+        </div>
+        <div>
+            <p>(5) 부업을 하고 계시다면, 입력해주세요.</p>
             <p>
                 월 <input value={sideJobMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"sideJobMonthly")}}/>만원
                 <span> (연 {(sideJobMonthly*12).toLocaleString('ko-KR')}만원)</span>

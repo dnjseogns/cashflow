@@ -2,13 +2,31 @@ import { Fragment, useState } from 'react';
 import {useSelector, useDispatch} from "react-redux";
 import {SvSave, SvClean} from '@/redux/action/SurveyAction';
 import useEffectNoMount from '@/hooks/useEffectNoMount.jsx';
+import { numRound } from "@/utils/util";
 
 //나이
 function BaseAgeSurvey({completeBtnClickCnt, commonCompleteLogic}){
     const surveyData = useSelector((store) => store.Survey).data;
     const dispatch = useDispatch();
 
-    const [age, setAge] = useState(surveyData.base?.age ?? 20);
+    const [age, setAge] = useState(surveyData.base?.age ?? 22);
+
+    const surveyOnChange = (e, div) => {
+        if(div==="age"){
+            const number = e.target.value.replaceAll(",",""); //쉼표제거
+            if(isNaN(number)){return;} //문자 체크
+            const valInt = numRound(number, 0); //정수변환
+
+            if(0 <= valInt && valInt <= 100){
+                setAge(valInt);
+            }else if(100 < valInt){
+                return;
+            }else{
+                setAge(0);
+                return;
+            }
+        }
+    };
 
     useEffectNoMount(()=>{
         surveyData.base.age = age;
@@ -16,22 +34,6 @@ function BaseAgeSurvey({completeBtnClickCnt, commonCompleteLogic}){
         dispatch(SvSave(surveyData));
         commonCompleteLogic();
     },[completeBtnClickCnt]);
-
-    const surveyOnChange = (e, div) => {
-        if(div==="age"){
-            if(isNaN(e.target.value)){return;} //문자 체크
-            const ageInt = Math.floor(e.target.value); //정수변환
-            if(0 <= ageInt && ageInt <= 100){
-                setAge(ageInt);
-            }else if(100 < ageInt){
-                return;
-            }else{
-                setAge(0);
-                return;
-            }
-            setAge(ageInt);
-        }
-    };
 
     return(
     <Fragment>
