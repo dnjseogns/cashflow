@@ -56,7 +56,7 @@ function CashflowTable(){
                         <th colSpan="1"></th>
                         <th colSpan={3 + (isSideJobVisible ? 1 : 0)}>소득</th>
                         <th colSpan={3 + (isHouseCostVisible ? 1 : 0) + (isCarCostVisible ? 1 : 0)}>소비</th>
-                        <th colSpan="1">저축(소득 - 소비)</th>
+                        <th colSpan="1">잔액(소득 - 소비)</th>
                         <th colSpan="1" className='gap'></th>
                         <th colSpan={4}>누적자산</th>
                     </tr>
@@ -101,15 +101,14 @@ function CashflowTable(){
                             {isCarCostVisible ? <td>{row?.carCost?.toLocaleString('ko-KR')}</td> : null}
                             <td className='sum'>{row?.totalConsumption?.toLocaleString('ko-KR')}</td>
 
-                            <td className='sum'>{row?.totalSaving?.toLocaleString('ko-KR')}</td>
+                            <td className='sum'>{row?.totalBalance?.toLocaleString('ko-KR')}</td>
 
                             <td className='gap'></td>
 
                             <td>{row?.assetLoanStack?.toLocaleString('ko-KR')}</td>
                             <td>{row?.assetSavingStack?.toLocaleString('ko-KR')}</td>
                             <td>{row?.assetInvestStack?.toLocaleString('ko-KR')}</td>
-                            {/* <td>{row?.houseGuarantee?.toLocaleString('ko-KR')}</td> */}
-                            <td className='sum'>합계</td>
+                            <td className='sum'>{row?.totalAsset?.toLocaleString('ko-KR')}</td>
                         </tr>
                     ) 
                     })}

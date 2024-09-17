@@ -6,12 +6,14 @@ const initialize = {
     {
         isCompleted:{
             guide:false,
-            index:false,
             age:false,
-            house:false,
             salary:false,
-            saving:false,
+            consumption:false,
+            balance:false,
             asset:false,
+
+            index:false,
+            house:false,
             marry:false,
             baby:false,
             retire:false,

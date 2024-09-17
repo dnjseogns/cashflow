@@ -5,10 +5,11 @@ import {SvSave, SvClean} from '@/redux/action/SurveyAction';
 import {CfSave, CfClean} from '@/redux/action/CashflowAction';
 import useEffectNoMount from '@/hooks/useEffectNoMount.jsx';
 //
+import GuideSurvey from './survey/GuideSurvey';
 import BaseAgeSurvey from './survey/BaseAgeSurvey';
 import BaseSalarySurvey from './survey/BaseSalarySurvey';
-import BaseSavingSurvey from './survey/BaseSavingSurvey';
-import GuideSurvey from './survey/GuideSurvey';
+import BaseConsumptionSurvey from './survey/BaseConsumptionSurvey';
+import BaseBalanceSurvey from './survey/BaseBalanceSurvey';
 import BaseAssetSurvey from './survey/BaseAssetSurvey';
 
 /* 입력해주신 자료는 이번 계산에만 활용합니다. 이 사이트는 어떤 개인 정보도 저장하지 않습니다. */
@@ -37,7 +38,8 @@ function CashflowSurvey({surveyDiv,setSurveyDiv, surveyTitle}){
                 {surveyDiv==="guide"?<GuideSurvey/>
                 :surveyDiv==="age"?<BaseAgeSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                 :surveyDiv==="salary"?<BaseSalarySurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                :surveyDiv==="saving"?<BaseSavingSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                :surveyDiv==="consumption"?<BaseConsumptionSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                :surveyDiv==="balance"?<BaseBalanceSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                 :surveyDiv==="asset"?<BaseAssetSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                 // :surveyDiv==="index"?<BaseIndexSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                 // :surveyDiv==="house"?<BasicHouseSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>

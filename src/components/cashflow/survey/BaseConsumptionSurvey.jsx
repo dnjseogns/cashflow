@@ -4,7 +4,7 @@ import {SvSave, SvClean} from '@/redux/action/SurveyAction';
 import useEffectNoMount from '@/hooks/useEffectNoMount.jsx';
 import { numRound } from "@/utils/util";
 
-function BaseSavingSurvey({completeBtnClickCnt, commonCompleteLogic}){
+function BaseConsumptionSurvey({completeBtnClickCnt, commonCompleteLogic}){
     const dispatch = useDispatch();
     const surveyData = useSelector((store) => store.Survey).data;
     const base = surveyData.base;
@@ -13,6 +13,7 @@ function BaseSavingSurvey({completeBtnClickCnt, commonCompleteLogic}){
     const [savingMonthly, setSavingMonthly] = useState(base?.savingMonthly ?? 0);
 
     const totIncomeMonthly = base?.salaryMonthly??0 + base?.sideJobMonthly??0;
+
     const surveyOnChange = (e, div) => {
         if(div==="indexInflation"){
             const number = e.target.value.replaceAll(",",""); //쉼표제거
@@ -32,9 +33,9 @@ function BaseSavingSurvey({completeBtnClickCnt, commonCompleteLogic}){
             if(isNaN(number)){return;} //문자 체크
             const valInt = Math.round(number); //정수변환
 
-            if(0 <= valInt && valInt <= 100){
+            if(0 <= valInt && valInt <= totIncomeMonthly){
                 setSavingMonthly(valInt);
-            }else if(100 < valInt){
+            }else if(totIncomeMonthly < valInt){
                 return;
             }else{
                 setSavingMonthly(0);
@@ -52,6 +53,7 @@ function BaseSavingSurvey({completeBtnClickCnt, commonCompleteLogic}){
         dispatch(SvSave(surveyData));
         commonCompleteLogic();
     },[completeBtnClickCnt]);
+
     return(
         <Fragment>
             <div>
@@ -66,4 +68,4 @@ function BaseSavingSurvey({completeBtnClickCnt, commonCompleteLogic}){
             </div>
         </Fragment>);
 }
-export default BaseSavingSurvey;
+export default BaseConsumptionSurvey;

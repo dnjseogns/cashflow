@@ -18,13 +18,13 @@
 
 /* left mouse hover */
 .cf-left .guide:hover,
-.cf-left .basic li:hover,
+.cf-left .base li:hover,
 .cf-left .add li:hover{color:#427D9D; background: #F1F1F1; cursor: pointer;}
 /* left click */
 .cf-left .on{color:#427D9D; background: #F1F1F1;}
 /* left click 꺽쇠 */
 .cf-left ul.guide,
-.cf-left ul.basic li,
+.cf-left ul.base li,
 .cf-left ul.add li{display: flex; justify-content: space-between;}
 .cf-left ul li span{margin-right: 10px;}
 /* left complete 체크 */
@@ -66,8 +66,8 @@
     border:0px; border-bottom: 1px solid black;
     background: white; }
 /* .cf-right .survey-area input{ text-align: right; } */
-/* .cf-right .basic div select{ font-size: 0.85em; } */
-/* .cf-right .survey-area .basic label{margin-right: 15px;} */
+/* .cf-right .base div select{ font-size: 0.85em; } */
+/* .cf-right .survey-area .base label{margin-right: 15px;} */
 
 /* .cf-right .d1{ margin-left: 20px; }
 .cf-right .d2{ margin-left: 40px; }

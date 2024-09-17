@@ -24,9 +24,9 @@ export const useCashflowTableData = () => {
         let loopCnt = 0;
         let salaryRiseRateStack = 1.0;
         let inflationStack = 1.0;
-        let assetLoanStack = 0;
-        let assetSavingStack = 0;
-        let assetInvestStack = 0;
+        let assetLoanStack = base?.currAssetLoan ? base?.currAssetLoan * -1 : 0;
+        let assetSavingStack = base?.currAssetSaving ?? 0;
+        let assetInvestStack = base?.currAssetInvest ?? 0;
         
         for(var i=0; i<=100; i++){
             let row = {};
@@ -75,7 +75,7 @@ export const useCashflowTableData = () => {
 
 
             //소비
-            if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.saving === true){
+            if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true){
                 //물가상승률
                 if(loopCnt <= 1){
                     inflationStack = 1.0;
@@ -92,21 +92,62 @@ export const useCashflowTableData = () => {
                 row.totalConsumption = row.consumption;
             }
 
-            //저축
-            if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.saving === true){
-                row.totalSaving = row.totalIncome - row.totalConsumption;
+            //잔액
+            if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true 
+                && isCompleted?.balance === true){
+                row.totalBalance = row.totalIncome - row.totalConsumption;
             }
 
             //누적자산
-            if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.saving === true && isCompleted?.asset === true){
-                console.log("bankRate",row.totalSaving * base.bankRate);
-                console.log("investRate",row.totalSaving * base.investRate);
-                assetSavingStack = assetSavingStack + Math.round(row.totalSaving * base.bankRate/100);
-                assetInvestStack = assetInvestStack + Math.round(row.totalSaving * base.investRate/100);
+            if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true 
+                && isCompleted?.balance === true && isCompleted?.asset === true){
+                let tmpBalance = row.totalBalance;
 
-                row.assetLoanStack = Math.round(assetLoanStack * (1 + base.loanInterest/100));
-                row.assetSavingStack = Math.round(assetSavingStack * (1 + base.loanInterest/100));
-                row.assetInvestStack = Math.round(assetInvestStack * (1 + base.loanInterest/100));
+                if(tmpBalance < 0){ // 잔액이 음수일 경우.
+                    if(assetSavingStack + tmpBalance >= 0){ // 1. 예금 충분할 경우(차감)
+                        assetSavingStack = assetSavingStack + tmpBalance;
+                        tmpBalance = 0;
+                    }else{ 
+                        assetSavingStack = 0;
+                        tmpBalance = assetSavingStack + tmpBalance; // 1-2. 예금 부족할 경우(부분 차감)
+
+                        if(assetInvestStack + tmpBalance >= 0){ // 2. 투자 충분할 경우(차감)
+                            assetInvestStack = assetInvestStack + tmpBalance;
+                            tmpBalance = 0;
+                        }else{
+                            assetInvestStack = 0;
+                            tmpBalance = tmpBalance + assetInvestStack;// 2-2. 투자 부족할 경우(부분 차감)
+
+                            assetLoanStack = assetLoanStack + tmpBalance;// 3. 최총(대출)
+                        }
+                    }
+                }else{
+                    if(assetLoanStack < 0){ // 잔액이 양수일 경우 + 대출이 있을 경우
+                        if(assetLoanStack + tmpBalance < 0){ // 대출이 더 많을 경우
+                            assetLoanStack = assetLoanStack + tmpBalance;
+                            tmpBalance = 0;
+                        }else{
+                            assetLoanStack = 0;
+                            tmpBalance = tmpBalance + assetLoanStack;
+
+                            //대출 상환 후 남은 금액 예금/투자
+                            assetSavingStack = assetSavingStack + Math.round(tmpBalance * base.bankRate/100);
+                            assetInvestStack = assetInvestStack + Math.round(tmpBalance * base.investRate/100);
+                        }
+                    }else{ // 잔액이 양수일 경우 + 대출 없을 경우
+                        assetSavingStack = assetSavingStack + Math.round(tmpBalance * base.bankRate/100);
+                        assetInvestStack = assetInvestStack + Math.round(tmpBalance * base.investRate/100);
+                    }
+                }
+
+                assetSavingStack = Math.round(assetSavingStack * (1 + base.bankInterest/100));
+                assetInvestStack = Math.round(assetInvestStack * (1 + base.investIncome/100));
+                assetLoanStack = Math.round(assetLoanStack * (1 + base.loanInterest/100));
+
+                row.assetSavingStack = assetSavingStack;
+                row.assetInvestStack = assetInvestStack;
+                row.assetLoanStack = assetLoanStack;
+                row.totalAsset = row.assetSavingStack + row.assetInvestStack + row.assetLoanStack;
             }
 
             //결과 넣기
@@ -115,133 +156,6 @@ export const useCashflowTableData = () => {
         cashflowData.timeline = rows;
         dispatch(CfSave(cashflowData));
 
-
-        
-        // // 누적 변수
-        // let loopCnt = 0;
-        // let inflationStack = 1.0;
-        // let incomeRiseRateStack = 1;
-        // // 이전 변수
-        // let assetSavingPrev = 0;
-        // let assetInvestPrev = 0;
-        // for(var i=0; i<=100; i++){
-            // //기초(나이)
-            // if(i < svBasic.age){
-            //     continue;
-            // }
-            // loopCnt++;
-            // //기초(인플레이션)
-            // if(loopCnt <= 1){
-            //     inflationStack = 1.0;
-            // }else{
-            //     inflationStack = inflationStack * (1 + svBasic.indexInflation/100);
-            //     inflationStack = Math.round(inflationStack * 10000) / 10000;
-            // }
-
-            // //근로소득(연봉상승률)
-            // let incomeRiseRate = 0;
-            // let incomeRiseRate_M = 0;
-            // if(loopCnt <= 1){
-            //     incomeRiseRate_M = -1 * svBasic.incomeRiseRate1;
-            // }else if(loopCnt <= 26) {
-            //     incomeRiseRate_M = (svBasic.incomeRiseRate25 - svBasic.incomeRiseRate1) / 25
-            //                         * (svBasic.workingExperienceYear - 1 + loopCnt - 2);
-            // }else{
-            //     incomeRiseRate_M = (svBasic.incomeRiseRate25 - svBasic.incomeRiseRate1);
-            // }
-            // incomeRiseRate = svBasic.incomeRiseRate1 + incomeRiseRate_M;
-            // incomeRiseRate = (incomeRiseRate + 100) / 100;
-            // incomeRiseRate = Math.round(incomeRiseRate * 10000) / 10000;
-            // incomeRiseRateStack = incomeRiseRateStack * incomeRiseRate;
-            // incomeRiseRateStack = Math.round(incomeRiseRateStack * 10000) / 10000;
-            // //근로소득(세후연봉)
-            // let incomeAfterTaxYearly = Math.round(svBasic.incomeAfterTaxMonthly * 12 * incomeRiseRateStack);
-            // if(i>50){
-            //     incomeAfterTaxYearly = 0;//50세 은퇴
-            // }
-            // //근로소득(부업)
-            // let additionalIncomeYearly = svBasic.additionalIncomeMonthly * 12;
-            // //근로소득(합계)
-            // let workIncomeTotSum = incomeAfterTaxYearly + additionalIncomeYearly;
-            
-
-            // //실거주(주거비)
-            // let houseCostYearly = svBasic.houseCost * 12;
-            // houseCostYearly = Math.round(houseCostYearly * inflationStack);
-            // //실거주(보증금)
-            // let houseGuarantee = svBasic.houseGuarantee;
-            // //차량비
-            // let carCostYearly = svBasic.carCost * 12;
-            // carCostYearly = Math.round(carCostYearly * inflationStack);
-            // //소비금액(소비)
-            // let consumAmountYearly = svBasic.consumAmountMonthly * 12;
-            // consumAmountYearly = Math.round(consumAmountYearly * inflationStack);
-            // consumAmountYearly = consumAmountYearly - houseCostYearly - carCostYearly;
-            // //소비금액(합계)
-            // let consumTotSum = consumAmountYearly + houseCostYearly + carCostYearly;
-
-
-            // //저축+투자
-            // let saveAmountYealy = Math.round((workIncomeTotSum - consumTotSum) * svBasic.savingRate);
-            // let investAmountYealy = Math.round((workIncomeTotSum - consumTotSum) * (1 - svBasic.savingRate));
-
-
-            // // 누적자산(저축)
-            // let assetSaving = svBasic.curAsset.saving;
-            // if(loopCnt <= 1){
-            //     assetSaving = Math.round(assetSaving * (1+svBasic.indexBankInterest/100));//+자본수익
-            //     assetSaving = assetSaving + saveAmountYealy;//+저축
-            //     assetSavingPrev = assetSaving;
-            // }else{
-            //     assetSaving = assetSavingPrev;
-            //     assetSaving = Math.round(assetSaving * (1+svBasic.indexBankInterest/100));//+자본수익
-            //     assetSaving = assetSaving + saveAmountYealy;//+저축
-            //     assetSavingPrev = assetSaving;
-            // }
-            // // 누적자산(투자)
-            // let assetInvest = svBasic.curAsset.invest;
-            // if(loopCnt <= 1){
-            //     assetInvest = Math.round(assetInvest * (1+svBasic.investIncome/100));//+자본수익
-            //     assetInvest = assetInvest + investAmountYealy;//+저축
-            //     assetInvestPrev = assetInvest;
-            // }else{
-            //     assetInvest = assetInvestPrev;
-            //     assetInvest = Math.round(assetInvest * (1+svBasic.investIncome/100));//+자본수익
-            //     assetInvest = assetInvest + investAmountYealy;//+저축
-            //     assetInvestPrev = assetInvest;
-            // }
-            
-            // //result
-            // let result = {
-            //             //기초
-            //             age : i, 
-            //             inflationStack : inflationStack,
-            //             //근로소득
-            //             incomeRiseRate : incomeRiseRate,
-            //             incomeRiseRateStack : incomeRiseRateStack,
-            //             incomeAfterTaxYearly : incomeAfterTaxYearly,
-            //             additionalIncomeYearly : additionalIncomeYearly,
-            //             workIncomeTotSum : workIncomeTotSum,
-
-            //             //부동산
-            //             houseCostYearly:houseCostYearly,
-            //             houseGuarantee:houseGuarantee,
-            //             //자동차
-            //             carCostYearly:carCostYearly,
-            //             //소비금액
-            //             consumAmountYearly : consumAmountYearly,
-            //             consumTotSum : consumTotSum,
-
-            //             //저축금액
-            //             saveAmountYealy : saveAmountYealy,
-            //             investAmountYealy : investAmountYealy,
-
-            //             //자산
-            //             assetSaving : assetSaving,
-            //             assetInvest : assetInvest,
-            //             };
-            // initTimeLine.push(result);
-        // }
     },[surveyDataOrgin]);
 
 }
