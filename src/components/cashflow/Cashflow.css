@@ -18,12 +18,14 @@
 
 /* left mouse hover */
 .cf-left .guide:hover,
+.cf-left .prev li:hover,
 .cf-left .base li:hover,
 .cf-left .add li:hover{color:#427D9D; background: #F1F1F1; cursor: pointer;}
 /* left click */
 .cf-left .on{color:#427D9D; background: #F1F1F1;}
 /* left click 꺽쇠 */
 .cf-left ul.guide,
+.cf-left ul.prev li,
 .cf-left ul.base li,
 .cf-left ul.add li{display: flex; justify-content: space-between;}
 .cf-left ul li span{margin-right: 10px;}
@@ -62,9 +64,12 @@
 /* survey common 설정 */
 .cf-right .survey-area .survey-content p{ margin: 0px; padding: 0px; }
 /* survey 버튼 */
-.cf-right .survey-area .survey-content input{ text-align: right; padding-right: 5px;
-    border:0px; border-bottom: 1px solid black;
+.cf-right .survey-area .survey-content input{ text-align: right; padding-right: 5px; border:0px; border-bottom: 1px solid black; 
     background: white; }
+/* survey 라디오 */
+.cf-right .survey-area .survey-content .radio-wrap input[type="radio"]{margin-right: 5px;}
+.cf-right .survey-area .survey-content .radio-wrap label{margin-right: 20px;}
+
 /* .cf-right .survey-area input{ text-align: right; } */
 /* .cf-right .base div select{ font-size: 0.85em; } */
 /* .cf-right .survey-area .base label{margin-right: 15px;} */

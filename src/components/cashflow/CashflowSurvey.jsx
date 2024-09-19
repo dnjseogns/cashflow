@@ -6,6 +6,10 @@ import {CfSave, CfClean} from '@/redux/action/CashflowAction';
 import useEffectNoMount from '@/hooks/useEffectNoMount.jsx';
 //
 import GuideSurvey from './survey/GuideSurvey';
+//
+import PrevCarSurvey from './survey/PrevCarSurvey';
+import PrevHouseSurvey from './survey/PrevHouseSurvey';
+//
 import BaseAgeSurvey from './survey/BaseAgeSurvey';
 import BaseSalarySurvey from './survey/BaseSalarySurvey';
 import BaseConsumptionSurvey from './survey/BaseConsumptionSurvey';
@@ -36,6 +40,10 @@ function CashflowSurvey({surveyDiv,setSurveyDiv, surveyTitle}){
                 <div className='survey-title'>{surveyTitle}</div>
                 <div className='survey-content'>
                 {surveyDiv==="guide"?<GuideSurvey/>
+                //
+                :surveyDiv==="car"?<PrevCarSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                :surveyDiv==="house"?<PrevHouseSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                //
                 :surveyDiv==="age"?<BaseAgeSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                 :surveyDiv==="salary"?<BaseSalarySurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                 :surveyDiv==="consumption"?<BaseConsumptionSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>

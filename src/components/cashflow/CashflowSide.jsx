@@ -7,7 +7,10 @@ import {CfSave, CfClean} from '@/redux/action/CashflowAction';
 /* 입력해주신 자료는 이번 계산에만 활용합니다. 이 사이트는 어떤 개인 정보도 저장하지 않습니다. */
 
 function CashflowSide({surveyDiv,setSurveyDiv, setSurveyTitle}){
-    const GUIDE = "1. 가이드";
+    const GUIDE = "0. 가이드";
+    const PREV = "1. 사전정보";
+    const PREV_CAR = "1) 자동차";
+    const PREV_HOUSE = "2) 집";
     const BASE = "2. 기본정보";
     const BASE_AGE = "1) 나이";
     const BASE_SALARY = "2) 소득";
@@ -40,6 +43,8 @@ function CashflowSide({surveyDiv,setSurveyDiv, setSurveyTitle}){
     function changeSurveyTitle(div){
         const surveyTitle
         = div==="guide"?GUIDE
+        :div==="car"?PREV + " 〉 " + PREV_CAR
+        :div==="house"?PREV + " 〉 " + PREV_HOUSE
         :div==="age"?BASE + " 〉 " + BASE_AGE
         :div==="salary"?BASE + " 〉 " + BASE_SALARY
         :div==="consumption"?BASE + " 〉 " + BASE_CONSUMPTION
@@ -60,12 +65,16 @@ function CashflowSide({surveyDiv,setSurveyDiv, setSurveyTitle}){
     <Fragment>
         <div className='left-title'><span>정보입력하기</span></div>
         <ul className={'guide ' + (surveyDiv==="guide"?"on":"")} onClick={()=>{setSurveyDivition("guide")}}>{GUIDE} {surveyDiv==="guide"?<span>〉</span>:null}</ul>
+        <ul className='prev '>{PREV}
+            <li className={(surveyDiv==="car"?"on ":"") + (isSurveyCompleted.car?"ok ":"")} onClick={()=>{setSurveyDivition("car")}}><span>{PREV_CAR}</span> {surveyDiv==="car"?<span>〉</span>:null}</li>
+            <li className={(surveyDiv==="house"?"on ":"") + (isSurveyCompleted.house?"ok ":"")} onClick={()=>{setSurveyDivition("house")}}><span>{PREV_HOUSE}</span> {surveyDiv==="house"?<span>〉</span>:null}</li>
+        </ul>
         <ul className='base '>{BASE}
-        <li className={(surveyDiv==="age"?"on ":"") + (isSurveyCompleted.age?"ok ":"")} onClick={()=>{setSurveyDivition("age")}}><span>{BASE_AGE}</span> {surveyDiv==="age"?<span>〉</span>:null}</li>
-        <li className={(surveyDiv==="salary"?"on":"") + (isSurveyCompleted.salary?" ok":"")} onClick={()=>{setSurveyDivition("salary")}}><span>{BASE_SALARY}</span> {surveyDiv==="salary"?<span>〉</span>:null}</li>
-        <li className={(surveyDiv==="consumption"?"on":"") + (isSurveyCompleted.consumption?" ok":"")} onClick={()=>{setSurveyDivition("consumption")}}><span>{BASE_CONSUMPTION}</span> {surveyDiv==="consumption"?<span>〉</span>:null}</li>
-        <li className={(surveyDiv==="balance"?"on":"") + (isSurveyCompleted.balance?" ok":"")} onClick={()=>{setSurveyDivition("balance")}}><span>{BASE_BALANCE}</span> {surveyDiv==="balance"?<span>〉</span>:null}</li>
-        <li className={(surveyDiv==="asset"?"on":"") + (isSurveyCompleted.asset?" ok":"")} onClick={()=>{setSurveyDivition("asset")}}><span>{BASE_ASSET}</span> {surveyDiv==="asset"?<span>〉</span>:null}</li>
+            <li className={(surveyDiv==="age"?"on ":"") + (isSurveyCompleted.age?"ok ":"")} onClick={()=>{setSurveyDivition("age")}}><span>{BASE_AGE}</span> {surveyDiv==="age"?<span>〉</span>:null}</li>
+            <li className={(surveyDiv==="salary"?"on":"") + (isSurveyCompleted.salary?" ok":"")} onClick={()=>{setSurveyDivition("salary")}}><span>{BASE_SALARY}</span> {surveyDiv==="salary"?<span>〉</span>:null}</li>
+            <li className={(surveyDiv==="consumption"?"on":"") + (isSurveyCompleted.consumption?" ok":"")} onClick={()=>{setSurveyDivition("consumption")}}><span>{BASE_CONSUMPTION}</span> {surveyDiv==="consumption"?<span>〉</span>:null}</li>
+            <li className={(surveyDiv==="balance"?"on":"") + (isSurveyCompleted.balance?" ok":"")} onClick={()=>{setSurveyDivition("balance")}}><span>{BASE_BALANCE}</span> {surveyDiv==="balance"?<span>〉</span>:null}</li>
+            <li className={(surveyDiv==="asset"?"on":"") + (isSurveyCompleted.asset?" ok":"")} onClick={()=>{setSurveyDivition("asset")}}><span>{BASE_ASSET}</span> {surveyDiv==="asset"?<span>〉</span>:null}</li>
             {/* <li className={(surveyDiv==="index"?"on":"") + (isSurveyCompleted.index?" ok":"")} onClick={()=>{setSurveyDivition("index")}}><span>{BASE_INDEX}</span> {surveyDiv==="index"?<span>〉</span>:null}</li>
             <li className={(surveyDiv==="house"?"on":"") + (isSurveyCompleted.house?" ok":"")} onClick={()=>{setSurveyDivition("house")}}><span>{BASE_HOUSE}</span> {surveyDiv==="house"?<span>〉</span>:null}</li> */}
         </ul>

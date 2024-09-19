@@ -158,4 +158,16 @@ export const useCashflowTableData = () => {
 
     },[surveyDataOrgin]);
 
+    // //예외처리
+    // useEffect(()=>{
+    //     let isCompleted = surveyData.isCompleted;
+    //     let base = surveyData.base;
+    //     savingMonthly
+    //     : 
+    //     100
+    //     sideJobMonthly
+    //     : 
+    //     0
+    //     console.log("base",base);
+    // },[surveyDataOrgin])
 }

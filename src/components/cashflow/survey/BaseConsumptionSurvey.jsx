@@ -63,8 +63,9 @@ function BaseConsumptionSurvey({completeBtnClickCnt, commonCompleteLogic}){
             </div>
             <div>
                 <p>(2) 현재 월 소득({totIncomeMonthly}만원) 중 얼마나 저축하고 있나요?</p>
-                <p>저축 : <input value={savingMonthly}  onChange={(e)=>{surveyOnChange(e,"savingMonthly")}}/> 만원</p>
-                <p>소비 : <input value={totIncomeMonthly - savingMonthly} readOnly={true}/> 만원</p>
+                <p>- 저축 : <input value={savingMonthly}  onChange={(e)=>{surveyOnChange(e,"savingMonthly")}}/> 만원</p>
+                <p>- 소비 : <input value={totIncomeMonthly - savingMonthly} readOnly={true}/> 만원</p>
+                <p className='note'>※ 미래 소비 계산방법 = 물가상승률(누적) x 현재소비({totIncomeMonthly - savingMonthly}만원)</p>
             </div>
         </Fragment>);
 }

@@ -4,8 +4,8 @@ import {SvSave, SvClean} from '@/redux/action/SurveyAction';
 import useEffectNoMount from '@/hooks/useEffectNoMount.jsx';
 
 function BaseSalarySurvey({completeBtnClickCnt, commonCompleteLogic}){
-    const surveyData = useSelector((store) => store.Survey).data;
     const dispatch = useDispatch();
+    const surveyData = useSelector((store) => store.Survey).data;
 
     const [salaryMonthly, setSalaryMonthly] = useState(surveyData.base?.salaryMonthly ?? 200);
     const [workYear, setWorkYear] = useState(surveyData.base?.workYear ?? 1);
@@ -118,11 +118,11 @@ function BaseSalarySurvey({completeBtnClickCnt, commonCompleteLogic}){
             <p className='note'>※ 모든 소득은 세후로 계산하고 있습니다.</p>
         </div>
         <div>
-            <p>(2) 현재 근속년수를 입력해주세요.</p>
+            <p>(2) 현재 연차수를 입력해주세요.</p>
             <p><input value={workYear} onChange={(e)=>{surveyOnChange(e,"workYear")}}/>년차</p>
         </div>
         <div>
-            <p>(3) 근속년수별 연봉상승률을 입력해주세요.</p>
+            <p>(3) 연차수별 연봉상승률을 입력해주세요.</p>
             <p>1년차 : <input value={salaryRiseRate1} onChange={(e)=>{surveyOnChange(e,"salaryRiseRate1")}}/>%
             → 25년차 이상 : <input value={salaryRiseRate25} onChange={(e)=>{surveyOnChange(e,"salaryRiseRate25")}}/>%</p>
             <p className='note'>※ 평균 연봉 상승률은 약 7% → 2% 입니다.</p>
