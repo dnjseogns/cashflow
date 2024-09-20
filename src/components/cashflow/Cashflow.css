@@ -42,7 +42,7 @@
 
 /* right position */
 .cf-right{ position: relative; }
-.cf-right .cf-content .survey-area,
+.cf-right .cf-content .survey-area{position: fixed;}
 .cf-right .cf-content .data-area{position: absolute;}
 
 
@@ -64,28 +64,20 @@
 /* survey common 설정 */
 .cf-right .survey-area .survey-content p{ margin: 0px; padding: 0px; }
 /* survey 버튼 */
-.cf-right .survey-area .survey-content input{ text-align: right; padding-right: 5px; border:0px; border-bottom: 1px solid black; 
-    background: white; }
+.cf-right .survey-area .survey-content .btn1{ text-align: right; padding-right: 5px; border:0px; border-bottom: 1px solid black; background: white; width: 130px; border-radius: 3px;}
+/* survey readonly 버튼 */
+.cf-right .survey-area .survey-content .btn1.readonly{ text-align: right; padding-right: 5px; border:0px; border-bottom: 1px solid black; background: #F7F7F7; }
 /* survey 라디오 */
 .cf-right .survey-area .survey-content .radio-wrap input[type="radio"]{margin-right: 5px;}
 .cf-right .survey-area .survey-content .radio-wrap label{margin-right: 20px;}
-
-/* .cf-right .survey-area input{ text-align: right; } */
-/* .cf-right .base div select{ font-size: 0.85em; } */
-/* .cf-right .survey-area .base label{margin-right: 15px;} */
-
-/* .cf-right .d1{ margin-left: 20px; }
-.cf-right .d2{ margin-left: 40px; }
-.cf-right .d3{ margin-left: 60px; }
-.cf-right .explain{ color: blueviolet;}
-.cf-right .h20{height: 20px;}
-.cf-right .w30{width: 30px;}
-.cf-right .w60{width: 60px;}
-.cf-right .w90{width: 90px;}
-.cf-right .w120{width: 120px;}
-.cf-right .w150{width: 150px;}
-.cf-right .w180{width: 180px;} */
-
+/* survey table 설정 */
+.cf-right .survey-area .survey-content table{width:100%; margin-bottom: 10px;}
+.cf-right .survey-area .survey-content .survey-table tr th,
+.cf-right .survey-area .survey-content .survey-table tr td{text-align:center; padding:3px; border-bottom: 3px solid white; }
+.cf-right .survey-area .survey-content .survey-table tr th img,
+.cf-right .survey-area .survey-content .survey-table tr td img{ cursor: pointer;}
+.cf-right .survey-area .survey-content .survey-table tr td input{ background: white; border: 0px; width:100%;}
+.cf-right .survey-area .survey-content .survey-table tr td input.readonly{ background: #F7F7F7; border: 0px; width:100%;}
 
 /*******************************************/
 /* table 테두리 */

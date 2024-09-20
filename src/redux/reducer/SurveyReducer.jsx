@@ -17,7 +17,7 @@ const initialize = {
             asset:false,
 
             index:false,
-            house:false,
+            // house:false,
             marry:false,
             baby:false,
             retire:false,
@@ -27,6 +27,7 @@ const initialize = {
         prev:{
         },
         base:{
+            loan:[]
         },
         add:{
 

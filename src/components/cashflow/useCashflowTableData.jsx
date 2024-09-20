@@ -17,7 +17,9 @@ export const useCashflowTableData = () => {
         console.log("surveyData",surveyData);
         // console.log("cashflowData",cashflowData);
 
+        // 기본 변수
         let isCompleted = surveyData.isCompleted;
+        let prev = surveyData.prev;
         let base = surveyData.base;
         let rows = [];
         //누적 변수
@@ -86,10 +88,12 @@ export const useCashflowTableData = () => {
                 row.inflationStack = inflationStack;
 
                 //소비
+                row.carCost = Math.round(prev?.carCostMonthly * 12 * row.inflationStack);
+                row.houseCost = Math.round(prev?.houseCostMonthly * 12 * row.inflationStack);
                 row.consumption = Math.round(base?.consumptionMonthly * 12 * row.inflationStack);
 
                 //전체소비
-                row.totalConsumption = row.consumption;
+                row.totalConsumption = row.carCost + row.houseCost + row.consumption;
             }
 
             //잔액
