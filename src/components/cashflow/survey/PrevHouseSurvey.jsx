@@ -111,7 +111,7 @@ const PrevHouseSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
     return (
         <Fragment>
             <div>
-                <p>(1) 현재 거주 형태를 선택해주세요.</p>
+                <p className="question">(1) 현재 거주 형태를 선택해주세요.</p>
                 <p className="radio-wrap">
                     <input type="radio" name="livingType" id="livingType_parent" value="parent" checked={livingType==="parent"?true:false} onChange={(e)=>{surveyOnChange(e,"livingType")}}/><label htmlFor="livingType_parent">본가</label>
                     <input type="radio" name="livingType" id="livingType_rent" value="rent" checked={livingType==="rent"?true:false} onChange={(e)=>{surveyOnChange(e,"livingType")}}/><label htmlFor="livingType_rent">월세·반전세·전세</label>
@@ -121,7 +121,7 @@ const PrevHouseSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
             {livingType==="rent"
             ? <Fragment>
                 <div>
-                    <p>(2) 보증금 정보를 입력해주세요.</p>
+                    <p className="question">(2) 보증금 정보를 입력해주세요.</p>
                     <p>- 보증금 : <input className='btn1' value={housePriceTotal.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"housePriceTotal")}}/> 만원</p>
                     <p>
                         <span>- 전·월세자금대출금 : </span>
@@ -132,7 +132,7 @@ const PrevHouseSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
                     <p>- 보증금 중 자기자본(자동계산) : <input className='btn1 readonly' value={(housePriceTotal - housePriceLoan).toLocaleString('ko-KR')} readOnly={true}/> 만원</p>
                 </div>
                 <div>
-                    <p>(3) 월 주거비(월세 + 관리비)를 입력해주세요.</p>
+                    <p className="question">(3) 월 주거비(월세 + 관리비 + 공과금 등...)를 입력해주세요.</p>
                     <p><input className='btn1' value={houseCostMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"houseCostMonthly")}}/> 만원</p>
                 </div>
             </Fragment>
@@ -140,7 +140,7 @@ const PrevHouseSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
             {livingType==="own"
             ? <Fragment>
                 <div>
-                    <p>(2) 주택 매매 가격을 입력해주세요.</p>
+                    <p className="question">(2) 주택 매매 가격을 입력해주세요.</p>
                     <p>- 매매가격 : <input className='btn1' value={housePriceTotal.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"housePriceTotal")}}/> 만원</p>
                     <p>
                         <span>- 주택담보대출 잔여 대출금 : </span>
@@ -151,7 +151,7 @@ const PrevHouseSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
                     <p>- 자기자본(자동계산) : <input className='btn1 readonly' value={(housePriceTotal - housePriceLoan).toLocaleString('ko-KR')} readOnly={true}/> 만원</p>
                 </div>
                 <div>
-                    <p>(3) 월 관리비를 입력해주세요.</p>
+                    <p className="question">(3) 월 관리비를 입력해주세요.</p>
                     <p><input className='btn1' value={houseCostMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"houseCostMonthly")}}/> 만원</p>
                 </div>
             </Fragment>

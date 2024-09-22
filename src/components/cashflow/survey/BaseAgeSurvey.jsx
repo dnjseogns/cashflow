@@ -38,7 +38,7 @@ function BaseAgeSurvey({completeBtnClickCnt, commonCompleteLogic}){
     return(
     <Fragment>
         <div>
-            <p>(1) 나이를 입력해주세요.</p>
+            <p className="question">(1) 만 나이를 입력해주세요.</p>
             <p><input className='btn1' value={age} onChange={(e)=>{surveyOnChange(e,"age")}}/> 세</p>
         </div>
     </Fragment>);
