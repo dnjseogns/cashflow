@@ -12,11 +12,14 @@ function CashflowTable(){
     const cashflowData = useSelector((store) => store.Cashflow).data;
 
     const base = surveyData?.base;
+    const prev = surveyData?.prev;
 
     useCashflowTableData();
 
     const isSideJobVisible = !!(cashflowData?.timeline ?? [])[0]?.sideJob;
 
+    const isAssetHouseVisible = (prev?.livingType == "rent" &&  prev?.housePriceOwn > 0) 
+                                || (prev?.livingType == "own" &&  prev?.housePriceTotal > 0);
     // const isHouseCostVisible = !!(cashflowData?.timeline ?? [])[0]?.houseCost;
     // const isCarCostVisible = !!(cashflowData?.timeline ?? [])[0]?.carCost;
 
@@ -31,15 +34,15 @@ function CashflowTable(){
                 <colgroup>
                     <col width="40px"/>
 
-                    <col width="80px"/>
-                    <col width="80px"/>
-                    {isSideJobVisible ? <col width="80px"/> : null}
+                    <col width="100px"/>
+                    <col width="100px"/>
+                    {isSideJobVisible ? <col width="100px"/> : null}
                     <col width="100px"/>
 
-                    <col width="80px"/>
-                    <col width="80px"/>
-                    <col width="80px"/>
-                    <col width="80px"/>
+                    <col width="100px"/>
+                    <col width="100px"/>
+                    <col width="100px"/>
+                    <col width="100px"/>
                     <col width="100px"/>
 
                     <col width="100px"/>
@@ -49,6 +52,7 @@ function CashflowTable(){
                     <col width="100px"/>
                     <col width="100px"/>
                     <col width="100px"/>
+                    {isAssetHouseVisible ? <col width="100px"/> : null}
                     <col width="100px"/>
                 </colgroup>
                 <thead>
@@ -56,9 +60,9 @@ function CashflowTable(){
                         <th colSpan="1"></th>
                         <th colSpan={3 + (isSideJobVisible ? 1 : 0)}>소득</th>
                         <th colSpan={5}>소비</th>
-                        <th colSpan="1">잔액(소득 - 소비)</th>
+                        <th colSpan="1">잔액<br/>(소득-소비)</th>
                         <th colSpan="1" className='gap'></th>
-                        <th colSpan={4}>누적자산</th>
+                        <th colSpan={4 + (isAssetHouseVisible ? 1 : 0)}>누적자산</th>
                     </tr>
                     <tr>
                         <th>나이</th>
@@ -81,6 +85,7 @@ function CashflowTable(){
                         <th>대출</th>{/* <th>대출({base?.loanInterest}%)</th> */}
                         <th>예금({base?.bankInterest}%)</th>
                         <th>투자({base?.investIncome}%)</th>
+                        {isAssetHouseVisible ? <th>주택</th> : null}
                         <th>합계</th>
                     </tr>
                 </thead>
@@ -108,6 +113,10 @@ function CashflowTable(){
                             <td>{row?.assetLoanStack?.toLocaleString('ko-KR')}</td>
                             <td>{row?.assetSavingStack?.toLocaleString('ko-KR')}</td>
                             <td>{row?.assetInvestStack?.toLocaleString('ko-KR')}</td>
+                            { isAssetHouseVisible && prev?.livingType == "rent" ? <td>{prev?.housePriceOwn?.toLocaleString('ko-KR')}</td> 
+                            : isAssetHouseVisible && prev?.livingType == "own" ? <td>{prev?.housePriceTotal?.toLocaleString('ko-KR')}</td> 
+                            : null}
+
                             <td className='sum'>{row?.totalAsset?.toLocaleString('ko-KR')}</td>
                         </tr>
                     ) 

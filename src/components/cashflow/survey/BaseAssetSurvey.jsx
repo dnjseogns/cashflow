@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import {useSelector, useDispatch} from "react-redux";
 import {SvSave, SvClean} from '@/redux/action/SurveyAction';
 import useEffectNoMount from '@/hooks/useEffectNoMount.jsx';
@@ -12,7 +12,8 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
     const surveyData = useSelector((store) => store.Survey).data;
     const base = surveyData.base;
 
-    const [currAssetLoan, setCurrAssetLoan] = useState(base?.currAssetLoan ?? 0);
+    // const [currAssetLoan, setCurrAssetLoan] = useState(base?.currAssetLoan ?? 0);
+    const [loan, setLoan] = useState(base?.loan.length >= 1 ? base?.loan : []);
     const [currAssetSaving, setCurrAssetSaving] = useState(base?.currAssetSaving ?? 0);
     const [currAssetInvest, setCurrAssetInvest] = useState(base?.currAssetInvest ?? 0);
 
@@ -20,41 +21,38 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
     const [bankInterest, setBankInterest] = useState(base?.bankInterest ?? "3.0");
     const [investIncome, setInvestIncome] = useState(base?.investIncome ?? "6.0");
 
-    const [loan, setLoan] = useState(base?.loan.length >= 1 ? base?.loan : []);
 
     useEffect(()=>{
         let newLoan = [...loan].filter((item)=>{return item.loanId != "carLoan" && item.loanId != "houseLoan"});
-        if(surveyData.prev?.carLoan > 0){
-            newLoan.push({loanId:"carLoan", loanName:"자동차 대출(사전정보)", loanAmout:surveyData.prev?.carLoan ?? 0, loanInterest:surveyData.prev?.carLoanRate ?? 0, isReadOnly:true});
-        }
         if(surveyData.prev?.housePriceLoan > 0){
             if(surveyData.prev?.livingType == "rent"){
-                newLoan.push({loanId:"houseLoan", loanName:"전·월세자금대출금(사전정보)", loanAmout:surveyData.prev?.housePriceLoan ?? 0, loanInterest:surveyData.prev?.housePriceLoanRate ?? 0, isReadOnly:true});
+                newLoan.unshift({loanId:"houseLoan", loanName:"전·월세자금대출금(사전입력)", loanAmount:surveyData.prev?.housePriceLoan ?? 0, loanInterest:surveyData.prev?.housePriceLoanRate ?? 0, isReadOnly:true});
             }else if(surveyData.prev?.livingType == "own"){
-                newLoan.push({loanId:"houseLoan", loanName:"주택담보대출(사전정보)", loanAmout:surveyData.prev?.housePriceLoan ?? 0, loanInterest:surveyData.prev?.housePriceLoanRate ?? 0, isReadOnly:true});
+                newLoan.unshift({loanId:"houseLoan", loanName:"주택담보대출(사전입력)", loanAmount:surveyData.prev?.housePriceLoan ?? 0, loanInterest:surveyData.prev?.housePriceLoanRate ?? 0, isReadOnly:true});
             }
         }
+        if(surveyData.prev?.carLoan > 0){
+            newLoan.unshift({loanId:"carLoan", loanName:"자동차 대출(사전입력)", loanAmount:surveyData.prev?.carLoan ?? 0, loanInterest:surveyData.prev?.carLoanRate ?? 0, isReadOnly:true});
+        }
         setLoan(newLoan);
-
-        console.log("newLoan",newLoan);
     },[]);
-    console.log("loan",loan);
 
     const surveyOnChange = (e, div) => {
-        if(div==="currAssetLoan"){
-            const number = e.target.value.replaceAll(",",""); //쉼표제거
-            if(isNaN(number)){return;} //문자 체크
-            const valInt = numRound(number, 0); //정수변환
+        // if(div==="currAssetLoan"){
+        //     const number = e.target.value.replaceAll(",",""); //쉼표제거
+        //     if(isNaN(number)){return;} //문자 체크
+        //     const valInt = numRound(number, 0); //정수변환
 
-            if(0 <= valInt && valInt <= 100000000){
-                setCurrAssetLoan(valInt);
-            }else if(100000000 < valInt){
-                return;
-            }else{
-                setCurrAssetLoan(0);
-                return;
-            }
-        }else if(div==="currAssetSaving"){
+        //     if(0 <= valInt && valInt <= 100000000){
+        //         setCurrAssetLoan(valInt);
+        //     }else if(100000000 < valInt){
+        //         return;
+        //     }else{
+        //         setCurrAssetLoan(0);
+        //         return;
+        //     }
+        // }
+        if(div==="currAssetSaving"){
             const number = e.target.value.replaceAll(",",""); //쉼표제거
             if(isNaN(number)){return;} //문자 체크
             const valInt = numRound(number, 0); //정수변환
@@ -147,7 +145,7 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
     };
 
     useEffectNoMount(()=>{
-        base.currAssetLoan = currAssetLoan;
+        base.loan = [...loan];
         base.currAssetSaving = currAssetSaving;
         base.currAssetInvest = currAssetInvest;
 
@@ -160,6 +158,68 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
         dispatch(SvSave(surveyData));
         commonCompleteLogic();
     },[completeBtnClickCnt]);
+
+    const addLoan = () => {
+        const newLoan = [...loan];
+        const loanNumber = (loan.length + 1).toString();
+        const newObj = {loanId : "loan"+loanNumber, loanName : "대출"+loanNumber, loanAmount : 100, loanInterest : "6.0", isReadOnly : false};
+        newLoan.push(newObj)
+        setLoan(newLoan);
+    }
+    const deleteLoan = (e, clickedItem) => {
+        const newLoan = JSON.parse(JSON.stringify(loan.filter((item)=>(item.loanId != clickedItem?.loanId))));
+        setLoan(newLoan);
+    }
+    const loanInputOnChange = (e, clickedItem, keyName) => {
+        let newValue = e.target.value;
+        if(keyName === "loanInterest"){
+            newValue = newValue.replaceAll(",",""); //쉼표제거
+            if(isNaN(newValue)){return;} //문자 체크
+            if(newValue.toString().length >= 5){return;}//길이체크
+
+            if(newValue === 0 || newValue === ""){
+                newValue = 0;
+            }
+            else if(0 <= newValue && newValue <= 100){
+                if(/^0\d/.test(newValue)){
+                    newValue = Number(newValue).toString();
+                }else{
+                    //do nothing
+                }
+            }else if(100 < newValue){
+                return;
+            }else{
+                newValue = 0;
+            }
+        }else if(keyName === "loanAmount"){
+            newValue = newValue.replaceAll(",",""); //쉼표제거
+            if(isNaN(newValue)){return;} //문자 체크
+            newValue = numRound(newValue, 0); //정수변환
+
+            if(0 <= newValue && newValue <= 100000000){
+                //good
+            }else if(100000000 < newValue){
+                return;
+            }else{
+                newValue = 0;
+            }
+        }else if(keyName === "loanName"){
+            if(newValue.length > 10){
+                return;
+            }
+        }
+
+        // console.log("e.target.value",e.target.value);
+        let newLoan = JSON.parse(JSON.stringify(loan));
+        newLoan = newLoan.map((item, i)=>{
+            if(item.loanId == clickedItem?.loanId){
+                return {...item, [keyName] : newValue};
+            }else{
+                return item;
+            }
+        });
+        setLoan(newLoan);
+    }
 
     return(
     <Fragment>
@@ -182,17 +242,25 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
                         <th>대출명</th>
                         <th>금액(만원)</th>
                         <th>금리(%)</th>
-                        <th><img src={plusIcon} alt="(+)" style={{width:"22px"}} onClick={()=>{alert("추가구현!")}}></img></th>
+                        <th><img src={plusIcon} alt="(+)" style={{width:"22px"}} onClick={()=>{addLoan()}}></img></th>
                     </tr>
                 </thead>
                 <tbody>
                     {loan.map((loanItem, i)=>{
                         return ( <tr key={i}>
                             <td>{i+1}</td>
-                            <td><input readOnly={loanItem?.isReadOnly ?? false} className={loanItem?.isReadOnly ? 'readonly' : ''} value={loanItem?.loanName}/></td>
-                            <td><input readOnly={loanItem?.isReadOnly ?? false} className={loanItem?.isReadOnly ? 'readonly' : ''} style={{textAlign:"right"}} value={loanItem?.loanAmout.toLocaleString('ko-KR')}/></td>
-                            <td><input readOnly={loanItem?.isReadOnly ?? false} className={loanItem?.isReadOnly ? 'readonly' : ''} style={{textAlign:"right"}} value={loanItem?.loanInterest}/></td>
-                            <td>{loanItem?.isReadOnly === true ? null : <img src={minusIcon} alt="(-)" style={{width:"20px"}} onClick={()=>{alert("삭제구현!")}}></img>}</td>
+                            <td>
+                                <input readOnly={loanItem?.isReadOnly ?? false} className={loanItem?.isReadOnly ? 'readonly' : ''} 
+                                style={{textAlign:"left"}} value={loanItem?.loanName} onChange={(e)=>{loanInputOnChange(e, loanItem, "loanName")}}/>
+                            </td>
+                            <td>
+                                <input readOnly={loanItem?.isReadOnly ?? false} className={loanItem?.isReadOnly ? 'readonly' : ''} 
+                                style={{textAlign:"right"}} value={loanItem?.loanAmount.toLocaleString('ko-KR')} onChange={(e)=>{loanInputOnChange(e, loanItem, "loanAmount")}}/>
+                            </td>
+                            <td><input readOnly={loanItem?.isReadOnly ?? false} className={loanItem?.isReadOnly ? 'readonly' : ''} 
+                                style={{textAlign:"right"}} value={loanItem?.loanInterest} onChange={(e)=>{loanInputOnChange(e, loanItem, "loanInterest")}}/>
+                            </td>
+                            <td>{loanItem?.isReadOnly === true ? null : <img src={minusIcon} alt="(-)" style={{width:"20px"}} onClick={(e)=>{deleteLoan(e, loanItem)}}></img>}</td>
                         </tr>
                         )
                     })}
@@ -200,12 +268,12 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
             </table>
         </div>
         <div>
-            <p>(4) 시뮬레이션 금리 및 투자수익률을 입력해주세요.</p>
+            <p>(4) 시뮬레이션 금리 및 개인 투자수익률을 입력해주세요.</p>
             <p>- 대출금리 : <input className='btn1' value={loanInterest} onChange={(e)=>{surveyOnChange(e,"loanInterest")}}/> %</p>
             <p className='note'>※ 2000년 ~ 2023년 1금융권 평균 대출금리는 약 6.0%입니다.</p>
             <p>- 예금금리 : <input className='btn1' value={bankInterest} onChange={(e)=>{surveyOnChange(e,"bankInterest")}}/> %</p>
             <p className='note'>※ 2000년 ~ 2023년 1금융권 평균 대출금리는 약 3.0%입니다.</p>
-            <p>- 투자수익률 : <input className='btn1' value={investIncome} onChange={(e)=>{surveyOnChange(e,"investIncome")}}/> %</p>
+            <p>- 개인 투자수익률 : <input className='btn1' value={investIncome} onChange={(e)=>{surveyOnChange(e,"investIncome")}}/> %</p>
             <p>※ 투자수익률은 미래자산에 매우 큰 영향을 끼칩니다. 현실적인 누적자산을 확인하기 위해선, 대출금리({loanInterest}%)를 크게 벗어나지 않는 수익률로 설정해주시길 바랍니다.</p>
             <p>※ 투자대상 : 주식, 금, 코인, 실거주 아닌 주택 등...(실거주 주택은 별도로 계산되므로, 투자대상에 포함하지 않습니다.)</p>
         </div>

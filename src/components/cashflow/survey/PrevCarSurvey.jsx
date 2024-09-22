@@ -94,8 +94,8 @@ const PrevCarSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
         {carYn === "Y"
         ? <Fragment>
             <div>
-                <p>(2) 자동차 대출 잔액을 입력해주세요.</p>
-                <p>- 잔액 : <input className='btn1' value={carLoan.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"carLoan")}}/> 만원</p>
+                <p>(2) 자동차 대출 정보를 입력해주세요.</p>
+                <p>- 잔여 대출금 : <input className='btn1' value={carLoan.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"carLoan")}}/> 만원</p>
                 <p>- 대출금리 : <input className='btn1' value={carLoanRate.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"carLoanRate")}}/> %</p>
             </div>
             <div>

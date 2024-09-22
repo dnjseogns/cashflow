@@ -8,7 +8,7 @@ import {CfSave, CfClean} from '@/redux/action/CashflowAction';
 
 function CashflowSide({surveyDiv,setSurveyDiv, setSurveyTitle}){
     const GUIDE = "0. 가이드";
-    const PREV = "1. 사전정보";
+    const PREV = "1. 사전입력";
     const PREV_CAR = "1) 자동차";
     const PREV_HOUSE = "2) 집";
     const BASE = "2. 기본정보";
