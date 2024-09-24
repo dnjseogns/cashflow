@@ -65,25 +65,69 @@ function CashflowSide({surveyDiv,setSurveyDiv, setSurveyTitle}){
     <Fragment>
         <div className='left-title'><span>정보입력하기</span></div>
         <ul className={'guide ' + (surveyDiv==="guide"?"on":"")} onClick={()=>{setSurveyDivition("guide")}}>{GUIDE} {surveyDiv==="guide"?<span>〉</span>:null}</ul>
-        <ul className='prev '>{PREV}
-            <li className={(surveyDiv==="car"?"on ":"") + (isSurveyCompleted.car?"ok ":"")} onClick={()=>{setSurveyDivition("car")}}><span>{PREV_CAR}</span> {surveyDiv==="car"?<span>〉</span>:null}</li>
-            <li className={(surveyDiv==="house"?"on ":"") + (isSurveyCompleted.house?"ok ":"")} onClick={()=>{setSurveyDivition("house")}}><span>{PREV_HOUSE}</span> {surveyDiv==="house"?<span>〉</span>:null}</li>
+        <ul className='prev '>{PREV}            
+            {isSurveyCompleted.car !== null 
+            ? <li className={(surveyDiv==="car"?"on ":"") + (isSurveyCompleted.car?"ok ":"")} onClick={()=>{setSurveyDivition("car")}}><span>{PREV_CAR}</span> {surveyDiv==="car"?<span>〉</span>:null}</li>
+            : <li className='disable'><span>{PREV_CAR}</span></li>}
+
+            {isSurveyCompleted.house !== null 
+            ? <li className={(surveyDiv==="house"?"on ":"") + (isSurveyCompleted.house?"ok ":"")} onClick={()=>{setSurveyDivition("house")}}><span>{PREV_HOUSE}</span> {surveyDiv==="house"?<span>〉</span>:null}</li> 
+            : <li className='disable'><span>{PREV_HOUSE}</span></li>}
         </ul>
         <ul className='base '>{BASE}
-            <li className={(surveyDiv==="age"?"on ":"") + (isSurveyCompleted.age?"ok ":"")} onClick={()=>{setSurveyDivition("age")}}><span>{BASE_AGE}</span> {surveyDiv==="age"?<span>〉</span>:null}</li>
-            <li className={(surveyDiv==="salary"?"on":"") + (isSurveyCompleted.salary?" ok":"")} onClick={()=>{setSurveyDivition("salary")}}><span>{BASE_SALARY}</span> {surveyDiv==="salary"?<span>〉</span>:null}</li>
-            <li className={(surveyDiv==="consumption"?"on":"") + (isSurveyCompleted.consumption?" ok":"")} onClick={()=>{setSurveyDivition("consumption")}}><span>{BASE_CONSUMPTION}</span> {surveyDiv==="consumption"?<span>〉</span>:null}</li>
-            <li className={(surveyDiv==="balance"?"on":"") + (isSurveyCompleted.balance?" ok":"")} onClick={()=>{setSurveyDivition("balance")}}><span>{BASE_BALANCE}</span> {surveyDiv==="balance"?<span>〉</span>:null}</li>
-            <li className={(surveyDiv==="asset"?"on":"") + (isSurveyCompleted.asset?" ok":"")} onClick={()=>{setSurveyDivition("asset")}}><span>{BASE_ASSET}</span> {surveyDiv==="asset"?<span>〉</span>:null}</li>
+            {isSurveyCompleted.age !== null 
+            ? <li className={(surveyDiv==="age"?"on ":"") + (isSurveyCompleted.age?"ok ":"")} onClick={()=>{setSurveyDivition("age")}}><span>{BASE_AGE}</span> {surveyDiv==="age"?<span>〉</span>:null}</li>
+            : <li className='disable'><span>{BASE_AGE}</span></li>}
+
+            {isSurveyCompleted.salary !== null 
+            ? <li className={(surveyDiv==="salary"?"on":"") + (isSurveyCompleted.salary?" ok":"")} onClick={()=>{setSurveyDivition("salary")}}><span>{BASE_SALARY}</span> {surveyDiv==="salary"?<span>〉</span>:null}</li>
+            : <li className='disable'><span>{BASE_SALARY}</span></li>}
+
+            {isSurveyCompleted.consumption !== null 
+            ? <li className={(surveyDiv==="consumption"?"on":"") + (isSurveyCompleted.consumption?" ok":"")} onClick={()=>{setSurveyDivition("consumption")}}><span>{BASE_CONSUMPTION}</span> {surveyDiv==="consumption"?<span>〉</span>:null}</li>
+            : <li className='disable'><span>{BASE_CONSUMPTION}</span></li>}
+
+            {isSurveyCompleted.balance !== null 
+            ? <li className={(surveyDiv==="balance"?"on":"") + (isSurveyCompleted.balance?" ok":"")} onClick={()=>{setSurveyDivition("balance")}}><span>{BASE_BALANCE}</span> {surveyDiv==="balance"?<span>〉</span>:null}</li>
+            : <li className='disable'><span>{BASE_BALANCE}</span></li>}
+
+            {isSurveyCompleted.asset !== null 
+            ? <li className={(surveyDiv==="asset"?"on":"") + (isSurveyCompleted.asset?" ok":"")} onClick={()=>{setSurveyDivition("asset")}}><span>{BASE_ASSET}</span> {surveyDiv==="asset"?<span>〉</span>:null}</li>
+            : <li className='disable'><span>{BASE_ASSET}</span></li>}
+
+            
+            
+            
+            
             {/* <li className={(surveyDiv==="index"?"on":"") + (isSurveyCompleted.index?" ok":"")} onClick={()=>{setSurveyDivition("index")}}><span>{BASE_INDEX}</span> {surveyDiv==="index"?<span>〉</span>:null}</li>
             <li className={(surveyDiv==="house"?"on":"") + (isSurveyCompleted.house?" ok":"")} onClick={()=>{setSurveyDivition("house")}}><span>{BASE_HOUSE}</span> {surveyDiv==="house"?<span>〉</span>:null}</li> */}
         </ul>
         <ul className='add'>{ADD}
-            <li className={(surveyDiv==="marry"?"on":"") + (isSurveyCompleted.marry?" ok":"")} onClick={()=>{setSurveyDivition("marry")}}>{ADD_MARRY} {surveyDiv==="marry"?<span>〉</span>:null}</li>
+            {isSurveyCompleted.marry !== null 
+            ? <li className={(surveyDiv==="marry"?"on":"") + (isSurveyCompleted.marry?" ok":"")} onClick={()=>{setSurveyDivition("marry")}}>{ADD_MARRY} {surveyDiv==="marry"?<span>〉</span>:null}</li>
+            : <li className='disable'><span>{ADD_MARRY}</span></li>}
+            
+            {isSurveyCompleted.baby !== null 
+            ? <li className={(surveyDiv==="baby"?"on":"") + (isSurveyCompleted.baby?" ok":"")} onClick={()=>{setSurveyDivition("baby")}}>{ADD_BABY} {surveyDiv==="baby"?<span>〉</span>:null}</li>
+            : <li className='disable'><span>{ADD_BABY}</span></li>}
+            
+            {isSurveyCompleted.retire !== null 
+            ? <li className={(surveyDiv==="retire"?"on":"") + (isSurveyCompleted.retire?" ok":"")} onClick={()=>{setSurveyDivition("retire")}}>{ADD_RETIRE} {surveyDiv==="retire"?<span>〉</span>:null}</li>
+            : <li className='disable'><span>{ADD_RETIRE}</span></li>}
+            
+            {isSurveyCompleted.parent !== null 
+            ? <li className={(surveyDiv==="parent"?"on":"") + (isSurveyCompleted.parent?" ok":"")} onClick={()=>{setSurveyDivition("parent")}}>{ADD_PARENT} {surveyDiv==="parent"?<span>〉</span>:null}</li>
+            : <li className='disable'><span>{ADD_PARENT}</span></li>}
+            
+            {isSurveyCompleted.lotto !== null 
+            ? <li className={(surveyDiv==="lotto"?"on":"") + (isSurveyCompleted.lotto?" ok":"")} onClick={()=>{setSurveyDivition("lotto")}}>{ADD_LOTTO} {surveyDiv==="lotto"?<span>〉</span>:null}</li>
+            : <li className='disable'><span>{ADD_LOTTO}</span></li>}
+
+            {/* <li className={(surveyDiv==="marry"?"on":"") + (isSurveyCompleted.marry?" ok":"")} onClick={()=>{setSurveyDivition("marry")}}>{ADD_MARRY} {surveyDiv==="marry"?<span>〉</span>:null}</li>
             <li className={(surveyDiv==="baby"?"on":"") + (isSurveyCompleted.baby?" ok":"")} onClick={()=>{setSurveyDivition("baby")}}>{ADD_BABY} {surveyDiv==="baby"?<span>〉</span>:null}</li>
             <li className={(surveyDiv==="retire"?"on":"") + (isSurveyCompleted.retire?" ok":"")} onClick={()=>{setSurveyDivition("retire")}}>{ADD_RETIRE} {surveyDiv==="retire"?<span>〉</span>:null}</li>
             <li className={(surveyDiv==="parent"?"on":"") + (isSurveyCompleted.parent?" ok":"")} onClick={()=>{setSurveyDivition("parent")}}>{ADD_PARENT} {surveyDiv==="parent"?<span>〉</span>:null}</li>
-            <li className={(surveyDiv==="lotto"?"on":"") + (isSurveyCompleted.lotto?" ok":"")} onClick={()=>{setSurveyDivition("lotto")}}>{ADD_LOTTO} {surveyDiv==="lotto"?<span>〉</span>:null}</li>
+            <li className={(surveyDiv==="lotto"?"on":"") + (isSurveyCompleted.lotto?" ok":"")} onClick={()=>{setSurveyDivition("lotto")}}>{ADD_LOTTO} {surveyDiv==="lotto"?<span>〉</span>:null}</li> */}
         </ul>
     </Fragment>
     );

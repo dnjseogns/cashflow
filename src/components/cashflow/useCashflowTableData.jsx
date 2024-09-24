@@ -26,7 +26,6 @@ export const useCashflowTableData = () => {
         base.loan.push({loanId:"systemLoan", loanName:"추가대출", loanAmount:0, loanInterest: base?.loanInterest ?? 6.0, isReadOnly:true});
         base.loan = base.loan.map((item)=> ({...item, "loanAmountStack":-1*item.loanAmount})) // loanAmountStack 컬럼 추가
                              .sort((a,b)=>(b.loanInterest - a.loanInterest)); // 대출금리 높은 걸 위로
-        console.log("surveyData.base.loan",surveyData.base?.loan);
 
         let rows = [];
         //누적 변수

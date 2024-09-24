@@ -5,24 +5,25 @@ const initialize = {
     data : 
     {
         isCompleted:{
-            guide:false,
+            guide:true,
 
-            car:false,
-            house:false,
+            car:null,
+            house:null,
 
-            age:false,
-            salary:false,
-            consumption:false,
-            balance:false,
-            asset:false,
+            age:null,
+            salary:null,
+            consumption:null,
+            balance:null,
+            asset:null,
 
-            index:false,
+            // index:null,
+            // car
             // house:false,
-            marry:false,
-            baby:false,
-            retire:false,
-            parent:false,
-            lotto:false
+            marry:null,
+            baby:null,
+            retire:null,
+            parent:null,
+            lotto:null
         },
         prev:{
         },

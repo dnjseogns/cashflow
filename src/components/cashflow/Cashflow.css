@@ -28,13 +28,15 @@
 .cf-left ul.prev li,
 .cf-left ul.base li,
 .cf-left ul.add li{display: flex; justify-content: space-between;}
+.cf-left ul span,
 .cf-left ul li span{margin-right: 10px;}
 /* left complete 체크 */
 .cf-left ul li{position:relative;}
 .cf-left ul li.ok ::before{content:""; width: 40px; height: 40px;
     background-image: url('../../images/check_01.png'); background-size: 40px 40px; background-repeat: no-repeat;
     display: inline-block; position:absolute; top:-7px; left:-8px;}
-
+/* 체크 못함 list disable  */
+.cf-left ul li.disable{color:#CCCCCC}
 
 /*******************************************/
 /* right overflow*/
@@ -42,7 +44,7 @@
 
 /* right position */
 .cf-right{ position: relative; }
-.cf-right .cf-content .survey-area{position: fixed; bottom: 0%;}
+.cf-right .cf-content .survey-area{position: fixed;}
 .cf-right .cf-content .data-area{position: absolute;}
 
 
@@ -51,7 +53,8 @@
 .cf-right .survey-area{ background: #F1F1F1; border: 1px solid #9BBEC8; border-left: 0px solid #9BBEC8; 
     width: 84.5%; min-width: 500px; height: auto; z-index: 10; } /*border-radius:10px;*/
 /* survey title */
-.cf-right .survey-area .survey-title{padding: 20px; background-color: #427D9D; font-weight: 600; color:white;}
+.cf-right .survey-area .survey-title{padding: 20px; background-color: #427D9D; font-weight: 600; color:white;display:flex; justify-content:space-between;}
+.cf-right .survey-area .survey-title a{cursor: pointer;}
 /* survey tail*/
 .cf-right .survey-area .survey-tail{padding: 20px; font-weight: 600; color:white; display: flex; justify-content: flex-end;}
 .cf-right .survey-area .survey-tail button.complete{padding: 6px 30px 6px 30px; font-weight: 600; background-color: #427D9D; color: white;

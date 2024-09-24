@@ -26,6 +26,39 @@ function CashflowSurvey({surveyDiv,setSurveyDiv, surveyTitle}){
         //완료
         const isSurveyCompleted = surveyData.isCompleted;
         isSurveyCompleted[surveyDiv] = true;
+        if(surveyDiv === "guide"){
+            if(isSurveyCompleted.car === null) isSurveyCompleted.car = false;
+        }
+        if(surveyDiv === "car"){
+            if(isSurveyCompleted.house === null) isSurveyCompleted.house = false;
+            if(isSurveyCompleted.consumption === true) {isSurveyCompleted.consumption = false;}
+            if(isSurveyCompleted.asset === true) {isSurveyCompleted.asset = false;}
+        }
+        if(surveyDiv === "house"){
+            if(isSurveyCompleted.age === null) isSurveyCompleted.age = false;
+            if(isSurveyCompleted.consumption === true) {isSurveyCompleted.consumption = false;}
+            if(isSurveyCompleted.asset === true) {isSurveyCompleted.asset = false;}
+        }
+        if(surveyDiv === "age"){
+            if(isSurveyCompleted.salary === null) isSurveyCompleted.salary = false;
+        }
+        if(surveyDiv === "salary"){
+            if(isSurveyCompleted.consumption === null) isSurveyCompleted.consumption = false;
+            if(isSurveyCompleted.consumption === true) isSurveyCompleted.consumption = false;
+        }
+        if(surveyDiv === "consumption"){
+            if(isSurveyCompleted.balance === null) isSurveyCompleted.balance = false;
+        }
+        if(surveyDiv === "balance"){
+            if(isSurveyCompleted.asset === null) isSurveyCompleted.asset = false;
+        }
+        if(surveyDiv === "asset"){
+            if(isSurveyCompleted.marry === null) isSurveyCompleted.marry = false;
+            if(isSurveyCompleted.baby === null) isSurveyCompleted.baby = false;
+            if(isSurveyCompleted.retire === null) isSurveyCompleted.retire = false;
+            if(isSurveyCompleted.parent === null) isSurveyCompleted.parent = false;
+            if(isSurveyCompleted.lotto === null) isSurveyCompleted.lotto = false;
+        }
         surveyData.isCompleted = isSurveyCompleted;
         dispatch(SvSave(surveyData));
         //survey창닫기
@@ -37,9 +70,9 @@ function CashflowSurvey({surveyDiv,setSurveyDiv, surveyTitle}){
         ? null
         : <Fragment>
             <article className={'survey-area '+surveyDiv}>
-                <div className='survey-title'>{surveyTitle}</div>
+                <div className='survey-title'><span>{surveyTitle}</span><a onClick={()=>{setSurveyDiv("");}}>⨉</a></div>
                 <div className='survey-content'>
-                {surveyDiv==="guide"?<GuideSurvey/>
+                {surveyDiv==="guide"?<GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                 //
                 :surveyDiv==="car"?<PrevCarSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                 :surveyDiv==="house"?<PrevHouseSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
@@ -49,6 +82,7 @@ function CashflowSurvey({surveyDiv,setSurveyDiv, surveyTitle}){
                 :surveyDiv==="consumption"?<BaseConsumptionSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                 :surveyDiv==="balance"?<BaseBalanceSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                 :surveyDiv==="asset"?<BaseAssetSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                //
                 // :surveyDiv==="index"?<BaseIndexSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                 // :surveyDiv==="house"?<BasicHouseSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                 // :surveyDiv==="asset"?<BasicAssetSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
@@ -60,7 +94,7 @@ function CashflowSurvey({surveyDiv,setSurveyDiv, surveyTitle}){
                 :null}
                 </div>
                 <div className='survey-tail'>
-                    <button className='complete' onClick={()=>{setCompleteBtnClickCnt(completeBtnClickCnt+1)}}>완료</button>
+                    <button className='complete' onClick={()=>{setCompleteBtnClickCnt(completeBtnClickCnt+1)}}>{surveyDiv === "guide" ? "시작하기" : "저장하기"}</button>
                 </div>
             </article>
             </Fragment>

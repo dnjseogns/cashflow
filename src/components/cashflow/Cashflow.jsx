@@ -11,7 +11,7 @@ import CashflowTable from './CashflowTable';
 
 function Cashflow(){
     //surveyDiv
-    const [surveyDiv,setSurveyDiv] = useState("");
+    const [surveyDiv,setSurveyDiv] = useState("guide");
     const [surveyTitle,setSurveyTitle] = useState("");
 
     return (
