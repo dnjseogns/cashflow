@@ -66,7 +66,7 @@ export const useCashflowTableData = () => {
                 row.salaryRiseRateStack = salaryRiseRateStack;
 
                 //은퇴 체크
-                if(i > base?.retireAge){
+                if(row.age > base?.retireAge){
                     row.salaryRiseRateStack = 0;
                 }
 
@@ -93,18 +93,31 @@ export const useCashflowTableData = () => {
                 row.inflationStack = inflationStack;
 
                 //소비
-                row.carCost = Math.round((prev?.carCostMonthly ?? 0) * 12 * row.inflationStack);
-                row.houseCost = Math.round((prev?.houseCostMonthly ?? 0) * 12 * row.inflationStack);
-                row.consumption = Math.round((base?.consumptionMonthly ?? 0) * 12 * row.inflationStack);
+                row.carCost = Math.round((prev?.carCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
+                row.houseCost = Math.round((prev?.houseCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
+                row.consumption = Math.round((base?.consumptionMonthly ?? 0) * 12 * row.inflationStack) * -1;
 
                 //전체소비
                 row.totalConsumption = row.carCost + row.houseCost + row.consumption;
             }
 
+            if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true){
+                //퇴직금
+                if(row.age == base?.retireAge){
+                    const totalWorkYear = loopCnt + (base?.workYear ?? 1);
+                    row.eventRetirementPay = base?.salaryMonthly * row.salaryRiseRateStack * totalWorkYear;
+                    row.totalEventNote = (row?.totalEventNote ?? "") + "퇴직금"
+                }else{
+                    row.eventRetirementPay = 0;
+                }
+
+                row.totalEvent = row.eventRetirementPay;
+            }
+
             //잔액
             if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true 
                 && isCompleted?.balance === true){
-                row.totalBalance = row.totalIncome - row.totalConsumption;
+                row.totalBalance = row.totalIncome + row.totalConsumption + row.totalEvent;
             }
 
             //누적자산

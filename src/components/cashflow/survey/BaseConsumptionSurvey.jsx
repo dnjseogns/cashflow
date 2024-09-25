@@ -58,6 +58,10 @@ function BaseConsumptionSurvey({completeBtnClickCnt, commonCompleteLogic}){
         base.consumptionMonthly = totIncomeMonthly - (surveyData.prev?.carCostMonthly ?? 0) - (surveyData.prev?.houseCostMonthly ?? 0) - savingMonthly;
         surveyData.base = base;
 
+        if(base.consumptionMonthly < 0){
+            alert("소비는 마이너스(-) 일 수 없습니다.");
+            return;
+        }
         dispatch(SvSave(surveyData));
         commonCompleteLogic();
     },[completeBtnClickCnt]);

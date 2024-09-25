@@ -46,6 +46,9 @@ function CashflowTable(){
                     <col width="100px"/>
 
                     <col width="100px"/>
+                    <col width="100px"/>
+
+                    <col width="100px"/>
 
                     <col width="20px"/>
 
@@ -60,7 +63,8 @@ function CashflowTable(){
                         <th colSpan="1"></th>
                         <th colSpan={3 + (isSideJobVisible ? 1 : 0)}>소득</th>
                         <th colSpan={5}>소비</th>
-                        <th colSpan="1">잔액<br/>(소득-소비)</th>
+                        <th colSpan="2">이벤트</th>
+                        <th colSpan="1">잔액(소득+소비+이벤트)</th>
                         <th colSpan="1" className='gap'></th>
                         <th colSpan={4 + (isAssetHouseVisible ? 1 : 0)}>누적자산</th>
                     </tr>
@@ -78,6 +82,9 @@ function CashflowTable(){
                         <th>소비</th>
                         <th>합계</th>
 
+                        <th>내용</th>
+                        <th>합계</th>
+
                         <th>합계</th>
 
                         <th className='gap'></th>
@@ -91,6 +98,7 @@ function CashflowTable(){
                 </thead>
                 <tbody>
                     {cashflowData?.timeline.map((row, i) => {
+                    
                     return(
                         <tr key={i}>
                             <td>{row?.age?.toLocaleString('ko-KR')}</td>
@@ -101,23 +109,26 @@ function CashflowTable(){
                             <td className='sum'>{row?.salary && (row?.salary + row?.sideJob)?.toLocaleString('ko-KR')}</td>
                             
                             <td>{row?.inflationStack?.toLocaleString('ko-KR')}</td>
-                            <td>{row?.houseCost?.toLocaleString('ko-KR')}</td>
-                            <td>{row?.carCost?.toLocaleString('ko-KR')}</td>
-                            <td>{row?.consumption?.toLocaleString('ko-KR')}</td>
-                            <td className='sum'>{row?.totalConsumption?.toLocaleString('ko-KR')}</td>
+                            <td className={`${row?.houseCost < 0 ? 'minus' : ''}`}>{row?.houseCost?.toLocaleString('ko-KR')}</td>
+                            <td className={`${row?.carCost < 0 ? 'minus' : ''}`}>{row?.carCost?.toLocaleString('ko-KR')}</td>
+                            <td className={`${row?.consumption < 0 ? 'minus' : ''}`}>{row?.consumption?.toLocaleString('ko-KR')}</td>
+                            <td  className={`sum ${row?.totalConsumption < 0 ? 'minus' : ''}`}>{row?.totalConsumption?.toLocaleString('ko-KR')}</td>
+                            
+                            <td>{row?.totalEventNote}</td>
+                            <td className={`sum ${row?.totalEvent < 0 ? 'minus' : ''}`}>{row?.totalEvent?.toLocaleString('ko-KR')}</td>
 
-                            <td className='sum'>{row?.totalBalance?.toLocaleString('ko-KR')}</td>
+                            <td className={`sum ${row?.totalBalance < 0 ? 'minus' : ''}`}>{row?.totalBalance?.toLocaleString('ko-KR')}</td>
 
                             <td className='gap'></td>
 
-                            <td>{row?.assetLoanStack?.toLocaleString('ko-KR')}</td>
+                            <td className={row?.assetLoanStack < 0 ? 'minus' : ''}>{row?.assetLoanStack?.toLocaleString('ko-KR')}</td>
                             <td>{row?.assetSavingStack?.toLocaleString('ko-KR')}</td>
                             <td>{row?.assetInvestStack?.toLocaleString('ko-KR')}</td>
                             { isAssetHouseVisible && prev?.livingType == "rent" ? <td>{prev?.housePriceOwn?.toLocaleString('ko-KR')}</td> 
                             : isAssetHouseVisible && prev?.livingType == "own" ? <td>{prev?.housePriceTotal?.toLocaleString('ko-KR')}</td> 
                             : null}
 
-                            <td className='sum'>{row?.totalAsset?.toLocaleString('ko-KR')}</td>
+                            <td className={`sum ${row?.totalAsset < 0 ? 'minus' : ''}`}>{row?.totalAsset?.toLocaleString('ko-KR')}</td>
                         </tr>
                     ) 
                     })}
