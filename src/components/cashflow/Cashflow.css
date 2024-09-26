@@ -71,7 +71,7 @@
 /* survey 버튼 */
 .cf-right .survey-area .survey-content .btn1{ text-align: right; padding-right: 5px; border:0px; border-bottom: 1px solid black; background: white; width: 130px; border-radius: 3px;}
 /* survey readonly 버튼 */
-.cf-right .survey-area .survey-content .btn1.readonly{ text-align: right; padding-right: 5px; border:0px; border-bottom: 1px solid black; background: #F7F7F7; }
+.cf-right .survey-area .survey-content .btn1.readonly{ text-align: right; padding-right: 5px; border:0px; border-bottom: 1px solid black; background: #F1F1F1; }
 /* survey 라디오 */
 .cf-right .survey-area .survey-content .radio-wrap input[type="radio"]{margin-right: 5px;}
 .cf-right .survey-area .survey-content .radio-wrap label{margin-right: 20px;}
@@ -82,7 +82,7 @@
 .cf-right .survey-area .survey-content .survey-table tr th img,
 .cf-right .survey-area .survey-content .survey-table tr td img{ cursor: pointer;}
 .cf-right .survey-area .survey-content .survey-table tr td input{ background: white; border: 0px; width:100%;}
-.cf-right .survey-area .survey-content .survey-table tr td input.readonly{ background: #F7F7F7; border: 0px; width:100%;}
+.cf-right .survey-area .survey-content .survey-table tr td input.readonly{ background: #F1F1F1; border: 0px; width:100%;}
 
 /*******************************************/
 /* table 테두리 */

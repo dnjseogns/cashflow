@@ -131,6 +131,17 @@ function BaseSalarySurvey({completeBtnClickCnt, commonCompleteLogic}){
         <div>
             <p className="question">(4) 은퇴 나이를 입력해주세요.</p>
             <p><input className='btn1' value={retireAge.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"retireAge")}}/> 세</p>
+            <p className='note'>※ 퇴직금 계산 : (퇴직 전 평균 월급) x 연차수</p>
+            {/* 예를 들어 계산
+해 볼까요? 소득대체율은 가입할 때부터 50%로 변함없으며, A값은 1,935,977원, B값은
+3,000,000원이고, 가입기간은 40년이라고 가정하면, 14,807,931원(1.5×(1,935,977원
++3.000.000원)×(1+0.05×20년×12월/12))을 기본연금액으로 계산할 수 있습니다. 이는 연
+지급액이므로 12개월로 나누면 월 지급액 1,233,994원을 구할 수 있습니다.  */}
+            {/* <p className='note'>※ 국민연금 예상 수령액 계산 : 소득대체율상수 × (A+B) × (1 + 0.05×n/12) </p> */}
+            {/* file:///C:/Users/dhwon/Downloads/pension1%20(1).pdf */}
+            {/* 한국투자증권 국민연금으로 재테크하기 */}
+            {/* 국민연금은 매년 물가 상승률을 반영하여 연금액이 인상됩니다. */}
+            {/* 이건... base에서 못하고 add쪽으로 옮겨야할 뜻*/}
         </div>
         <div>
             <p className="question">(5) 부업을 하고 계시다면, 입력해주세요.</p>

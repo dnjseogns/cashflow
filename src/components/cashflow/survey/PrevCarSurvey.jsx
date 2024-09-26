@@ -101,7 +101,7 @@ const PrevCarSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
             <div>
                 <p className="question">(3) 월 평균 차량 유지비 입력해주세요.(주유비 + 보험료 + 유지보수비 등...)</p>
                 <p><input className='btn1' value={carCostMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"carCostMonthly")}}/> 만원</p>
-                <p className='note'>※ 차량 가격의 1.5% 이상의 월 유지비로 나옵니다. ex) 3000만원 자동차의 유지비 → 45만원</p>
+                <p className='note'>※ 차량 가격의 1.5% 이상의 월 유지비가 나옵니다. ex) 3000만원 자동차의 유지비 → 45만원</p>
             </div>
         </Fragment>
         : null}

@@ -16,6 +16,7 @@ function CashflowTable(){
 
     useCashflowTableData();
 
+    const isSalaryRiseRateStackVisible = false;
     const isSideJobVisible = !!(cashflowData?.timeline ?? [])[0]?.sideJob;
 
     const isAssetHouseVisible = (prev?.livingType == "rent" &&  prev?.housePriceOwn > 0) 
@@ -34,7 +35,7 @@ function CashflowTable(){
                 <colgroup>
                     <col width="40px"/>
 
-                    <col width="100px"/>
+                    {isSalaryRiseRateStackVisible ? <col width="100px"/> : null}
                     <col width="100px"/>
                     {isSideJobVisible ? <col width="100px"/> : null}
                     <col width="100px"/>
@@ -61,7 +62,7 @@ function CashflowTable(){
                 <thead>
                     <tr>
                         <th colSpan="1"></th>
-                        <th colSpan={3 + (isSideJobVisible ? 1 : 0)}>소득</th>
+                        <th colSpan={2 + (isSalaryRiseRateStackVisible ? 1 : 0) + (isSideJobVisible ? 1 : 0)}>소득</th>
                         <th colSpan={5}>소비</th>
                         <th colSpan="2">이벤트</th>
                         <th colSpan="1">잔액(소득+소비+이벤트)</th>
@@ -71,7 +72,7 @@ function CashflowTable(){
                     <tr>
                         <th>나이</th>
 
-                        <th>연봉상승률(누적)</th>
+                        {isSalaryRiseRateStackVisible ? <th>연봉상승률(누적)</th> : null}
                         <th>연봉</th>
                         {isSideJobVisible ? <th>부업</th> : null}
                         <th>합계</th>
@@ -103,7 +104,7 @@ function CashflowTable(){
                         <tr key={i}>
                             <td>{row?.age?.toLocaleString('ko-KR')}</td>
 
-                            <td>{row?.salaryRiseRateStack?.toLocaleString('ko-KR')}</td>
+                            {isSalaryRiseRateStackVisible ? <td>{row?.salaryRiseRateStack?.toLocaleString('ko-KR')}</td> : null}
                             <td>{row?.salary?.toLocaleString('ko-KR')}</td>
                             {isSideJobVisible ? <td>{row?.sideJob?.toLocaleString('ko-KR')}</td> : null}
                             <td className='sum'>{row?.salary && (row?.salary + row?.sideJob)?.toLocaleString('ko-KR')}</td>
