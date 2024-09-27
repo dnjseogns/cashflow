@@ -68,6 +68,7 @@
 .cf-right .survey-area .survey-content p{ margin: 0px; padding: 0px; }
 .cf-right .survey-area .survey-content p.question{ font-weight: 600; }
 .cf-right .survey-area .survey-content p.note{ color:#427D9D; }
+.cf-right .survey-area .survey-content i.mapping{ color:green; font-size:16px; font-weight:600}
 /* survey 버튼 */
 .cf-right .survey-area .survey-content .btn1{ text-align: right; padding-right: 5px; border:0px; border-bottom: 1px solid black; background: white; width: 130px; border-radius: 3px;}
 /* survey readonly 버튼 */

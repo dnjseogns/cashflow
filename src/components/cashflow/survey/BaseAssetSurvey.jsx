@@ -5,6 +5,8 @@ import useEffectNoMount from '@/hooks/useEffectNoMount.jsx';
 import { numRound } from "@/utils/util";
 import plusIcon from "@/images/icon_add.png";
 import minusIcon from "@/images/icon_del.png";
+import Mapping from '@/components/common/Mapping.jsx';
+
 
 //나이
 function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
@@ -225,9 +227,9 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
     <Fragment>
         <div>
             <p className="question">(1) 자산 현황을 입력해주세요.</p>
-            <p>- 예·적금 : <input className='btn1' value={currAssetSaving.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"currAssetSaving")}}/> 만원</p>
-            <p>- 투자금 : <input className='btn1' value={currAssetInvest.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"currAssetInvest")}}/> 만원</p>
-            <p>- 대출금</p>
+            <p>- <Mapping txt="ⓐ"/>예·적금 : <input className='btn1' value={currAssetSaving.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"currAssetSaving")}}/> 만원</p>
+            <p>- <Mapping txt="ⓑ"/>투자금 : <input className='btn1' value={currAssetInvest.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"currAssetInvest")}}/> 만원</p>
+            <p>- <Mapping txt="ⓒ"/>대출금</p>
             <table className='survey-table'>
                 <colgroup>
                     <col width={"7%"}/>
@@ -269,11 +271,11 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
         </div>
         <div>
             <p className="question">(2) 시뮬레이션 금리 및 개인 투자수익률을 입력해주세요.</p>
-            <p>- 대출금리 : <input className='btn1' value={loanInterest} onChange={(e)=>{surveyOnChange(e,"loanInterest")}}/> %</p>
+            <p>- <Mapping txt="ⓓ"/>대출금리 : <input className='btn1' value={loanInterest} onChange={(e)=>{surveyOnChange(e,"loanInterest")}}/> %</p>
             <p className='note'>※ 2000년 ~ 2023년 1금융권 평균 대출금리는 약 6.0%입니다.</p>
-            <p>- 예금금리 : <input className='btn1' value={bankInterest} onChange={(e)=>{surveyOnChange(e,"bankInterest")}}/> %</p>
+            <p>- <Mapping txt="ⓔ"/>예금금리 : <input className='btn1' value={bankInterest} onChange={(e)=>{surveyOnChange(e,"bankInterest")}}/> %</p>
             <p className='note'>※ 2000년 ~ 2023년 1금융권 평균 대출금리는 약 3.0%입니다.</p>
-            <p>- 개인 투자수익률 : <input className='btn1' value={investIncome} onChange={(e)=>{surveyOnChange(e,"investIncome")}}/> %</p>
+            <p>- <Mapping txt="ⓕ"/>개인 투자수익률 : <input className='btn1' value={investIncome} onChange={(e)=>{surveyOnChange(e,"investIncome")}}/> %</p>
             <p className='note'>※ 투자수익률은 미래자산에 매우 큰 영향을 끼칩니다. 현실적인 누적자산을 확인하기 위해선, <i>대출금리({loanInterest}%)</i>를 크게 벗어나지 않는 수익률로 설정해주시길 바랍니다.</p>
             <p className='note'>※ 투자대상 : 주식, 금, 코인, 실거주 아닌 주택 등...(실거주 주택은 별도로 계산되므로, 투자대상에 포함하지 않습니다.)</p>
         </div>

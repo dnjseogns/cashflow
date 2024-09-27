@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react';
 import {useSelector, useDispatch} from "react-redux";
 import {SvSave, SvClean} from '@/redux/action/SurveyAction';
 import useEffectNoMount from '@/hooks/useEffectNoMount.jsx';
+import Mapping from '@/components/common/Mapping.jsx';
 
 const PrevHouseSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
     const dispatch = useDispatch();
@@ -111,7 +112,7 @@ const PrevHouseSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
     return (
         <Fragment>
             <div>
-                <p className="question">(1) 현재 거주 형태를 선택해주세요.</p>
+                <p className="question">(1) 현재 거주 형태를 선택해주세요.<Mapping txt="ⓐ"/></p>
                 <p className="radio-wrap">
                     <input type="radio" name="livingType" id="livingType_parent" value="parent" checked={livingType==="parent"?true:false} onChange={(e)=>{surveyOnChange(e,"livingType")}}/><label htmlFor="livingType_parent">본가</label>
                     <input type="radio" name="livingType" id="livingType_rent" value="rent" checked={livingType==="rent"?true:false} onChange={(e)=>{surveyOnChange(e,"livingType")}}/><label htmlFor="livingType_rent">월세·반전세·전세</label>
@@ -122,18 +123,18 @@ const PrevHouseSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
             ? <Fragment>
                 <div>
                     <p className="question">(2) 보증금 정보를 입력해주세요.</p>
-                    <p>- 보증금 : <input className='btn1' value={housePriceTotal.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"housePriceTotal")}}/> 만원</p>
+                    <p>- <Mapping txt="ⓑ"/>보증금 : <input className='btn1' value={housePriceTotal.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"housePriceTotal")}}/> 만원</p>
                     <p>
-                        <span>- 전·월세자금대출금 : </span>
+                        <span>- <Mapping txt="ⓒ"/>전·월세자금대출금 : </span>
                         <input className='btn1' value={housePriceLoan.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"housePriceLoan")}}/> 만원,
-                        <span style={{marginLeft:"20px"}}>대출금리 : </span>
+                        <span style={{marginLeft:"20px"}}><Mapping txt="ⓓ"/>대출금리 : </span>
                         <input className='btn1' value={housePriceLoanRate.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"housePriceLoanRate")}}/> %
                     </p>
-                    <p>- 보증금 중 자기자본(자동계산) : <input className='btn1 readonly' value={(housePriceTotal - housePriceLoan).toLocaleString('ko-KR')} readOnly={true}/> 만원</p>
+                    <p>- <Mapping txt="ⓔ"/>보증금 중 자기자본(자동계산) : <input className='btn1 readonly' value={(housePriceTotal - housePriceLoan).toLocaleString('ko-KR')} readOnly={true}/> 만원</p>
                 </div>
                 <div>
                     <p className="question">(3) 월 주거비(월세 + 관리비 + 공과금 등...)를 입력해주세요.</p>
-                    <p><input className='btn1' value={houseCostMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"houseCostMonthly")}}/> 만원</p>
+                    <p>- <Mapping txt="ⓕ"/> : <input className='btn1' value={houseCostMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"houseCostMonthly")}}/> 만원</p>
                 </div>
             </Fragment>
             : null}
@@ -141,18 +142,18 @@ const PrevHouseSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
             ? <Fragment>
                 <div>
                     <p className="question">(2) 주택 매매 가격을 입력해주세요.</p>
-                    <p>- 매매가격 : <input className='btn1' value={housePriceTotal.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"housePriceTotal")}}/> 만원</p>
+                    <p>- <Mapping txt="ⓑ"/>매매가격 : <input className='btn1' value={housePriceTotal.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"housePriceTotal")}}/> 만원</p>
                     <p>
-                        <span>- 주택담보대출 잔여 대출금 : </span>
+                        <span>- <Mapping txt="ⓒ"/>주택담보대출 잔여 대출금 : </span>
                         <input className='btn1' value={housePriceLoan.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"housePriceLoan")}}/> 만원,
-                        <span style={{marginLeft:"20px"}}>대출금리 : </span>
+                        <span style={{marginLeft:"20px"}}><Mapping txt="ⓓ"/>대출금리 : </span>
                         <input className='btn1' value={housePriceLoanRate.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"housePriceLoanRate")}}/> %
                     </p>
-                    <p>- 자기자본(자동계산) : <input className='btn1 readonly' value={(housePriceTotal - housePriceLoan).toLocaleString('ko-KR')} readOnly={true}/> 만원</p>
+                    <p>- <Mapping txt="ⓔ"/>자기자본(자동계산) : <input className='btn1 readonly' value={(housePriceTotal - housePriceLoan).toLocaleString('ko-KR')} readOnly={true}/> 만원</p>
                 </div>
                 <div>
                     <p className="question">(3) 월 관리비를 입력해주세요.</p>
-                    <p><input className='btn1' value={houseCostMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"houseCostMonthly")}}/> 만원</p>
+                    <p>- <Mapping txt="ⓕ"/> : <input className='btn1' value={houseCostMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"houseCostMonthly")}}/> 만원</p>
                 </div>
             </Fragment>
             : null}

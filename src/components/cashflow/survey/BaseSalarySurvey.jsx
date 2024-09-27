@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react';
 import {useSelector, useDispatch} from "react-redux";
 import {SvSave, SvClean} from '@/redux/action/SurveyAction';
 import useEffectNoMount from '@/hooks/useEffectNoMount.jsx';
+import Mapping from '@/components/common/Mapping.jsx';
 
 function BaseSalarySurvey({completeBtnClickCnt, commonCompleteLogic}){
     const dispatch = useDispatch();
@@ -111,7 +112,7 @@ function BaseSalarySurvey({completeBtnClickCnt, commonCompleteLogic}){
     return(<Fragment>
         <div>
             <p className="question">(1) 현재 세후 월급을 입력해주세요.</p>
-            <p>
+            <p> - <Mapping txt="ⓐ"/> : 
                 월 <input className='btn1' value={salaryMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"salaryMonthly")}}/>만원
                 <i> (연봉 {(salaryMonthly*12).toLocaleString('ko-KR')}만원)</i>
             </p>
@@ -119,18 +120,18 @@ function BaseSalarySurvey({completeBtnClickCnt, commonCompleteLogic}){
         </div>
         <div>
             <p className="question">(2) 총 연차수를 입력해주세요.(이직포함)</p>
-            <p><input className='btn1' value={workYear} onChange={(e)=>{surveyOnChange(e,"workYear")}}/>년차</p>
+            <p> - <Mapping txt="ⓑ"/> : <input className='btn1' value={workYear} onChange={(e)=>{surveyOnChange(e,"workYear")}}/>년차</p>
         </div>
         <div>
             <p className="question">(3) 연차수별 시뮬레이션 연봉상승률을 입력해주세요.</p>
-            <p>1년차 : <input className='btn1' value={salaryRiseRate1} onChange={(e)=>{surveyOnChange(e,"salaryRiseRate1")}}/>%
+            <p> - <Mapping txt="ⓒ"/> : 1년차 : <input className='btn1' value={salaryRiseRate1} onChange={(e)=>{surveyOnChange(e,"salaryRiseRate1")}}/>%
             → 25년차 이상 : <input className='btn1' value={salaryRiseRate25} onChange={(e)=>{surveyOnChange(e,"salaryRiseRate25")}}/>%</p>
             <p className='note'>※ 평균 연봉 상승률은 약 7% → 2%으로 25년에 걸쳐 점차 감소합니다.</p>
             <p className='note'>※ 참고사이트 : 임금직무정보시스템(https://www.wage.go.kr/whome/index.do)</p>
         </div>
         <div>
             <p className="question">(4) 은퇴 나이를 입력해주세요.</p>
-            <p><input className='btn1' value={retireAge.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"retireAge")}}/> 세</p>
+            <p> - <Mapping txt="ⓓ"/> : <input className='btn1' value={retireAge.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"retireAge")}}/> 세</p>
             <p className='note'>※ 퇴직금 계산 : (퇴직 전 평균 월급) x 연차수</p>
             {/* 예를 들어 계산
 해 볼까요? 소득대체율은 가입할 때부터 50%로 변함없으며, A값은 1,935,977원, B값은
@@ -145,7 +146,7 @@ function BaseSalarySurvey({completeBtnClickCnt, commonCompleteLogic}){
         </div>
         <div>
             <p className="question">(5) 부업을 하고 계시다면, 입력해주세요.</p>
-            <p>
+            <p> - <Mapping txt="ⓔ"/> : 
                 월 <input className='btn1' value={sideJobMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"sideJobMonthly")}}/>만원
                 <i> (연 {(sideJobMonthly*12).toLocaleString('ko-KR')}만원)</i>
             </p>

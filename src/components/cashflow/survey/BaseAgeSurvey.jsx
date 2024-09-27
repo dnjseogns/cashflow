@@ -3,6 +3,7 @@ import {useSelector, useDispatch} from "react-redux";
 import {SvSave, SvClean} from '@/redux/action/SurveyAction';
 import useEffectNoMount from '@/hooks/useEffectNoMount.jsx';
 import { numRound } from "@/utils/util";
+import Mapping from '@/components/common/Mapping.jsx';
 
 //나이
 function BaseAgeSurvey({completeBtnClickCnt, commonCompleteLogic}){
@@ -39,7 +40,7 @@ function BaseAgeSurvey({completeBtnClickCnt, commonCompleteLogic}){
     <Fragment>
         <div>
             <p className="question">(1) 만 나이를 입력해주세요.</p>
-            <p><input className='btn1' value={age} onChange={(e)=>{surveyOnChange(e,"age")}}/> 세</p>
+            <p>- <Mapping txt="ⓐ"/> : <input className='btn1' value={age} onChange={(e)=>{surveyOnChange(e,"age")}}/> 세</p>
         </div>
     </Fragment>);
 }
