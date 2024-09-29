@@ -89,7 +89,7 @@ function BaseSalarySurvey({completeBtnClickCnt, commonCompleteLogic}){
             <p className="question">(5) 부업을 하고 계시다면, 입력해주세요.</p>
             <p>- <Mapping txt="ⓒ"/> : 
                 월 <input className='btn1' value={sideJobMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"sideJobMonthly")}}/>원
-                <i> (연 {toKoreanMoneyUnit(sideJobMonthly*12)})</i>
+                <i> ({toKoreanMoneyUnit(sideJobMonthly)})</i>
             </p>
             <p className='note'>※ 모든 소득은 세후로 계산하고 있습니다.</p>
             <p className='note'>※ 미래 부업소득 = 부업소득 x 물가상승률<Mapping txt="(1-ⓑ)"/></p>

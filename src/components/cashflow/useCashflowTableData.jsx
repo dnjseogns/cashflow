@@ -103,11 +103,19 @@ export const useCashflowTableData = () => {
 
             if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true 
                 && isCompleted?.balance === true && isCompleted?.house === true){
-                //잔액
+                //집
                 row.houseCost = Math.round((base?.houseCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
                 row.consumption -= row.houseCost;
             }
 
+            if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true 
+                && isCompleted?.balance === true && isCompleted?.house === true && isCompleted?.car === true){
+                //차
+                row.carCost = Math.round((base?.carCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
+                row.consumption -= row.carCost;
+            }
+
+            //이벤트
             if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true){
                 //퇴직금
                 if(row.age == base?.retireAge){
@@ -115,7 +123,7 @@ export const useCashflowTableData = () => {
                     row.eventRetirementPay = base?.salaryMonthly * row.salaryRiseRateStack * totalWorkYear;
                     row.totalEventNote = (row?.totalEventNote ?? "") + "퇴직금(4-ⓑ)"
                 }else{
-                    row.eventRetirementPay = 0;
+                    row.eventRetirementPay = row.eventRetirementPay;
                 }
 
                 row.totalEvent = row.eventRetirementPay;

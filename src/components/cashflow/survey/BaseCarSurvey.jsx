@@ -3,67 +3,35 @@ import {useSelector, useDispatch} from "react-redux";
 import {SvSave, SvClean} from '@/redux/action/SurveyAction';
 import useEffectNoMount from '@/hooks/useEffectNoMount.jsx';
 import Mapping from '@/components/common/Mapping.jsx';
+import {expCheckInt, expCheckDouble, toKoreanMoneyUnit} from "@/utils/util.js";
 
 const BaseCarSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
     const dispatch = useDispatch();
     const surveyData = useSelector((store) => store.Survey).data;
 
-    const [carYn, setCarYn] = useState(surveyData?.base?.carYn ?? "N");
-    const [carLoan, setCarLoan] = useState(surveyData?.base?.carLoan ?? 0);
-    const [carLoanRate, setCarLoanRate] = useState(surveyData?.base?.carLoanRate ?? "6.0");
-    const [carCostMonthly, setCarCostMonthly] = useState(surveyData?.base?.carCostMonthly ?? 0);
+    const carYn = surveyData?.base?.carYn ?? "N";
+    const carLoan = surveyData?.base?.carLoan ?? 0;
+    const carLoanRate = surveyData?.base?.carLoanRate ?? "6.0";
+    const carCostMonthly = surveyData?.base?.carCostMonthly ?? 0;
 
     const surveyOnChange = (e, div) => {
         if(div === "carYn"){
-            setCarYn(e.target.value);
+            surveyData.base.carYn = e.target.value;
         } else if(div === "carLoan"){
-            const number = e.target.value.replaceAll(",",""); //쉼표제거
-            if(isNaN(number)){return;} //문자 체크
-            const valInt = Math.floor(number); //정수변환
-
-            if(0 <= valInt && valInt <= 10000000){
-                setCarLoan(valInt);
-            }else if(10000000 < valInt){
-                return;
-            }else{
-                setCarLoan(0);
-                return;
-            }
+            const ret = expCheckInt(e.target.value, 0, 10000000000);
+            if(ret === null){return;}
+            else{surveyData.base.carLoan = ret;}
         } else if(div === "carLoanRate"){
-            const number = e.target.value.replaceAll(",",""); //쉼표제거
-            if(isNaN(number)){return;} //문자 체크
-            if(number.toString().length >= 5){return;}//길이체크
-
-            if(number === 0 || number === ""){
-                setCarLoanRate(0);
-                return;
-            }
-            else if(0 <= number && number <= 100){
-                if(/^0\d/.test(number)){
-                    setCarLoanRate(Number(number).toString());
-                }else{
-                    setCarLoanRate(number);
-                }
-            }else if(100 < number){
-                return;
-            }else{
-                setCarLoanRate(0);
-                return;
-            }
+            const ret = expCheckDouble(e.target.value, 0, 100, 5);
+            if(ret === null){return;}
+            else{surveyData.base.carLoanRate = ret;}
         } else if(div === "carCostMonthly"){
-            const number = e.target.value.replaceAll(",",""); //쉼표제거
-            if(isNaN(number)){return;} //문자 체크
-            const valInt = Math.floor(number); //정수변환
-
-            if(0 <= valInt && valInt <= 10000000){
-                setCarCostMonthly(valInt);
-            }else if(10000000 < valInt){
-                return;
-            }else{
-                setCarCostMonthly(0);
-                return;
-            }
+            const ret = expCheckInt(e.target.value, 0, 1000000000);
+            if(ret === null){return;}
+            else{surveyData.base.carCostMonthly = ret;}
         }
+
+        dispatch(SvSave(surveyData));
     };
 
     useEffectNoMount(()=>{
@@ -74,7 +42,7 @@ const BaseCarSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
             surveyData.base.carCostMonthly = carCostMonthly;
         }else{
             surveyData.base.carLoan = 0;
-            surveyData.base.carLoanRate = 0;
+            surveyData.base.carLoanRate = carLoanRate;
             surveyData.base.carCostMonthly = 0;
         }
 
@@ -96,12 +64,12 @@ const BaseCarSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
         ? <Fragment>
             <div>
                 <p className="question">(2) 자동차 대출 정보를 입력해주세요.</p>
-                <p>- <Mapping txt="ⓐ"/>잔여 대출금 : <input className='btn1' value={carLoan.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"carLoan")}}/> 만원</p>
+                <p>- <Mapping txt="ⓐ"/>잔여 대출금 : <input className='btn1' value={carLoan.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"carLoan")}}/>({toKoreanMoneyUnit(carLoan)})</p>
                 <p>- 대출금리 : <input className='btn1' value={carLoanRate.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"carLoanRate")}}/> %</p>
             </div>
             <div>
                 <p className="question">(3) 월 평균 차량 유지비 입력해주세요.(주유비 + 보험료 + 유지보수비 등...)</p>
-                <p>- <Mapping txt="ⓑ"/> : <input className='btn1' value={carCostMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"carCostMonthly")}}/> 만원</p>
+                <p>- <Mapping txt="ⓑ"/> : <input className='btn1' value={carCostMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"carCostMonthly")}}/>({toKoreanMoneyUnit(carCostMonthly)})</p>
                 <p className='note'>※ 차량 가격의 1.5% 이상의 월 유지비가 나옵니다. ex) 3000만원 자동차의 유지비 → 45만원</p>
             </div>
         </Fragment>
