@@ -105,7 +105,7 @@ const BaseHouseSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
                     <p>- 자기자본(자동계산) : <input className='btn1 readonly' value={(housePriceTotal - housePriceLoan).toLocaleString('ko-KR')} readOnly={true}/>({toKoreanMoneyUnit(housePriceTotal - housePriceLoan)})</p>
                 </div>
                 <div>
-                    <p className="question">(3) 월 관리비를 입력해주세요.</p>
+                    <p className="question">(3) 월 관리비 + 공과금를 입력해주세요.</p>
                     <p>- <Mapping txt="ⓒ"/> : <input className='btn1' value={houseCostMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"houseCostMonthly")}}/>({toKoreanMoneyUnit(houseCostMonthly)})</p>
                 </div>
             </Fragment>

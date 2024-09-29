@@ -6,23 +6,22 @@ import { numRound } from "@/utils/util";
 import plusIcon from "@/images/icon_add.png";
 import minusIcon from "@/images/icon_del.png";
 import Mapping from '@/components/common/Mapping.jsx';
+import {expCheckInt, expCheckDouble, toKoreanMoneyUnit} from "@/utils/util.js";
 
 
 //나이
 function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
     const dispatch = useDispatch();
     const surveyData = useSelector((store) => store.Survey).data;
-    const base = surveyData.base;
 
-    // const [currAssetLoan, setCurrAssetLoan] = useState(base?.currAssetLoan ?? 0);
-    const [loan, setLoan] = useState(base?.loan.length >= 1 ? base?.loan : []);
-    const [currAssetSaving, setCurrAssetSaving] = useState(base?.currAssetSaving ?? 0);
-    const [currAssetInvest, setCurrAssetInvest] = useState(base?.currAssetInvest ?? 0);
+    // const [currAssetLoan, setCurrAssetLoan] = useState(surveyData.base?.currAssetLoan ?? 0);
+    const loan = (Array.isArray(surveyData.base?.loan) && surveyData.base?.loan?.length >= 1) ? surveyData.base?.loan : [];
+    const currAssetSaving = surveyData.base?.currAssetSaving ?? 0;
+    const currAssetInvest = surveyData.base?.currAssetInvest ?? 0;
 
-    const [loanInterest, setLoanInterest] = useState(base?.loanInterest ?? "6.0");
-    const [bankInterest, setBankInterest] = useState(base?.bankInterest ?? "3.0");
-    const [investIncome, setInvestIncome] = useState(base?.investIncome ?? "6.0");
-
+    const loanInterest = surveyData.base?.loanInterest ?? "6.0";
+    const bankInterest = surveyData.base?.bankInterest ?? "3.0";
+    const investIncome = surveyData.base?.investIncome ?? "6.0";
 
     useEffect(()=>{
         let newLoan = [...loan].filter((item)=>{return item.loanId != "carLoan" && item.loanId != "houseLoan"});
@@ -36,126 +35,45 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
         if(surveyData.base?.carLoan > 0){
             newLoan.unshift({loanId:"carLoan", loanName:"자동차 대출(사전입력 : 1-ⓐ)", loanAmount:surveyData.base?.carLoan ?? 0, loanInterest:surveyData.base?.carLoanRate ?? 0, isReadOnly:true});
         }
-        setLoan(newLoan);
+
+        surveyData.base.loan = newLoan;
+        dispatch(SvSave(surveyData));
     },[]);
 
     const surveyOnChange = (e, div) => {
-        // if(div==="currAssetLoan"){
-        //     const number = e.target.value.replaceAll(",",""); //쉼표제거
-        //     if(isNaN(number)){return;} //문자 체크
-        //     const valInt = numRound(number, 0); //정수변환
-
-        //     if(0 <= valInt && valInt <= 100000000){
-        //         setCurrAssetLoan(valInt);
-        //     }else if(100000000 < valInt){
-        //         return;
-        //     }else{
-        //         setCurrAssetLoan(0);
-        //         return;
-        //     }
-        // }
         if(div==="currAssetSaving"){
-            const number = e.target.value.replaceAll(",",""); //쉼표제거
-            if(isNaN(number)){return;} //문자 체크
-            const valInt = numRound(number, 0); //정수변환
-
-            if(0 <= valInt && valInt <= 100000000){
-                setCurrAssetSaving(valInt);
-            }else if(100000000 < valInt){
-                return;
-            }else{
-                setCurrAssetSaving(0);
-                return;
-            }
+            const ret = expCheckInt(e.target.value, 0, 10000000000);
+            if(ret === null){return;}
+            else{surveyData.base.currAssetSaving = ret;}
         }else if(div==="currAssetInvest"){
-            const number = e.target.value.replaceAll(",",""); //쉼표제거
-            if(isNaN(number)){return;} //문자 체크
-            const valInt = numRound(number, 0); //정수변환
-
-            if(0 <= valInt && valInt <= 100000000){
-                setCurrAssetInvest(valInt);
-            }else if(100000000 < valInt){
-                return;
-            }else{
-                setCurrAssetInvest(0);
-                return;
-            }
+            const ret = expCheckInt(e.target.value, 0, 10000000000);
+            if(ret === null){return;}
+            else{surveyData.base.currAssetInvest = ret;}
         }else if(div==="loanInterest"){
-            const number = e.target.value.replaceAll(",",""); //쉼표제거
-            if(isNaN(number)){return;} //문자 체크
-            if(number.toString().length >= 5){return;}//길이체크
-
-            if(number === 0 || number === ""){
-                setLoanInterest(0);
-                return;
-            }
-            else if(0 <= number && number <= 100){
-                if(/^0\d/.test(number)){
-                    setLoanInterest(Number(number).toString());
-                }else{
-                    setLoanInterest(number);
-                }
-            }else if(100 < number){
-                return;
-            }else{
-                setLoanInterest(0);
-                return;
-            }
+            const ret = expCheckDouble(e.target.value, 0, 100, 5);
+            if(ret === null){return;}
+            else{surveyData.base.loanInterest = ret;}
         }else if(div==="bankInterest"){
-            const number = e.target.value.replaceAll(",",""); //쉼표제거
-            if(isNaN(number)){return;} //문자 체크
-            if(number.toString().length >= 5){return;}//길이체크
-
-            if(number === 0 || number === ""){
-                setBankInterest(0);
-                return;
-            }
-            else if(0 < number && number <= 100){
-                if(/^0\d/.test(number)){
-                    setBankInterest(Number(number).toString());
-                }else{
-                    setBankInterest(number);
-                }
-            }else if(100 < number){
-                return;
-            }else{
-                setBankInterest(0);
-                return;
-            }
+            const ret = expCheckDouble(e.target.value, 0, 100, 5);
+            if(ret === null){return;}
+            else{surveyData.base.bankInterest = ret;}
         }else if(div==="investIncome"){
-            const number = e.target.value.replaceAll(",",""); //쉼표제거
-            if(isNaN(number)){return;} //문자 체크
-            if(number.toString().length >= 5){return;}//길이체크
-
-            if(number === 0 || number === ""){
-                setInvestIncome(0);
-                return;
-            }
-            else if(0 <= number && number <= 100){
-                if(/^0\d/.test(number)){
-                    setInvestIncome(Number(number).toString());
-                }else{
-                    setInvestIncome(number);
-                }
-            }else if(100 < number){
-                return;
-            }else{
-                setInvestIncome(0);
-                return;
-            }
+            const ret = expCheckDouble(e.target.value, 0, 100, 5);
+            if(ret === null){return;}
+            else{surveyData.base.investIncome = ret;}
         }
+
+        dispatch(SvSave(surveyData));
     };
 
     useEffectNoMount(()=>{
-        base.loan = [...loan];
-        base.currAssetSaving = currAssetSaving;
-        base.currAssetInvest = currAssetInvest;
+        surveyData.base.loan = [...loan];
+        surveyData.base.currAssetSaving = currAssetSaving;
+        surveyData.base.currAssetInvest = currAssetInvest;
 
-        base.loanInterest = loanInterest;
-        base.bankInterest = bankInterest;
-        base.investIncome = investIncome;
-
-        surveyData.base = base;
+        surveyData.base.loanInterest = loanInterest;
+        surveyData.base.bankInterest = bankInterest;
+        surveyData.base.investIncome = investIncome;
 
         dispatch(SvSave(surveyData));
         commonCompleteLogic();
@@ -164,47 +82,28 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
     const addLoan = () => {
         const newLoan = [...loan];
         const loanNumber = (loan.length + 1).toString();
-        const newObj = {loanId : "loan"+loanNumber, loanName : "대출"+loanNumber, loanAmount : 100, loanInterest : "6.0", isReadOnly : false};
-        newLoan.push(newObj)
-        setLoan(newLoan);
+        const newObj = {loanId : "loan"+loanNumber, loanName : "대출"+loanNumber, loanAmount : 1000000, loanInterest : "6.0", isReadOnly : false};
+        newLoan.push(newObj);
+
+        surveyData.base.loan = newLoan;
+        dispatch(SvSave(surveyData));
     }
     const deleteLoan = (e, clickedItem) => {
         const newLoan = JSON.parse(JSON.stringify(loan.filter((item)=>(item.loanId != clickedItem?.loanId))));
-        setLoan(newLoan);
+        
+        surveyData.base.loan = newLoan;
+        dispatch(SvSave(surveyData));
     }
     const loanInputOnChange = (e, clickedItem, keyName) => {
         let newValue = e.target.value;
         if(keyName === "loanInterest"){
-            newValue = newValue.replaceAll(",",""); //쉼표제거
-            if(isNaN(newValue)){return;} //문자 체크
-            if(newValue.toString().length >= 5){return;}//길이체크
-
-            if(newValue === 0 || newValue === ""){
-                newValue = 0;
-            }
-            else if(0 <= newValue && newValue <= 100){
-                if(/^0\d/.test(newValue)){
-                    newValue = Number(newValue).toString();
-                }else{
-                    //do nothing
-                }
-            }else if(100 < newValue){
-                return;
-            }else{
-                newValue = 0;
-            }
+            const ret = expCheckDouble(e.target.value, 0, 100, 5);
+            if(ret === null){return;}
+            else{newValue = ret;}
         }else if(keyName === "loanAmount"){
-            newValue = newValue.replaceAll(",",""); //쉼표제거
-            if(isNaN(newValue)){return;} //문자 체크
-            newValue = numRound(newValue, 0); //정수변환
-
-            if(0 <= newValue && newValue <= 100000000){
-                //good
-            }else if(100000000 < newValue){
-                return;
-            }else{
-                newValue = 0;
-            }
+            const ret = expCheckInt(e.target.value, 0, 10000000000);
+            if(ret === null){return;}
+            else{newValue = ret;}
         }else if(keyName === "loanName"){
             if(newValue.length > 10){
                 return;
@@ -220,13 +119,15 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
                 return item;
             }
         });
-        setLoan(newLoan);
+
+        surveyData.base.loan = newLoan;
+        dispatch(SvSave(surveyData));
     }
 
     return(
     <Fragment>
         <div>
-            <p className="question">(1) 자산 현황을 입력해주세요.</p>
+            <p className="question">(1) 현재 자산 현황을 입력해주세요.</p>
             <p>- <Mapping txt="ⓐ"/>대출금</p>
             <table className='survey-table'>
                 <colgroup>
@@ -240,7 +141,7 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
                     <tr>
                         <th>순번</th>
                         <th>대출명</th>
-                        <th>금액(만원)</th>
+                        <th>금액(원)</th>
                         <th>금리(%)</th>
                         <th><img src={plusIcon} alt="(+)" style={{width:"22px"}} onClick={()=>{addLoan()}}></img></th>
                     </tr>
@@ -266,8 +167,8 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
                     })}
                 </tbody>
             </table>
-            <p>- <Mapping txt="ⓑ"/>예·적금 : <input className='btn1' value={currAssetSaving.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"currAssetSaving")}}/> 만원</p>
-            <p>- <Mapping txt="ⓒ"/>투자금 : <input className='btn1' value={currAssetInvest.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"currAssetInvest")}}/> 만원</p>
+            <p>- <Mapping txt="ⓑ"/>예·적금 : <input className='btn1' value={currAssetSaving.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"currAssetSaving")}}/>({toKoreanMoneyUnit(currAssetSaving)})</p>
+            <p>- <Mapping txt="ⓒ"/>투자금 : <input className='btn1' value={currAssetInvest.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"currAssetInvest")}}/>({toKoreanMoneyUnit(currAssetInvest)})</p>
             
         </div>
         <div>
