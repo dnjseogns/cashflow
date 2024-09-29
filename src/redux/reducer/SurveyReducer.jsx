@@ -7,25 +7,21 @@ const initialize = {
         isCompleted:{
             guide:true,
 
-            car:null,
-            house:null,
-
             age:null,
             salary:null,
             consumption:null,
             balance:null,
+            house:null,
+            car:null,
             asset:null,
 
-            // index:null,
-            // car
-            // house:false,
             marry:null,
             baby:null,
+            house2:null,
+            car2:null,
             retire:null,
             parent:null,
             lotto:null
-        },
-        prev:{
         },
         base:{
             loan:[]

@@ -7,62 +7,70 @@ import useEffectNoMount from '@/hooks/useEffectNoMount.jsx';
 //
 import GuideSurvey from './survey/GuideSurvey';
 //
-import PrevCarSurvey from './survey/PrevCarSurvey';
-import PrevHouseSurvey from './survey/PrevHouseSurvey';
+import BaseCarSurvey from './survey/BaseCarSurvey';
+import BaseHouseSurvey from './survey/BaseHouseSurvey';
 //
 import BaseAgeSurvey from './survey/BaseAgeSurvey';
 import BaseSalarySurvey from './survey/BaseSalarySurvey';
 import BaseConsumptionSurvey from './survey/BaseConsumptionSurvey';
 import BaseBalanceSurvey from './survey/BaseBalanceSurvey';
 import BaseAssetSurvey from './survey/BaseAssetSurvey';
+import { useMenuContext } from '@/components/cashflow/MenuContext.jsx';
 
 /* 입력해주신 자료는 이번 계산에만 활용합니다. 이 사이트는 어떤 개인 정보도 저장하지 않습니다. */
 
-function CashflowSurvey({surveyDiv,setSurveyDiv, surveyTitle}){
+function CashflowSurvey(){
+    const {surveyDiv, setSurveyDiv, surveyTitle, setSurveyTitle, 
+        menuEnum, setSurveyDivition} = useMenuContext();
+
     const surveyData = useSelector((store) => store.Survey).data;
     const dispatch = useDispatch();
     const [completeBtnClickCnt,setCompleteBtnClickCnt] = useState(0);
+    
     const commonCompleteLogic = () => {
         //완료
         const isSurveyCompleted = surveyData.isCompleted;
         isSurveyCompleted[surveyDiv] = true;
         if(surveyDiv === "guide"){
-            if(isSurveyCompleted.car === null) isSurveyCompleted.car = false;
-        }
-        if(surveyDiv === "car"){
-            if(isSurveyCompleted.house === null) isSurveyCompleted.house = false;
-            if(isSurveyCompleted.consumption === true) {isSurveyCompleted.consumption = false;}
-            if(isSurveyCompleted.asset === true) {isSurveyCompleted.asset = false;}
-        }
-        if(surveyDiv === "house"){
-            if(isSurveyCompleted.age === null) isSurveyCompleted.age = false;
-            if(isSurveyCompleted.consumption === true) {isSurveyCompleted.consumption = false;}
-            if(isSurveyCompleted.asset === true) {isSurveyCompleted.asset = false;}
+            if(isSurveyCompleted.age === null) {isSurveyCompleted.age = false;}
+            setSurveyDivition("age");
         }
         if(surveyDiv === "age"){
             if(isSurveyCompleted.salary === null) isSurveyCompleted.salary = false;
+            setSurveyDivition("salary");
         }
         if(surveyDiv === "salary"){
             if(isSurveyCompleted.consumption === null) isSurveyCompleted.consumption = false;
-            if(isSurveyCompleted.consumption === true) isSurveyCompleted.consumption = false;
+            setSurveyDivition("consumption");
         }
         if(surveyDiv === "consumption"){
             if(isSurveyCompleted.balance === null) isSurveyCompleted.balance = false;
+            setSurveyDivition("balance");
         }
         if(surveyDiv === "balance"){
+            if(isSurveyCompleted.house === null) isSurveyCompleted.house = false;
+            setSurveyDivition("house");
+        }
+        if(surveyDiv === "house"){
+            if(isSurveyCompleted.car === null) isSurveyCompleted.car = false;
+            setSurveyDivition("car");
+        }
+        if(surveyDiv === "car"){
             if(isSurveyCompleted.asset === null) isSurveyCompleted.asset = false;
+            setSurveyDivition("asset");
         }
         if(surveyDiv === "asset"){
+            setSurveyDivition("");
             if(isSurveyCompleted.marry === null) isSurveyCompleted.marry = false;
             if(isSurveyCompleted.baby === null) isSurveyCompleted.baby = false;
+            if(isSurveyCompleted.house2 === null) isSurveyCompleted.house2 = false;
+            if(isSurveyCompleted.car2 === null) isSurveyCompleted.car2 = false;
             if(isSurveyCompleted.retire === null) isSurveyCompleted.retire = false;
             if(isSurveyCompleted.parent === null) isSurveyCompleted.parent = false;
             if(isSurveyCompleted.lotto === null) isSurveyCompleted.lotto = false;
         }
         surveyData.isCompleted = isSurveyCompleted;
         dispatch(SvSave(surveyData));
-        //survey창닫기
-        setSurveyDiv("");
     }
     return (
     <Fragment>
@@ -74,8 +82,8 @@ function CashflowSurvey({surveyDiv,setSurveyDiv, surveyTitle}){
                 <div className='survey-content'>
                 {surveyDiv==="guide"?<GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                 //
-                :surveyDiv==="car"?<PrevCarSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                :surveyDiv==="house"?<PrevHouseSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                :surveyDiv==="car"?<BaseCarSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                :surveyDiv==="house"?<BaseHouseSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                 //
                 :surveyDiv==="age"?<BaseAgeSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                 :surveyDiv==="salary"?<BaseSalarySurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
@@ -94,7 +102,11 @@ function CashflowSurvey({surveyDiv,setSurveyDiv, surveyTitle}){
                 :null}
                 </div>
                 <div className='survey-tail'>
-                    <button className='complete' onClick={()=>{setCompleteBtnClickCnt(completeBtnClickCnt+1)}}>{surveyDiv === "guide" ? "시작하기" : "저장하기"}</button>
+                    <button className='complete' onClick={()=>{setCompleteBtnClickCnt(completeBtnClickCnt+1)}}>
+                        {surveyDiv === "guide" ? "시작하기" 
+                        : surveyDiv === "age" || surveyDiv === "salary" || surveyDiv === "consumption" || surveyDiv === "balance" 
+                        ||surveyDiv === "house" || surveyDiv === "car"? "다음"
+                        :"완료"}</button>
                 </div>
             </article>
             </Fragment>

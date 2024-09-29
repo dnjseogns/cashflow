@@ -2,6 +2,7 @@ import '@/css/App.css';
 import { Fragment, useState } from 'react';
 import Welcome from "@/components/welcome/Welcome";
 import Cashflow from "@/components/cashflow/Cashflow";
+import { MenuProvider } from '@/components/cashflow/MenuContext';
 
 function App() {
   const [isWelcome,setIsWelcome] = useState(true);
@@ -10,7 +11,9 @@ function App() {
     <Fragment>
       {isWelcome
       ?<Welcome setIsWelcome={setIsWelcome}></Welcome>
-      :<Cashflow></Cashflow>
+      :<MenuProvider>
+        <Cashflow />
+      </MenuProvider>
       }
     </Fragment>
   )

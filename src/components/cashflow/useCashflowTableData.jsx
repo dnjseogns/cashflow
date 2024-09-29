@@ -15,11 +15,10 @@ export const useCashflowTableData = () => {
     //cfRedux 값 세팅
     useEffect(()=>{
         console.log("surveyData",surveyData);
-        // console.log("cashflowData",cashflowData);
+        console.log("cashflowData",cashflowData);
 
         // 기본 변수
         let isCompleted = surveyData.isCompleted;
-        let prev = surveyData.prev;
         let base = surveyData.base;
 
         //대출
@@ -38,21 +37,27 @@ export const useCashflowTableData = () => {
         for(var i=0; i<=100; i++){
             let row = {};
 
-            //나이(age)
-            if(!surveyData.base?.age){
-                return;
-            }
-            else if(i < base?.age){
-                continue;
-            }
+            //나이 설문 작성까지 return
+            if(!isCompleted?.age){ return; }
+            //나이(age)보다 적으면 skip
+            else if(i < base?.age){ continue; }
 
-            //나이(age)
             if(isCompleted?.age === true){
-                row.age = i;   
+                //나이(age)
+                row.age = i;
                 loopCnt++;
+                
+                //물가상승률
+                if(loopCnt <= 1){
+                    inflationStack = 1.0;
+                }else{
+                    inflationStack = inflationStack * (1 + base.indexInflation/100);
+                    inflationStack = numRound(inflationStack, 3);
+                }
+                row.inflationStack = inflationStack;
             }
 
-            //소득
+
             if(isCompleted?.age === true && isCompleted?.salary === true){
                 //연봉상승률(누적)
                 const salaryRiseRateGap = (base?.salaryRiseRate1 - base?.salaryRiseRate25) / 25;
@@ -74,31 +79,33 @@ export const useCashflowTableData = () => {
                 row.salary = Math.round((base?.salaryMonthly * 12) * row.salaryRiseRateStack);
 
                 //부업
-                row.sideJob = Math.round(base?.sideJobMonthly * 12);
+                row.sideJob = Math.round(base?.sideJobMonthly * 12 * row.inflationStack);
 
                 //전체소득
                 row.totalIncome = row.salary + row.sideJob;
             }
 
 
-            //소비
             if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true){
-                //물가상승률
-                if(loopCnt <= 1){
-                    inflationStack = 1.0;
-                }else{
-                    inflationStack = inflationStack * (1 + base.indexInflation/100);
-                    inflationStack = numRound(inflationStack, 3);
-                }
-                row.inflationStack = inflationStack;
-
-                //소비
-                row.carCost = Math.round((prev?.carCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
-                row.houseCost = Math.round((prev?.houseCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
+                // 소비
                 row.consumption = Math.round((base?.consumptionMonthly ?? 0) * 12 * row.inflationStack) * -1;
 
                 //전체소비
-                row.totalConsumption = row.carCost + row.houseCost + row.consumption;
+                row.totalConsumption = row.consumption;
+            }
+
+
+            if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true 
+                && isCompleted?.balance === true){
+                //잔액
+                row.totalBalance = row.totalIncome + row.totalConsumption + (row.totalEvent ?? 0);
+            }
+
+            if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true 
+                && isCompleted?.balance === true && isCompleted?.house === true){
+                //잔액
+                row.houseCost = Math.round((base?.houseCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
+                row.consumption -= row.houseCost;
             }
 
             if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true){
@@ -106,18 +113,12 @@ export const useCashflowTableData = () => {
                 if(row.age == base?.retireAge){
                     const totalWorkYear = loopCnt + (base?.workYear ?? 1);
                     row.eventRetirementPay = base?.salaryMonthly * row.salaryRiseRateStack * totalWorkYear;
-                    row.totalEventNote = (row?.totalEventNote ?? "") + "퇴직금"
+                    row.totalEventNote = (row?.totalEventNote ?? "") + "퇴직금(4-ⓑ)"
                 }else{
                     row.eventRetirementPay = 0;
                 }
 
                 row.totalEvent = row.eventRetirementPay;
-            }
-
-            //잔액
-            if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true 
-                && isCompleted?.balance === true){
-                row.totalBalance = row.totalIncome + row.totalConsumption + row.totalEvent;
             }
 
             //누적자산
@@ -169,25 +170,6 @@ export const useCashflowTableData = () => {
                                 return {...loanItem, loanAmountStack : 0}
                             }
                         })
-                        // if(assetLoanTotalAmount + tmpBalance < 0){ // 대출이 더 많을 경우
-
-                        //     // base.loan = base.loan.map((loanItem)=>{
-                        //     //     if(loanItem.loanAmountStack + tmpBalance <= 0){ //개별대출이 더 많을 때
-                        //     //         tmpBalance = 0;
-                        //     //         return {...loanItem, loanAmountStack : loanAmountStack + tmpBalance}
-                        //     //     }else{ //개별대출이 더 적을 때
-                        //     //         tmpBalance = tmpBalance + loanAmountStack;
-                        //     //         return {...loanItem, loanAmountStack : 0}
-                        //     //     }
-                        //     // })
-                            
-                        // }else{
-                        //     tmpBalance = tmpBalance + assetLoanTotalAmount;
-
-                        //     //대출 상환 후 남은 금액 예금/투자
-                        //     assetSavingStack = assetSavingStack + Math.round(tmpBalance * base.bankRate/100);
-                        //     assetInvestStack = assetInvestStack + Math.round(tmpBalance * base.investRate/100);
-                        // }
                     }else{ // 잔액이 양수일 경우 + 대출 없을 경우
                         assetSavingStack = assetSavingStack + Math.round(tmpBalance * base.bankRate/100);
                         assetInvestStack = assetInvestStack + Math.round(tmpBalance * base.investRate/100);
