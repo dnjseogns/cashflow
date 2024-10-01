@@ -47,6 +47,7 @@ function CashflowTable(){
                     <col width="100px"/>
                     <col width="100px"/>
                     <col width="100px"/>
+                    <col width="100px"/>
                     {/* 이벤트 */}
                     <col width="100px"/>
                     <col width="100px"/>
@@ -65,7 +66,7 @@ function CashflowTable(){
                     <tr>
                         <th colSpan={2}></th>
                         <th colSpan={2 + (isSalaryRiseRateStackVisible ? 1 : 0) + (isSideJobVisible ? 1 : 0)}>소득</th>
-                        <th colSpan={4}>소비</th>
+                        <th colSpan={5}>소비</th>
                         <th colSpan={2}>이벤트</th>
                         <th colSpan={1}>잔액(소득+소비+이벤트)</th>
                         <th colSpan={1} className='gap'></th>
@@ -83,6 +84,7 @@ function CashflowTable(){
                         <th>주거비<br/><Mapping txt="(2-ⓑ)"/></th>
                         <th>차량비<br/><Mapping txt="(1-ⓑ)"/></th>
                         <th>기타소비<br/><Mapping txt="(5-ⓐ)"/></th>
+                        <th>대출이자<br/><Mapping txt="(5-ⓐ)"/></th>
                         <th>합계</th>
 
                         <th>내용</th>
@@ -114,6 +116,7 @@ function CashflowTable(){
                             
                             <td className={`${row?.houseCost < 0 ? 'minus' : ''}`}>{toKoreanMoneySimpleUnit(row?.houseCost)}</td>
                             <td className={`${row?.carCost < 0 ? 'minus' : ''}`}>{toKoreanMoneySimpleUnit(row?.carCost)}</td>
+                            <td className={`${row?.consumption < 0 ? 'minus' : ''}`}>{toKoreanMoneySimpleUnit(row?.loanInterest)}</td>
                             <td className={`${row?.consumption < 0 ? 'minus' : ''}`}>{toKoreanMoneySimpleUnit(row?.consumption)}</td>
                             <td className={`sum ${row?.totalConsumption < 0 ? 'minus' : ''}`}>{toKoreanMoneySimpleUnit(row?.totalConsumption)}</td>
                             

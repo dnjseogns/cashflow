@@ -115,6 +115,10 @@ export const useCashflowTableData = () => {
                 row.consumption -= row.carCost;
             }
 
+            if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true){
+                row.loanInterest = 0;
+            }
+
             //이벤트
             if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true){
                 //퇴직금

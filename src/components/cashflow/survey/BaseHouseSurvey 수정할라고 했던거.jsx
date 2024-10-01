@@ -14,8 +14,14 @@ const BaseHouseSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
     const housePriceTotal = surveyData?.base?.housePriceTotal ?? 0;
     const housePriceLoan = surveyData?.base?.housePriceLoan ?? 0;
     const housePriceLoanRate = surveyData?.base?.housePriceLoanRate ?? "6.0";
-
+    const houseRentMonthly = surveyData?.base?.houseRentMonthly ?? 0;
+    const houseUtilityMonthly = surveyData?.base?.houseUtilityMonthly ?? 0;
     const houseCostMonthly = surveyData?.base?.houseCostMonthly ?? 0;
+    
+    // const ownHousePriceTotal = surveyData?.base?.ownHousePriceTotal ?? 0;
+    // const ownHousePriceLoan = surveyData?.base?.ownHousePriceLoan ?? 0;
+    // const ownHousePriceLoanRate = surveyData?.base?.ownHousePriceLoanRate ?? "6.0";
+    // const ownHouseCostMonthly = surveyData?.base?.ownHouseCostMonthly ?? 0;
 
     const surveyOnChange = (e, div) => {
         if(div === "livingType"){
@@ -33,12 +39,20 @@ const BaseHouseSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
             const ret = expCheckInt(e.target.value, 0, housePriceTotal);
             if(ret === null){return;}
             else{surveyData.base.housePriceLoan = ret;}
-        }else if(div === "houseCostMonthly"){
+        }else if(div === "houseRentMonthly"){
             const ret = expCheckInt(e.target.value, 0, 1000000000);
             if(ret === null){return;}
-            else{surveyData.base.houseCostMonthly = ret;}
+            else{surveyData.base.houseRentMonthly = ret;}
+        }else if(div === "houseUtilityMonthly"){
+            const ret = expCheckInt(e.target.value, 0, 1000000000);
+            if(ret === null){return;}
+            else{surveyData.base.houseUtilityMonthly = ret;}
         }
         
+        surveyData.base.houseCostMonthly
+        = Math.round(surveyData.base.housePriceLoan*surveyData.base.housePriceLoanRate/100/12) 
+        + surveyData.base.houseRentMonthly + surveyData.base.houseUtilityMonthly;
+
         dispatch(SvSave(surveyData));
     };
 
@@ -49,12 +63,18 @@ const BaseHouseSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
             surveyData.base.housePriceLoan = 0;
             surveyData.base.housePriceLoanRate = housePriceLoanRate;
             surveyData.base.housePriceOwn = 0;
+            
+            surveyData.base.houseRentMonthly = 0;
+            surveyData.base.houseUtilityMonthly = 0;
             surveyData.base.houseCostMonthly = 0;
         }else{
             surveyData.base.housePriceTotal = housePriceTotal;
             surveyData.base.housePriceLoan = housePriceLoan;
             surveyData.base.housePriceLoanRate = housePriceLoanRate;
             surveyData.base.housePriceOwn = housePriceTotal - housePriceLoan;
+
+            surveyData.base.houseRentMonthly = houseRentMonthly;
+            surveyData.base.houseUtilityMonthly = houseUtilityMonthly;
             surveyData.base.houseCostMonthly = houseCostMonthly;
         }
 
@@ -86,8 +106,11 @@ const BaseHouseSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
                     <p>- <Mapping txt="ⓑ"/>보증금 중 자기자본(자동계산) : <input className='btn1 readonly' value={(housePriceTotal - housePriceLoan).toLocaleString('ko-KR')} readOnly={true}/>({toKoreanMoneyUnit(housePriceTotal - housePriceLoan)})</p>
                 </div>
                 <div>
-                    <p className="question">(3) 월 주거비(월세 + 관리비 + 공과금 등...)를 입력해주세요.</p>
-                    <p>- <Mapping txt="ⓒ"/> : <input className='btn1' value={houseCostMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"houseCostMonthly")}}/>({toKoreanMoneyUnit(houseCostMonthly)})</p>
+                    <p className="question">(3) 월 주거비를 입력해주세요.</p>
+                    <p>- 대출이자(자동계산) : <input className='btn1 readonly' readOnly={true} value={(Math.round(housePriceLoan*housePriceLoanRate/100/12)).toLocaleString('ko-KR')} />({toKoreanMoneyUnit(Math.round(housePriceLoan*housePriceLoanRate/100/12))})</p>
+                    <p>- 월세+관리비 : <input className='btn1' value={houseRentMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"houseRentMonthly")}}/>({toKoreanMoneyUnit(houseRentMonthly)})</p>
+                    <p>- 공과금 : <input className='btn1' value={houseUtilityMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"houseUtilityMonthly")}}/>({toKoreanMoneyUnit(houseUtilityMonthly)})</p>
+                    <p>- <Mapping txt="ⓒ"/>총 월 주거비(자동계산) : <input className='btn1 readonly' readOnly={true} value={houseCostMonthly.toLocaleString('ko-KR')} />({toKoreanMoneyUnit(houseCostMonthly)})</p>
                 </div>
             </Fragment>
             : null}
@@ -105,7 +128,7 @@ const BaseHouseSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
                     <p>- 자기자본(자동계산) : <input className='btn1 readonly' value={(housePriceTotal - housePriceLoan).toLocaleString('ko-KR')} readOnly={true}/>({toKoreanMoneyUnit(housePriceTotal - housePriceLoan)})</p>
                 </div>
                 <div>
-                    <p className="question">(3) 월 주거비(관리비 + 공과금 등...)를 입력해주세요.</p>
+                    <p className="question">(3) 월 관리비 + 공과금를 입력해주세요.</p>
                     <p>- <Mapping txt="ⓒ"/> : <input className='btn1' value={houseCostMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"houseCostMonthly")}}/>({toKoreanMoneyUnit(houseCostMonthly)})</p>
                 </div>
             </Fragment>
