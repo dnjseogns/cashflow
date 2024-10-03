@@ -45,14 +45,15 @@ function GuideSurvey ({completeBtnClickCnt, commonCompleteLogic}){
                 {/*잔액 화살표3*/}
             </div>
             <div>
-                <p className='note'>※ 잔액은 아래와 같이 계산됩니다.</p>
+                <p className='question'>※ 잔액은 아래와 같이 계산됩니다.</p>
                 <p className='note'>- 잔액이 양수(+)일 경우, 대출 상환을 우선합니다. (대출 &gt; 예금/투자)</p>
                 <p className='note'>- 잔액이 음수(-)일 경우, 예금 → 투자 → 대출 순으로 우선 차감됩니다.</p>
             </div>
             <div>
-                <p className='note'>※ 참고해주세요!</p>
-                <p className='note'>- 입력해주신 데이터는 수집되지 않으며, 계산에만 활용됩니다.</p>
+                <p className='question'>※ 참고해주세요!</p>
+                <p className='note'>- 현재 맞벌이 이신 경우, 부부합산 소득 및 자산으로 작성해주세요.</p>
                 <p className='note'>- 모든 소득은 세후로 고려하며, 세금계산은 하지 않습니다.</p>
+                <p className='note'>- 입력해주신 데이터는 수집되지 않으며, 계산에만 활용됩니다.</p>
             </div>
         </Fragment>)
 }
