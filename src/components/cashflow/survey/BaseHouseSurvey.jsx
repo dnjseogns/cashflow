@@ -38,6 +38,12 @@ const BaseHouseSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
             if(ret === null){return;}
             else{surveyData.base.houseCostMonthly = ret;}
         }
+
+        if(div !== "housePriceTotal"){surveyData.base.housePriceTotal = housePriceTotal;}
+        if(div !== "housePriceLoan"){surveyData.base.housePriceLoan = housePriceLoan;}
+        if(div !== "housePriceLoanRate"){surveyData.base.housePriceLoanRate = housePriceLoanRate;}
+        if(div !== "housePriceOwn"){surveyData.base.housePriceOwn = surveyData.base.housePriceTotal - surveyData.base.housePriceLoan;}
+        if(div !== "houseCostMonthly"){surveyData.base.houseCostMonthly = houseCostMonthly;}
         
         dispatch(SvSave(surveyData));
     };

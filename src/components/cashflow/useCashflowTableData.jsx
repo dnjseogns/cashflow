@@ -22,6 +22,35 @@ export const useCashflowTableData = () => {
         let base = surveyData.base;
 
         //대출
+        //집 대출
+        if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true 
+            && isCompleted?.balance === true && isCompleted?.house === true){
+            const idx = surveyData.base.loan.findIndex((item)=>item.loanId === "houseLoan");
+            if(idx >= 0){
+                surveyData.base.loan.splice(idx, 1);
+            }
+            if(surveyData.base?.housePriceLoan > 0){
+                if(surveyData.base?.livingType == "rent"){
+                    surveyData.base.loan.unshift({loanId:"houseLoan", loanName:"전·월세자금대출금(사전입력 : 2-ⓐ)", loanAmount:surveyData.base?.housePriceLoan ?? 0, loanInterest:surveyData.base?.housePriceLoanRate ?? 0, isReadOnly:true});
+                }else if(surveyData.base?.livingType == "own"){
+                    surveyData.base.loan.unshift({loanId:"houseLoan", loanName:"주택담보대출(사전입력 : 2-ⓐ)", loanAmount:surveyData.base?.housePriceLoan ?? 0, loanInterest:surveyData.base?.housePriceLoanRate ?? 0, isReadOnly:true});
+                }
+            }
+        }
+
+        //차 대출
+        if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true 
+            && isCompleted?.balance === true && isCompleted?.car === true){
+            const idx = surveyData.base.loan.findIndex((item)=>item.loanId === "carLoan");
+            if(idx >= 0){
+                surveyData.base.loan.splice(idx, 1);
+            }
+            if(surveyData.base?.carLoan > 0){
+                surveyData.base.loan.unshift({loanId:"carLoan", loanName:"자동차 대출(사전입력 : 1-ⓐ)", loanAmount:surveyData.base?.carLoan ?? 0, loanInterest:surveyData.base?.carLoanRate ?? 0, isReadOnly:true});
+            }
+        }
+
+        //추가 대출(시스템)
         base.loan.push({loanId:"systemLoan", loanName:"추가대출", loanAmount:0, loanInterest: base?.loanInterest ?? 6.0, isReadOnly:true});
         base.loan = base.loan.map((item)=> ({...item, "loanAmountStack":-1*item.loanAmount})) // loanAmountStack 컬럼 추가
                              .sort((a,b)=>(b.loanInterest - a.loanInterest)); // 대출금리 높은 걸 위로
@@ -103,14 +132,14 @@ export const useCashflowTableData = () => {
 
             if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true 
                 && isCompleted?.balance === true && isCompleted?.house === true){
-                //집
+                //집 소비
                 row.houseCost = Math.round((base?.houseCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
                 row.consumption -= row.houseCost;
             }
 
             if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true 
                 && isCompleted?.balance === true && isCompleted?.house === true && isCompleted?.car === true){
-                //차
+                //차 소비
                 row.carCost = Math.round((base?.carCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
                 row.consumption -= row.carCost;
             }
