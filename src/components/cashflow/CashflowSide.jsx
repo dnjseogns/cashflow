@@ -23,23 +23,12 @@ function CashflowSide(){
             {isSurveyCompleted.age !== null 
             ? <li className={(surveyDiv==="age"?"on ":"") + (isSurveyCompleted.age?"ok ":"")} onClick={()=>{setSurveyDivition("age")}}><span>{menuEnum.BASE_AGE}</span> {surveyDiv==="age"?<span>〉</span>:null}</li>
             : <li className='disable'><span>{menuEnum.BASE_AGE}</span></li>}
-
-            {isSurveyCompleted.salary !== null 
-            ? <li className={(surveyDiv==="salary"?"on":"") + (isSurveyCompleted.salary?" ok":"")} onClick={()=>{setSurveyDivition("salary")}}><span>{menuEnum.BASE_SALARY}</span> {surveyDiv==="salary"?<span>〉</span>:null}</li>
-            : <li className='disable'><span>{menuEnum.BASE_SALARY}</span></li>}
-
-            {isSurveyCompleted.consumption !== null 
-            ? <li className={(surveyDiv==="consumption"?"on":"") + (isSurveyCompleted.consumption?" ok":"")} onClick={()=>{setSurveyDivition("consumption")}}><span>{menuEnum.BASE_CONSUMPTION}</span> {surveyDiv==="consumption"?<span>〉</span>:null}</li>
-            : <li className='disable'><span>{menuEnum.BASE_CONSUMPTION}</span></li>}
-
-            {isSurveyCompleted.balance !== null 
-            ? <li className={(surveyDiv==="balance"?"on":"") + (isSurveyCompleted.balance?" ok":"")} onClick={()=>{setSurveyDivition("balance")}}><span>{menuEnum.BASE_BALANCE}</span> {surveyDiv==="balance"?<span>〉</span>:null}</li>
-            : <li className='disable'><span>{menuEnum.BASE_BALANCE}</span></li>}
-
+        </ul>
+        <ul className='base '>{menuEnum.BASE2}
             {isSurveyCompleted.house !== null 
             ? <li className={(surveyDiv==="house"?"on":"") + (isSurveyCompleted.house?" ok":"")} onClick={()=>{setSurveyDivition("house")}}><span>{menuEnum.BASE_HOUSE}</span> {surveyDiv==="house"?<span>〉</span>:null}</li>
             : <li className='disable'><span>{menuEnum.BASE_HOUSE}</span></li>}
-            
+
             {isSurveyCompleted.car !== null 
             ? <li className={(surveyDiv==="car"?"on":"") + (isSurveyCompleted.car?" ok":"")} onClick={()=>{setSurveyDivition("car")}}><span>{menuEnum.BASE_CAR}</span> {surveyDiv==="car"?<span>〉</span>:null}</li>
             : <li className='disable'><span>{menuEnum.BASE_CAR}</span></li>}
@@ -47,7 +36,15 @@ function CashflowSide(){
             {isSurveyCompleted.asset !== null 
             ? <li className={(surveyDiv==="asset"?"on":"") + (isSurveyCompleted.asset?" ok":"")} onClick={()=>{setSurveyDivition("asset")}}><span>{menuEnum.BASE_ASSET}</span> {surveyDiv==="asset"?<span>〉</span>:null}</li>
             : <li className='disable'><span>{menuEnum.BASE_ASSET}</span></li>}
+        </ul>
+        <ul className='base '>{menuEnum.BASE3}
+            {isSurveyCompleted.salary !== null 
+            ? <li className={(surveyDiv==="salary"?"on":"") + (isSurveyCompleted.salary?" ok":"")} onClick={()=>{setSurveyDivition("salary")}}><span>{menuEnum.BASE_SALARY}</span> {surveyDiv==="salary"?<span>〉</span>:null}</li>
+            : <li className='disable'><span>{menuEnum.BASE_SALARY}</span></li>}
 
+            {isSurveyCompleted.consumption !== null 
+            ? <li className={(surveyDiv==="consumption"?"on":"") + (isSurveyCompleted.consumption?" ok":"")} onClick={()=>{setSurveyDivition("consumption")}}><span>{menuEnum.BASE_CONSUMPTION}</span> {surveyDiv==="consumption"?<span>〉</span>:null}</li>
+            : <li className='disable'><span>{menuEnum.BASE_CONSUMPTION}</span></li>}
         </ul>
         <ul className='add'>{menuEnum.ADD}
             {isSurveyCompleted.marry !== null 

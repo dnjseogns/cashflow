@@ -10,7 +10,6 @@ const initialize = {
             age:null,
             salary:null,
             consumption:null,
-            balance:null,
             house:null,
             car:null,
             asset:null,

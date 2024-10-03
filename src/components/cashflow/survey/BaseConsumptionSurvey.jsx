@@ -8,27 +8,40 @@ import Mapping from '@/components/common/Mapping.jsx';
 function BaseConsumptionSurvey({completeBtnClickCnt, commonCompleteLogic}){
     const dispatch = useDispatch();
     const surveyData = useSelector((store) => store.Survey).data;
-    const base = surveyData.base;
     
-    const savingMonthly = base?.savingMonthly ?? 0;
-    const totIncomeMonthly = (base?.salaryMonthly??0) + (base?.sideJobMonthly??0);
+    const savingMonthly = surveyData.base?.savingMonthly ?? 0;
+    const totIncomeMonthly = (surveyData.base?.salaryMonthly??0) + (surveyData.base?.sideJobMonthly??0);
+
+    const bankRate = surveyData.base?.bankRate ?? 80;
+    const investRate = surveyData.base?.investRate ?? 20;
 
     const surveyOnChange = (e, div) => {
         if(div==="savingMonthly"){
-            const ret = expCheckInt(e.target.value, 0, 1000000000);
+            const ret = expCheckInt(e.target.value, 0, totIncomeMonthly);
             if(ret === null){return;}
-            else{surveyData.base.savingMonthly = ret;}
+            else{
+                surveyData.base.savingMonthly = ret;
+                surveyData.base.consumptionMonthly = totIncomeMonthly - ret;
+            }
+        }else if(div==="bankRate"){
+            const ret = expCheckInt(e.target.value, 0, 100);
+            if(ret === null){return;}
+            else{ 
+                surveyData.base.bankRate = ret; 
+                surveyData.base.investRate = 100 - ret; 
+            }
         }
 
         dispatch(SvSave(surveyData));
     };
         
     useEffectNoMount(()=>{
-        base.savingMonthly = savingMonthly;
-        base.consumptionMonthly = totIncomeMonthly - savingMonthly;
-        surveyData.base = base;
+        surveyData.base.savingMonthly = savingMonthly;
+        surveyData.base.consumptionMonthly = totIncomeMonthly - savingMonthly;
+        surveyData.base.bankRate = bankRate;
+        surveyData.base.investRate = investRate;
 
-        if(base.consumptionMonthly < 0){
+        if(surveyData.base.consumptionMonthly < 0){
             alert("소비는 마이너스(-) 일 수 없습니다.");
             return;
         }
@@ -43,6 +56,11 @@ function BaseConsumptionSurvey({completeBtnClickCnt, commonCompleteLogic}){
                 <p>- 저축 : <input className='btn1' value={savingMonthly.toLocaleString('ko-KR')}  onChange={(e)=>{surveyOnChange(e,"savingMonthly")}}/>원({toKoreanMoneyUnit(savingMonthly)})</p>
                 <p>- <Mapping txt="ⓑ"/>소비(자동계산) : <input className='btn1 readonly' value={(totIncomeMonthly - savingMonthly).toLocaleString('ko-KR')} readOnly={true}/>원({toKoreanMoneyUnit(totIncomeMonthly - savingMonthly)})</p>
                 <p className='note'>※ 미래 소비 계산방법 = 물가상승률<Mapping txt="(5-ⓐ)"/> x <i>소비금액({toKoreanMoneyUnit(totIncomeMonthly - savingMonthly)})</i></p>
+            </div>
+            <div>
+                <p className="question">(2) 저축액의 예금 / 투자 비율을 입력해주세요.</p>
+                <p>- 예금 : <input className='btn1' value={bankRate} onChange={(e)=>{surveyOnChange(e,"bankRate")}}/> %</p>
+                <p>- 투자(자동계산) : <input className='btn1 readonly' value={investRate} readOnly={true}/> %</p>
             </div>
         </Fragment>);
 }

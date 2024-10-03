@@ -13,7 +13,6 @@ import BaseHouseSurvey from './survey/BaseHouseSurvey';
 import BaseAgeSurvey from './survey/BaseAgeSurvey';
 import BaseSalarySurvey from './survey/BaseSalarySurvey';
 import BaseConsumptionSurvey from './survey/BaseConsumptionSurvey';
-import BaseBalanceSurvey from './survey/BaseBalanceSurvey';
 import BaseAssetSurvey from './survey/BaseAssetSurvey';
 import { useMenuContext } from '@/components/cashflow/MenuContext.jsx';
 
@@ -36,18 +35,6 @@ function CashflowSurvey(){
             setSurveyDivition("age");
         }
         if(surveyDiv === "age"){
-            if(isSurveyCompleted.salary === null) isSurveyCompleted.salary = false;
-            setSurveyDivition("salary");
-        }
-        if(surveyDiv === "salary"){
-            if(isSurveyCompleted.consumption === null) isSurveyCompleted.consumption = false;
-            setSurveyDivition("consumption");
-        }
-        if(surveyDiv === "consumption"){
-            if(isSurveyCompleted.balance === null) isSurveyCompleted.balance = false;
-            setSurveyDivition("balance");
-        }
-        if(surveyDiv === "balance"){
             if(isSurveyCompleted.house === null) isSurveyCompleted.house = false;
             setSurveyDivition("house");
         }
@@ -60,6 +47,14 @@ function CashflowSurvey(){
             setSurveyDivition("asset");
         }
         if(surveyDiv === "asset"){
+            if(isSurveyCompleted.salary === null) isSurveyCompleted.salary = false;
+            setSurveyDivition("salary");
+        }
+        if(surveyDiv === "salary"){
+            if(isSurveyCompleted.consumption === null) isSurveyCompleted.consumption = false;
+            setSurveyDivition("consumption");
+        }
+        if(surveyDiv === "consumption"){
             setSurveyDivition("");
             if(isSurveyCompleted.marry === null) isSurveyCompleted.marry = false;
             if(isSurveyCompleted.baby === null) isSurveyCompleted.baby = false;
@@ -82,13 +77,12 @@ function CashflowSurvey(){
                 <div className='survey-content'>
                 {surveyDiv==="guide"?<GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                 //
-                :surveyDiv==="car"?<BaseCarSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                :surveyDiv==="house"?<BaseHouseSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                 //
                 :surveyDiv==="age"?<BaseAgeSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                 :surveyDiv==="salary"?<BaseSalarySurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                 :surveyDiv==="consumption"?<BaseConsumptionSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                :surveyDiv==="balance"?<BaseBalanceSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                :surveyDiv==="car"?<BaseCarSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                :surveyDiv==="house"?<BaseHouseSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                 :surveyDiv==="asset"?<BaseAssetSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                 //
                 // :surveyDiv==="index"?<BaseIndexSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
@@ -104,7 +98,7 @@ function CashflowSurvey(){
                 <div className='survey-tail'>
                     <button className='complete' onClick={()=>{setCompleteBtnClickCnt(completeBtnClickCnt+1)}}>
                         {surveyDiv === "guide" ? "시작하기" 
-                        : surveyDiv === "age" || surveyDiv === "salary" || surveyDiv === "consumption" || surveyDiv === "balance" 
+                        : surveyDiv === "age" || surveyDiv === "salary" || surveyDiv === "consumption" 
                         ||surveyDiv === "house" || surveyDiv === "car"? "다음"
                         :"완료"}</button>
                 </div>

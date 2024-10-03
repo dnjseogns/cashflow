@@ -13,7 +13,7 @@
 /*******************************************/
 /* left 간격*/
 .cf-left .left-title{margin-bottom:20px; font-weight: 600;}
-.cf-left ul{margin: 5px 0px 5px 0px; padding: 5px 0px 5px 5px; list-style: none; font-weight: 600;}
+.cf-left ul{margin: 5px 0px 5px 0px; padding: 5px 0px 0px 5px; list-style: none; font-weight: 600;}
 .cf-left ul li{margin: 5px 0px 5px 10px; padding: 5px 0px 5px 5px;}
 
 /* left mouse hover */
@@ -51,7 +51,7 @@
 /*******************************************/
 /* survey */
 .cf-right .survey-area{ background: #F1F1F1; border: 1px solid #9BBEC8; border-left: 0px solid #9BBEC8; 
-    width: 84.5%; min-width: 500px; height: auto; z-index: 10; }
+    width: 84.5%; min-width: 500px; height: auto; z-index: 10;}
 
 /* survey title */
 .cf-right .survey-area .survey-title{padding: 20px; background-color: #427D9D; font-weight: 600; color:white;display:flex; justify-content:space-between;}
@@ -110,16 +110,16 @@
 .cf-right .survey-area span.arrowYellow{border-color:yellowgreen;}
 .cf-right .survey-area span.arrowYellow::after{border-color: transparent transparent transparent yellowgreen; }
 /* 애니메이션 */
-.cf-right .survey-area .ani1{animation: show-ani1 5s infinite; }
-@keyframes show-ani1 { 0% { opacity: 0; } 20% { opacity: 1; } 100% { opacity: 1; } }
-.cf-right .survey-area .ani2{animation: show-ani2 5s infinite; }
-@keyframes show-ani2 { 0% { opacity: 0; } 20% { opacity: 0; } 40% { opacity: 1; } 100% { opacity: 1; } }
-.cf-right .survey-area .ani3{animation: show-ani3 5s infinite; }
-@keyframes show-ani3 { 0% { opacity: 0; } 40% { opacity: 0; } 60% { opacity: 1; } 100% { opacity: 1; } }
-.cf-right .survey-area .ani4{animation: show-ani4 5s infinite; }
-@keyframes show-ani4 { 0% { opacity: 0; } 60% { opacity: 0; } 80% { opacity: 1; } 100% { opacity: 1; } }
-.cf-right .survey-area .ani5{animation: show-ani5 5s infinite; }
-@keyframes show-ani5 { 0% { opacity: 0; } 80% { opacity: 0; } 100% { opacity: 1; } }
+.cf-right .survey-area .ani1{animation: show-ani1 8s infinite; }
+@keyframes show-ani1 { 0% { opacity: 0; } 12% { opacity: 1; } 100% { opacity: 1; } }
+.cf-right .survey-area .ani2{animation: show-ani2 8s infinite; }
+@keyframes show-ani2 { 0% { opacity: 0; } 12% { opacity: 0; } 24% { opacity: 1; } 100% { opacity: 1; } }
+.cf-right .survey-area .ani3{animation: show-ani3 8s infinite; }
+@keyframes show-ani3 { 0% { opacity: 0; } 24% { opacity: 0; } 36% { opacity: 1; } 100% { opacity: 1; } }
+.cf-right .survey-area .ani4{animation: show-ani4 8s infinite; }
+@keyframes show-ani4 { 0% { opacity: 0; } 36% { opacity: 0; } 48% { opacity: 1; } 100% { opacity: 1; } }
+.cf-right .survey-area .ani5{animation: show-ani5 8s infinite; }
+@keyframes show-ani5 { 0% { opacity: 0; } 48% { opacity: 0; } 60% { opacity: 1; } 100% { opacity: 1; } }
 /*******************************************/
 /* table 테두리 */
 .cf-right .data-area { width:98%; margin-left:20px;}

@@ -1,14 +1,13 @@
 해야할 것
 
-집/자동차/누적자산을 먼저 해야함
+지출을 맨 밑으로 하기... 대출
 
-loanInterest 구현
-
-car, house 바로 반영되게 구현...
-
-asset ...
+loanCost 구현하기 useCashflowTableData쪽... loanCost += Math.round(item.loanAmo
 
 aseet 집값상승률 적기
+
+ⓐ라고 된 맵핑 다시 하기
+
 
 
 

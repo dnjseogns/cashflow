@@ -24,7 +24,7 @@ export const useCashflowTableData = () => {
         //대출
         //집 대출
         if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true 
-            && isCompleted?.balance === true && isCompleted?.house === true){
+            && isCompleted?.house === true){
             const idx = surveyData.base.loan.findIndex((item)=>item.loanId === "houseLoan");
             if(idx >= 0){
                 surveyData.base.loan.splice(idx, 1);
@@ -40,7 +40,7 @@ export const useCashflowTableData = () => {
 
         //차 대출
         if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true 
-            && isCompleted?.balance === true && isCompleted?.car === true){
+            && isCompleted?.car === true){
             const idx = surveyData.base.loan.findIndex((item)=>item.loanId === "carLoan");
             if(idx >= 0){
                 surveyData.base.loan.splice(idx, 1);
@@ -66,9 +66,9 @@ export const useCashflowTableData = () => {
         for(var i=0; i<=100; i++){
             let row = {};
 
-            //나이 설문 작성까지 return
+            //나이 설문 작성 완료 시점부터 table 만들기
             if(!isCompleted?.age){ return; }
-            //나이(age)보다 적으면 skip
+            //나이보다 적으면 skip
             else if(i < base?.age){ continue; }
 
             if(isCompleted?.age === true){
@@ -87,7 +87,31 @@ export const useCashflowTableData = () => {
             }
 
 
-            if(isCompleted?.age === true && isCompleted?.salary === true){
+            if(isCompleted?.age === true && isCompleted?.house === true){
+                //집 소비
+                row.houseCost = Math.round((base?.houseCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
+                row.consumption -= row.houseCost;
+            }
+
+            if(isCompleted?.age === true && isCompleted?.house === true && isCompleted?.car === true){
+                //차 소비
+                row.carCost = Math.round((base?.carCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
+                row.consumption -= row.carCost;
+            }
+
+            if(isCompleted?.age === true && isCompleted?.house === true && isCompleted?.car === true && isCompleted?.asset === true){
+                // 대출이자
+                let loanCost = 0;
+                base.loan.forEach((item)=>{
+                    loanCost += Math.round(item.loanAmountStack*(item.loanInterest/100));
+                });
+                row.loanCost = loanCost;
+            }
+
+
+
+            if(isCompleted?.age === true && isCompleted?.house === true && isCompleted?.car === true && isCompleted?.asset === true
+                && isCompleted?.salary === true){
                 //연봉상승률(누적)
                 const salaryRiseRateGap = (base?.salaryRiseRate1 - base?.salaryRiseRate25) / 25;
                 let salaryRiseRate = base?.salaryRiseRate1 - salaryRiseRateGap * (base?.workYear + loopCnt - 3) // 1년차 + loop (1) - 3
@@ -99,57 +123,39 @@ export const useCashflowTableData = () => {
                 }
                 row.salaryRiseRateStack = salaryRiseRateStack;
 
-                //은퇴 체크
-                if(row.age > base?.retireAge){
-                    row.salaryRiseRateStack = 0;
-                }
-
                 //연봉
                 row.salary = Math.round((base?.salaryMonthly * 12) * row.salaryRiseRateStack);
 
                 //부업
                 row.sideJob = Math.round(base?.sideJobMonthly * 12 * row.inflationStack);
 
+                //은퇴 체크
+                if(row.age > base?.retireAge){
+                    row.salary = 0;
+                }
+
                 //전체소득
                 row.totalIncome = row.salary + row.sideJob;
             }
 
 
-            if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true){
+            if(isCompleted?.age === true && isCompleted?.house === true && isCompleted?.car === true && isCompleted?.asset === true
+                && isCompleted?.salary === true && isCompleted?.consumption === true){
                 // 소비
                 row.consumption = Math.round((base?.consumptionMonthly ?? 0) * 12 * row.inflationStack) * -1;
 
                 //전체소비
                 row.totalConsumption = row.consumption;
-            }
-
-
-            if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true 
-                && isCompleted?.balance === true){
+                
                 //잔액
                 row.totalBalance = row.totalIncome + row.totalConsumption + (row.totalEvent ?? 0);
             }
 
-            if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true 
-                && isCompleted?.balance === true && isCompleted?.house === true){
-                //집 소비
-                row.houseCost = Math.round((base?.houseCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
-                row.consumption -= row.houseCost;
-            }
 
-            if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true 
-                && isCompleted?.balance === true && isCompleted?.house === true && isCompleted?.car === true){
-                //차 소비
-                row.carCost = Math.round((base?.carCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
-                row.consumption -= row.carCost;
-            }
-
-            if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true){
-                row.loanInterest = 0;
-            }
 
             //이벤트
-            if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true){
+            if(isCompleted?.age === true && isCompleted?.house === true && isCompleted?.car === true && isCompleted?.asset === true
+                && isCompleted?.salary === true && isCompleted?.consumption === true){
                 //퇴직금
                 if(row.age == base?.retireAge){
                     const totalWorkYear = loopCnt + (base?.workYear ?? 1);
@@ -163,8 +169,7 @@ export const useCashflowTableData = () => {
             }
 
             //누적자산
-            if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true 
-                && isCompleted?.balance === true && isCompleted?.asset === true){
+            if(isCompleted?.age === true){
                 let tmpBalance = row.totalBalance; //잔액
 
                 if(tmpBalance < 0){ // 잔액이 음수일 경우.
@@ -224,7 +229,7 @@ export const useCashflowTableData = () => {
                 assetInvestStack = Math.round(assetInvestStack * (1 + base.investIncome/100));
                 row.assetInvestStack = assetInvestStack;
                 // 대출
-                base.loan = base.loan.map((item)=>({...item, loanAmountStack : Math.round(item.loanAmountStack*(1 + item.loanInterest/100))}));
+                // base.loan = base.loan.map((item)=>({...item, loanAmountStack : Math.round(item.loanAmountStack*(1 + item.loanInterest/100))}));
                 let assetLoanStack = 0;
                 base.loan.forEach(item => {
                     assetLoanStack += item?.loanAmountStack ?? 0;
@@ -233,6 +238,7 @@ export const useCashflowTableData = () => {
 
                 //전체 자산
                 row.totalAsset = row.assetSavingStack + row.assetInvestStack + row.assetLoanStack;
+
             }
 
             //결과 넣기
