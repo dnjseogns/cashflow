@@ -23,8 +23,7 @@ export const useCashflowTableData = () => {
 
         //대출
         //집 대출
-        if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true 
-            && isCompleted?.house === true){
+        if(isCompleted?.age === true && isCompleted?.house === true){
             const idx = surveyData.base.loan.findIndex((item)=>item.loanId === "houseLoan");
             if(idx >= 0){
                 surveyData.base.loan.splice(idx, 1);
@@ -39,8 +38,7 @@ export const useCashflowTableData = () => {
         }
 
         //차 대출
-        if(isCompleted?.age === true && isCompleted?.salary === true && isCompleted?.consumption === true 
-            && isCompleted?.car === true){
+        if(isCompleted?.age === true && isCompleted?.car === true){
             const idx = surveyData.base.loan.findIndex((item)=>item.loanId === "carLoan");
             if(idx >= 0){
                 surveyData.base.loan.splice(idx, 1);
@@ -55,8 +53,9 @@ export const useCashflowTableData = () => {
         base.loan = base.loan.map((item)=> ({...item, "loanAmountStack":-1*item.loanAmount})) // loanAmountStack 컬럼 추가
                              .sort((a,b)=>(b.loanInterest - a.loanInterest)); // 대출금리 높은 걸 위로
 
+        //결과 변수
         let rows = [];
-        //누적 변수
+        //과정 누적 변수
         let loopCnt = 0;
         let salaryRiseRateStack = 1.0;
         let inflationStack = 1.0;
@@ -91,6 +90,12 @@ export const useCashflowTableData = () => {
                 //집 소비
                 row.houseCost = Math.round((base?.houseCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
                 row.consumption -= row.houseCost;
+
+                //주택가격
+                const housePrice = base?.livingType == "rent" ? base?.housePriceOwn
+                                    : base?.livingType == "own" ? base?.housePriceTotal
+                                    : 0;
+                row.housePrice = housePrice;
             }
 
             if(isCompleted?.age === true && isCompleted?.house === true && isCompleted?.car === true){
@@ -99,7 +104,7 @@ export const useCashflowTableData = () => {
                 row.consumption -= row.carCost;
             }
 
-            if(isCompleted?.age === true && isCompleted?.house === true && isCompleted?.car === true && isCompleted?.asset === true){
+            if(isCompleted?.age === true && isCompleted?.house === true){
                 // 대출이자
                 let loanCost = 0;
                 base.loan.forEach((item)=>{
@@ -169,8 +174,8 @@ export const useCashflowTableData = () => {
             }
 
             //누적자산
-            if(isCompleted?.age === true){
-                let tmpBalance = row.totalBalance; //잔액
+            if(isCompleted?.age === true && isCompleted?.house === true){
+                let tmpBalance = row.totalBalance ?? 0; //잔액
 
                 if(tmpBalance < 0){ // 잔액이 음수일 경우.
                     if(assetSavingStack + tmpBalance >= 0){ // 1. 예금 충분할 경우(차감)
@@ -195,7 +200,6 @@ export const useCashflowTableData = () => {
                                     return item;
                                 }
                             });
-                            // assetLoanStack = assetLoanStack + tmpBalance;
                         }
                     }
                 }else{
