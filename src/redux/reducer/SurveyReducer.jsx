@@ -23,7 +23,9 @@ const initialize = {
             lotto:null
         },
         base:{
-            loan:[]
+            loan:[],
+            curHouse:{},
+            house:[]
         },
         add:{
 

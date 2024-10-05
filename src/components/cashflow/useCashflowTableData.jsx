@@ -24,34 +24,53 @@ export const useCashflowTableData = () => {
         //대출
         //집 대출
         if(isCompleted?.age === true && isCompleted?.house === true){
-            const idx = surveyData.base.loan.findIndex((item)=>item.loanId === "houseLoan");
+            const idx = base.loan.findIndex((item)=>item.loanId === "houseLoan");
             if(idx >= 0){
-                surveyData.base.loan.splice(idx, 1);
+                base.loan.splice(idx, 1);
             }
-            if(surveyData.base?.housePriceLoan > 0){
-                if(surveyData.base?.livingType == "rent"){
-                    surveyData.base.loan.unshift({loanId:"houseLoan", loanName:"전·월세자금대출금(사전입력 : 2-ⓐ)", loanAmount:surveyData.base?.housePriceLoan ?? 0, loanInterest:surveyData.base?.housePriceLoanRate ?? 0, isReadOnly:true});
-                }else if(surveyData.base?.livingType == "own"){
-                    surveyData.base.loan.unshift({loanId:"houseLoan", loanName:"주택담보대출(사전입력 : 2-ⓐ)", loanAmount:surveyData.base?.housePriceLoan ?? 0, loanInterest:surveyData.base?.housePriceLoanRate ?? 0, isReadOnly:true});
+            if(base?.housePriceLoan > 0){
+                if(base?.livingType == "rent"){
+                    base.loan.unshift({loanId:"houseLoan", loanName:"전·월세자금대출금(사전입력 : 2-ⓐ)", loanAmount:base?.housePriceLoan ?? 0, loanInterest:base?.housePriceLoanRate ?? 0, isReadOnly:true});
+                }else if(base?.livingType == "own"){
+                    base.loan.unshift({loanId:"houseLoan", loanName:"주택담보대출(사전입력 : 2-ⓐ)", loanAmount:base?.housePriceLoan ?? 0, loanInterest:base?.housePriceLoanRate ?? 0, isReadOnly:true});
                 }
             }
         }
-
         //차 대출
-        if(isCompleted?.age === true && isCompleted?.car === true){
-            const idx = surveyData.base.loan.findIndex((item)=>item.loanId === "carLoan");
+        if(isCompleted?.age === true && isCompleted?.house === true && isCompleted?.car === true){
+            const idx = base.loan.findIndex((item)=>item.loanId === "carLoan");
             if(idx >= 0){
-                surveyData.base.loan.splice(idx, 1);
+                base.loan.splice(idx, 1);
             }
-            if(surveyData.base?.carLoan > 0){
-                surveyData.base.loan.unshift({loanId:"carLoan", loanName:"자동차 대출(사전입력 : 1-ⓐ)", loanAmount:surveyData.base?.carLoan ?? 0, loanInterest:surveyData.base?.carLoanRate ?? 0, isReadOnly:true});
+            if(base?.carLoan > 0){
+                base.loan.unshift({loanId:"carLoan", loanName:"자동차 대출(사전입력 : 1-ⓐ)", loanAmount:base?.carLoan ?? 0, loanInterest:base?.carLoanRate ?? 0, isReadOnly:true});
             }
         }
-
         //추가 대출(시스템)
         base.loan.push({loanId:"systemLoan", loanName:"추가대출", loanAmount:0, loanInterest: base?.loanInterest ?? 6.0, isReadOnly:true});
         base.loan = base.loan.map((item)=> ({...item, "loanAmountStack":-1*item.loanAmount})) // loanAmountStack 컬럼 추가
                              .sort((a,b)=>(b.loanInterest - a.loanInterest)); // 대출금리 높은 걸 위로
+
+        if(isCompleted?.age === true && isCompleted?.house === true){
+            const newHouse = base?.house?.filter((item)=>(item.age !== -1));
+            if(base?.livingType=="rent"){
+                newHouse.unshift({
+                    age:-1, 
+                    amount: base?.housePriceOwn,
+                    interest:0, 
+                    isReadOnly:true
+                });
+            }else if(base?.livingType=="own"){
+                newHouse.unshift({
+                    age:-1, 
+                    amount: base?.housePriceTotal,
+                    interest: base?.realEstateGrouthRate ?? 0,
+                    isReadOnly:true
+                });
+            }
+            base.house = newHouse;
+        }
+
 
         //결과 변수
         let rows = [];
@@ -61,6 +80,8 @@ export const useCashflowTableData = () => {
         let inflationStack = 1.0;
         let assetSavingStack = base?.currAssetSaving ?? 0;
         let assetInvestStack = base?.currAssetInvest ?? 0;
+        let curHouse = base?.house?.find((item)=>(item.age === -1));
+        let assetHousePriceStack = curHouse?.amount ?? 0;
 
         for(var i=0; i<=100; i++){
             let row = {};
@@ -89,19 +110,23 @@ export const useCashflowTableData = () => {
             if(isCompleted?.age === true && isCompleted?.house === true){
                 //집 소비
                 row.houseCost = Math.round((base?.houseCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
-                row.consumption -= row.houseCost;
+                // row.consumption -= row.houseCost;
 
-                //주택가격
-                const housePrice = base?.livingType == "rent" ? base?.housePriceOwn
-                                    : base?.livingType == "own" ? base?.housePriceTotal
-                                    : 0;
-                row.housePrice = housePrice;
+                // 실거주 가격
+                const newHouse = base?.house?.find((item)=>(item.age === base.age));
+                if(newHouse){
+                    curHouse = newHouse;
+                    assetHousePriceStack = newHouse.amount;
+                }else{
+                    assetHousePriceStack = assetHousePriceStack * (1 + curHouse.interest/100);
+                }
+                row.assetHousePriceStack = assetHousePriceStack;
             }
 
             if(isCompleted?.age === true && isCompleted?.house === true && isCompleted?.car === true){
                 //차 소비
                 row.carCost = Math.round((base?.carCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
-                row.consumption -= row.carCost;
+                // row.consumption -= row.carCost;
             }
 
             if(isCompleted?.age === true && isCompleted?.house === true){

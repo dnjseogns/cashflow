@@ -97,7 +97,7 @@ function CashflowTable(){
                         <th>대출<br/><Mapping txt="(7-ⓐ)"/></th>
                         <th>예금({base?.bankInterest}%)<br/><Mapping txt="(7-ⓐ)"/></th>
                         <th>투자({base?.investIncome}%)<br/><Mapping txt="(7-ⓐ)"/></th>
-                        {isAssetHouseVisible ? <th>실거주</th> : null}
+                        {isAssetHouseVisible ? <th>주택({base?.realEstateGrouthRate}%)<br/><Mapping txt="(7-ⓐ)"/></th> : null}
                         <th>합계</th>
                     </tr>
                 </thead>
@@ -130,7 +130,7 @@ function CashflowTable(){
                             <td className={row?.assetLoanStack < 0 ? 'minus' : ''}>{toKoreanMoneySimpleUnit(row?.assetLoanStack)}</td>
                             <td>{toKoreanMoneySimpleUnit(row?.assetSavingStack)}</td>
                             <td>{toKoreanMoneySimpleUnit(row?.assetInvestStack)}</td>
-                            { isAssetHouseVisible ? <td>{toKoreanMoneySimpleUnit(row?.housePrice)}</td>
+                            { isAssetHouseVisible ? <td>{toKoreanMoneySimpleUnit(row?.assetHousePriceStack)}</td>
                             : null}
 
                             <td className={`sum ${row?.totalAsset < 0 ? 'minus' : ''}`}>{toKoreanMoneySimpleUnit(row?.totalAsset)}</td>

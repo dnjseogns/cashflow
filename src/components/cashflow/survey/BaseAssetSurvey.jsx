@@ -22,6 +22,7 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
     const loanInterest = surveyData.base?.loanInterest ?? "6.0";
     const bankInterest = surveyData.base?.bankInterest ?? "3.0";
     const investIncome = surveyData.base?.investIncome ?? "6.0";
+    const realEstateGrouthRate = surveyData.base?.realEstateGrouthRate ?? "4.0";
 
     useEffect(()=>{
         let newLoan = [...loan].filter((item)=>{return item.loanId != "carLoan" && item.loanId != "houseLoan"});
@@ -61,6 +62,10 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
             const ret = expCheckDouble(e.target.value, 0, 100, 5);
             if(ret === null){return;}
             else{surveyData.base.investIncome = ret;}
+        }else if(div==="realEstateGrouthRate"){
+            const ret = expCheckDouble(e.target.value, 0, 100, 5);
+            if(ret === null){return;}
+            else{surveyData.base.realEstateGrouthRate = ret;}
         }
 
         dispatch(SvSave(surveyData));
@@ -74,6 +79,7 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
         surveyData.base.loanInterest = loanInterest;
         surveyData.base.bankInterest = bankInterest;
         surveyData.base.investIncome = investIncome;
+        surveyData.base.realEstateGrouthRate = realEstateGrouthRate;
 
         dispatch(SvSave(surveyData));
         commonCompleteLogic();
@@ -127,7 +133,7 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
     return(
     <Fragment>
         <div>
-            <p className="question">(1) 현재 자산 현황을 입력해주세요.</p>
+            <p className="question">(1) 현재 자산 현황을 추가해주세요.</p>
             <p>- <Mapping txt="ⓐ"/>대출금</p>
             <table className='survey-table'>
                 <colgroup>
@@ -143,7 +149,7 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
                         <th>대출명</th>
                         <th>금액(원)</th>
                         <th>금리(%)</th>
-                        <th><img src={plusIcon} alt="(+)" style={{width:"22px"}} onClick={()=>{addLoan()}}></img></th>
+                        <th><button className='btnAdd' onClick={()=>{addLoan()}}>추가(+)</button></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -172,14 +178,16 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
             
         </div>
         <div>
-            <p className="question">(2) 시뮬레이션 금리 및 개인 투자수익률을 입력해주세요.</p>
+            <p className="question">(2) 시뮬레이션 지수를 입력해주세요.</p>
             <p>- <Mapping txt="ⓐ"/>대출금리 : <input className='btn1' value={loanInterest} onChange={(e)=>{surveyOnChange(e,"loanInterest")}}/> %</p>
             <p className='note'>※ 2000년 ~ 2023년 1금융권 평균 대출금리는 약 6.0%입니다.</p>
             <p>- <Mapping txt="ⓑ"/>예금금리 : <input className='btn1' value={bankInterest} onChange={(e)=>{surveyOnChange(e,"bankInterest")}}/> %</p>
             <p className='note'>※ 2000년 ~ 2023년 1금융권 평균 대출금리는 약 3.0%입니다.</p>
             <p>- <Mapping txt="ⓒ"/>개인 투자수익률 : <input className='btn1' value={investIncome} onChange={(e)=>{surveyOnChange(e,"investIncome")}}/> %</p>
-            <p className='note'>※ 투자수익률은 미래자산에 매우 큰 영향을 끼칩니다. 현실적인 누적자산을 확인하기 위해선, <i>대출금리({loanInterest}%)</i>를 크게 벗어나지 않는 수익률로 설정해주시길 바랍니다.</p>
+            <p className='note'>※ 투자수익률은 미래자산에 큰 영향을 끼칩니다. 현실적인 누적자산을 확인하기 위해선, <i>대출금리({loanInterest}%)</i>를 크게 벗어나지 않는 수익률로 설정해주시길 바랍니다.</p>
             <p className='note'>※ 투자대상 : 주식, 금, 코인, 실거주 아닌 주택 등...(실거주 주택은 별도로 계산되므로, 투자대상에 포함하지 않습니다.)</p>
+            <p>- <Mapping txt="ⓓ"/>부동산 상승률 : <input className='btn1' value={realEstateGrouthRate} onChange={(e)=>{surveyOnChange(e,"realEstateGrouthRate")}}/> %</p>
+            <p className='note'>※ 실거주 주택도 투자의 한 부분입니다. 현실적인 누적자산을 확인하기 위해선, <i>예금금리({bankInterest}%)</i> ~ <i>대출금리({loanInterest}%)</i> 사이로 설정해주시길 바랍니다.</p>
         </div>
     </Fragment>);
 }

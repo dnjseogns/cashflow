@@ -31,6 +31,10 @@ const BaseCarSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
             else{surveyData.base.carCostMonthly = ret;}
         }
 
+        if(div !== "carLoan"){surveyData.base.carLoan = carLoan;}
+        if(div !== "carLoanRate"){surveyData.base.carLoanRate = carLoanRate;}
+        if(div !== "carCostMonthly"){surveyData.base.carCostMonthly = carCostMonthly;}
+
         dispatch(SvSave(surveyData));
     };
 

@@ -9,8 +9,12 @@ function BaseConsumptionSurvey({completeBtnClickCnt, commonCompleteLogic}){
     const dispatch = useDispatch();
     const surveyData = useSelector((store) => store.Survey).data;
     
-    const savingMonthly = surveyData.base?.savingMonthly ?? 0;
     const totIncomeMonthly = (surveyData.base?.salaryMonthly??0) + (surveyData.base?.sideJobMonthly??0);
+    const savingMonthly = surveyData.base?.savingMonthly ?? 0;
+    const houseCostMonthly = surveyData.base?.houseCostMonthly ?? 0;
+    const carCostMonthly = surveyData.base?.carCostMonthly ?? 0;
+    //대출이자 넣기
+    const etcExpenseMonthly = totIncomeMonthly - savingMonthly - houseCostMonthly - carCostMonthly; //저장하지 않음
 
     const bankRate = surveyData.base?.bankRate ?? 80;
     const investRate = surveyData.base?.investRate ?? 20;
@@ -21,7 +25,6 @@ function BaseConsumptionSurvey({completeBtnClickCnt, commonCompleteLogic}){
             if(ret === null){return;}
             else{
                 surveyData.base.savingMonthly = ret;
-                surveyData.base.consumptionMonthly = totIncomeMonthly - ret;
             }
         }else if(div==="bankRate"){
             const ret = expCheckInt(e.target.value, 0, 100);
@@ -37,11 +40,10 @@ function BaseConsumptionSurvey({completeBtnClickCnt, commonCompleteLogic}){
         
     useEffectNoMount(()=>{
         surveyData.base.savingMonthly = savingMonthly;
-        surveyData.base.consumptionMonthly = totIncomeMonthly - savingMonthly;
         surveyData.base.bankRate = bankRate;
         surveyData.base.investRate = investRate;
 
-        if(surveyData.base.consumptionMonthly < 0){
+        if(surveyData.base.etcExpenseMonthly < 0){
             alert("소비는 마이너스(-) 일 수 없습니다.");
             return;
         }
@@ -54,8 +56,10 @@ function BaseConsumptionSurvey({completeBtnClickCnt, commonCompleteLogic}){
             <div>
                 <p className="question">(1) 현재 월 소득(<i>{toKoreanMoneyUnit(totIncomeMonthly)}</i>) 중 얼마나 저축하고 있나요?</p>
                 <p>- 저축 : <input className='btn1' value={savingMonthly.toLocaleString('ko-KR')}  onChange={(e)=>{surveyOnChange(e,"savingMonthly")}}/>원({toKoreanMoneyUnit(savingMonthly)})</p>
-                <p>- <Mapping txt="ⓑ"/>소비(자동계산) : <input className='btn1 readonly' value={(totIncomeMonthly - savingMonthly).toLocaleString('ko-KR')} readOnly={true}/>원({toKoreanMoneyUnit(totIncomeMonthly - savingMonthly)})</p>
-                <p className='note'>※ 미래 소비 계산방법 = 물가상승률<Mapping txt="(5-ⓐ)"/> x <i>소비금액({toKoreanMoneyUnit(totIncomeMonthly - savingMonthly)})</i></p>
+                <p>- <Mapping txt="ⓑ"/>주거비(사전입력) : <input className='btn1 readonly' value={houseCostMonthly.toLocaleString('ko-KR')} readOnly={true}/>원({toKoreanMoneyUnit(houseCostMonthly)})</p>
+                <p>- <Mapping txt="ⓑ"/>차량비(사전입력) : <input className='btn1 readonly' value={carCostMonthly.toLocaleString('ko-KR')} readOnly={true}/>원({toKoreanMoneyUnit(carCostMonthly)})</p>
+                <p>- <Mapping txt="ⓑ"/>기타소비(자동계산) : <input className='btn1 readonly' value={etcExpenseMonthly.toLocaleString('ko-KR')} readOnly={true}/>원({toKoreanMoneyUnit(etcExpenseMonthly)})</p>
+                <p className='note'>※ 소비 계산방법 = 물가상승률<Mapping txt="(5-ⓐ)"/> x <i>총 소비금액({toKoreanMoneyUnit(totIncomeMonthly - savingMonthly)})</i></p>
             </div>
             <div>
                 <p className="question">(2) 저축액의 예금 / 투자 비율을 입력해주세요.</p>
