@@ -172,8 +172,8 @@ export const useCashflowTableData = () => {
             if(isCompleted?.age === true && isCompleted?.house === true && isCompleted?.car === true && isCompleted?.asset === true
                 && isCompleted?.salary === true && isCompleted?.consumption === true){
                 // 소비
-                row.consumption = Math.round((base?.consumptionMonthly ?? 0) * 12 * row.inflationStack) * -1;
-
+                row.consumption = Math.round((base?.etcExpenseMonthly ?? 0) * 12 * row.inflationStack) * -1;
+                
                 //전체소비
                 row.totalConsumption = row.consumption;
                 
