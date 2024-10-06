@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { createContext } from 'react';
+import { useSelector } from "react-redux";
 
 export const MenuContext = createContext();
 
@@ -14,16 +15,26 @@ export const useMenuContext = () => {
 export const MenuProvider = ({ children }) => {
     const [surveyDiv,setSurveyDiv] = useState("guide");
     const [surveyTitle,setSurveyTitle] = useState("");
+    const surveyData = useSelector((store) => store.Survey).data;
     
+    let base2 = "";
+    let base3 = "";
+    if(surveyData.base?.marryYn==="Y"){
+        base2 = "부부 자산";
+        base3 = "부부 수입/지출";
+    }else{
+        base2 = "자산";
+        base3 = "수입/지출";
+    }
     const menuEnum = {
         GUIDE : "가이드",
         BASE : "기본정보",
-        BASE_AGE : "1. 나이/물가",
-        BASE2 : "자산",
+        BASE_AGE : "1. 기본정보",
+        BASE2 : base2,
         BASE_HOUSE : "2. 집",
         BASE_CAR : "3. 자동차",
         BASE_ASSET : "4. 자산",
-        BASE3 : "수입/지출",
+        BASE3 : base3,
         BASE_SALARY : "5. 수입",
         BASE_CONSUMPTION : "6. 지출",
         ADD : "이벤트",

@@ -51,6 +51,7 @@ export const useCashflowTableData = () => {
         base.loan = base.loan.map((item)=> ({...item, "loanAmountStack":-1*item.loanAmount})) // loanAmountStack 컬럼 추가
                              .sort((a,b)=>(b.loanInterest - a.loanInterest)); // 대출금리 높은 걸 위로
 
+        //집price 구하기
         if(isCompleted?.age === true && isCompleted?.house === true){
             const newHouse = base?.house?.filter((item)=>(item.age !== -1));
             if(base?.livingType=="rent"){
@@ -70,6 +71,12 @@ export const useCashflowTableData = () => {
             }
             base.house = newHouse;
         }
+
+        // 국민연금 구하기 전처리
+        const tmpPensionYear = 65 - (surveyData.base?.age - surveyData.base?.workYear) - 20;
+        surveyData.base.pensionMonthly = surveyData.base?.pensionMonthly 
+                            ?? Math.round((1.2 * (surveyData.base?.salaryMonthly + 2989237) * (1 + (tmpPensionYear < 0 ? 0 : tmpPensionYear)*0.05))/12);
+        
 
 
         //결과 변수
@@ -117,7 +124,11 @@ export const useCashflowTableData = () => {
                     curHouse = newHouse;
                     assetHousePriceStack = newHouse.amount;
                 }else{
-                    assetHousePriceStack = assetHousePriceStack * (1 + curHouse?.interest/100);
+                    if(curHouse){
+                        assetHousePriceStack = assetHousePriceStack * (1 + curHouse?.interest/100);
+                    }else{
+                        assetHousePriceStack = null;
+                    }
                 }
                 row.assetHousePriceStack = assetHousePriceStack;
             }
@@ -131,9 +142,9 @@ export const useCashflowTableData = () => {
                 // 대출이자
                 let loanCost = 0;
                 base.loan.forEach((item)=>{
-                    loanCost += Math.round(item.loanAmountStack*(item.loanInterest/100));
+                    loanCost += item.loanAmountStack*(item.loanInterest/100);
                 });
-                row.loanCost = loanCost;
+                row.loanCost = Math.round(loanCost/12)*12;
             }
 
 
@@ -162,15 +173,21 @@ export const useCashflowTableData = () => {
                     row.salary = 0;
                 }
 
+                //국민연금(대충계산하자... 현재 받는 연봉 넣으면 대충 맞음.)
+                row.pension = 0;
+                if(row.age >= 65){
+                    row.pension = base?.pensionMonthly*12 * Math.pow((1 + base.indexInflation/100), row?.age - 65);
+                }
+
                 //전체소득
-                row.totalIncome = row.salary + row.sideJob;
+                row.totalIncome = row.salary + row.sideJob + row.pension;
             }
 
 
             if(isCompleted?.age === true && isCompleted?.house === true && isCompleted?.car === true && isCompleted?.asset === true
                 && isCompleted?.salary === true && isCompleted?.consumption === true){
                 // 기타소비
-                row.etcExpense = Math.round((base?.etcExpenseMonthly ?? 0) * 12 * -1 * row.inflationStack);
+                row.etcExpense = Math.round((base?.etcExpenseMonthly ?? 0) * 12 * row.inflationStack) * -1;
 
                 //전체소비
                 row.totalConsumption = row.houseCost + row.carCost + row.loanCost + row.etcExpense;
@@ -268,7 +285,8 @@ export const useCashflowTableData = () => {
 
                 
                 //전체 자산
-                row.totalAsset = row.assetSavingStack + row.assetInvestStack + row.assetLoanStack + row.assetHousePriceStack;
+                row.totalAsset = (row.assetSavingStack ?? 0) + (row.assetInvestStack ?? 0) 
+                                + (row.assetLoanStack ?? 0) + (row.assetHousePriceStack ?? 0);
 
             }
 
