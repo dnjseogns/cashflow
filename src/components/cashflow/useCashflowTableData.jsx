@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {SvSave, SvClean} from '@/redux/action/SurveyAction';
 import {CfSave, CfClean} from '@/redux/action/CashflowAction';
 import { numRound } from "@/utils/util";
+import useEffectNoMount from '@/hooks/useEffectNoMount.jsx';
 
 export const useCashflowTableData = () => {
     //redux
@@ -10,14 +11,18 @@ export const useCashflowTableData = () => {
     const surveyDataOrgin = useSelector((store) => store.Survey).data;
     const cashflowData = useSelector((store) => store.Cashflow).data;
 
-    const surveyData = JSON.parse(JSON.stringify(surveyDataOrgin));
-    //
-    //cfRedux 값 세팅
-    useEffect(()=>{
-        console.log("surveyData",surveyData);
-        console.log("cashflowData",cashflowData);
+    const [isCompleteStep1, setIsCompleteStep1] = useState(false);
+    const [isCompleteStep2, setIsCompleteStep2] = useState(false);
+    const [isCompleteStep3, setIsCompleteStep3] = useState(false);
+
+    //survey 값 다시 한 번 세팅
+    useEffectNoMount(()=>{
+        if(isCompleteStep1){
+            return;
+        }
 
         // 기본 변수
+        const surveyData = JSON.parse(JSON.stringify(surveyDataOrgin));
         let isCompleted = surveyData.isCompleted;
         let base = surveyData.base;
 
@@ -46,10 +51,6 @@ export const useCashflowTableData = () => {
                 base.loan.unshift({loanId:"carLoan", loanName:"자동차 대출(사전입력 : 3-ⓐ)", loanAmount:base?.carLoan ?? 0, loanInterest:base?.carLoanRate ?? 0, isReadOnly:true});
             }
         }
-        //추가 대출(시스템)
-        base.loan.push({loanId:"systemLoan", loanName:"추가대출", loanAmount:0, loanInterest: base?.loanInterest ?? 6.0, isReadOnly:true});
-        base.loan = base.loan.map((item)=> ({...item, "loanAmountStack":-1*item.loanAmount})) // loanAmountStack 컬럼 추가
-                             .sort((a,b)=>(b.loanInterest - a.loanInterest)); // 대출금리 높은 걸 위로
 
         //집price 구하기
         if(isCompleted?.age === true && isCompleted?.house === true){
@@ -73,10 +74,37 @@ export const useCashflowTableData = () => {
         }
 
         // 국민연금 구하기 전처리
-        const tmpPensionYear = 65 - (surveyData.base?.age - surveyData.base?.workYear) - 20;
-        surveyData.base.pensionMonthly = surveyData.base?.pensionMonthly 
-                            ?? Math.round((1.2 * (surveyData.base?.salaryMonthly + 2989237) * (1 + (tmpPensionYear < 0 ? 0 : tmpPensionYear)*0.05))/12);
+        const tmpPensionYear = 65 - ((surveyData.base?.age??20) - (surveyData.base?.workYear??1)) - 20;
+        surveyData.base.pensionMonthly = Math.round((1.2 * ((surveyData.base?.salaryMonthly??3000000) + 2989237) * (1 + (tmpPensionYear < 0 ? 0 : tmpPensionYear)*0.05))/12);
         
+
+        dispatch(SvSave(surveyData));
+        setIsCompleteStep1(true);
+    },[surveyDataOrgin]);
+    
+    //cfRedux 값 다시 한 번 세팅
+    useEffectNoMount(()=>{
+        if(isCompleteStep2){
+            return;
+        }else{
+            setIsCompleteStep1(false);
+        }
+
+        // 기본 변수
+        const surveyData = JSON.parse(JSON.stringify(surveyDataOrgin));
+        let isCompleted = surveyData.isCompleted;
+        let base = surveyData.base;
+
+        //추가 대출(시스템 계산용)
+        {
+            base.loan = base.loan.filter((item)=>(item.loanId !== "systemLoan"));
+            base.loan.push({loanId:"systemLoan", loanName:"추가대출", loanAmount:0, loanInterest: base?.loanInterest ?? 6.0, isReadOnly:true});
+            base.loan = base.loan.map((item)=> ({...item, "loanAmountStack":-1*item.loanAmount})) // loanAmountStack 컬럼 추가
+                                .sort((a,b)=>(b.loanInterest - a.loanInterest)); // 대출금리 높은 걸 위로
+        }
+
+        console.log("surveyData",surveyData);
+        console.log("cashflowData",cashflowData);
 
 
         //결과 변수
@@ -296,8 +324,24 @@ export const useCashflowTableData = () => {
         cashflowData.timeline = rows;
         dispatch(CfSave(cashflowData));
 
-    },[surveyDataOrgin]);
+        setIsCompleteStep2(true);
+    },[isCompleteStep1]);
 
+    useEffectNoMount(()=>{
+        if(isCompleteStep3){
+            return;
+        }else{
+            setIsCompleteStep2(false);
+        }
+
+        resetComplete();
+    },[isCompleteStep2])
+
+    const resetComplete = () => {
+        setIsCompleteStep1(false);
+        setIsCompleteStep2(false);
+        setIsCompleteStep3(false);
+    }
     // //예외처리
     // useEffect(()=>{
     //     let isCompleted = surveyData.isCompleted;

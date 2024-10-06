@@ -27,22 +27,22 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
     const investIncome = surveyData.base?.investIncome ?? "5.0";
     const realEstateGrouthRate = surveyData.base?.realEstateGrouthRate ?? "4.0";
 
-    useEffect(()=>{
-        let newLoan = [...loan].filter((item)=>{return item.loanId != "carLoan" && item.loanId != "houseLoan"});
-        if(surveyData.base?.housePriceLoan > 0){
-            if(surveyData.base?.livingType == "rent"){
-                newLoan.unshift({loanId:"houseLoan", loanName:"전·월세자금대출금(사전입력 : 2-ⓐ)", loanAmount:surveyData.base?.housePriceLoan ?? 0, loanInterest:surveyData.base?.housePriceLoanRate ?? 0, isReadOnly:true});
-            }else if(surveyData.base?.livingType == "own"){
-                newLoan.unshift({loanId:"houseLoan", loanName:"주택담보대출(사전입력 : 2-ⓐ)", loanAmount:surveyData.base?.housePriceLoan ?? 0, loanInterest:surveyData.base?.housePriceLoanRate ?? 0, isReadOnly:true});
-            }
-        }
-        if(surveyData.base?.carLoan > 0){
-            newLoan.unshift({loanId:"carLoan", loanName:"자동차 대출(사전입력 : 3-ⓐ)", loanAmount:surveyData.base?.carLoan ?? 0, loanInterest:surveyData.base?.carLoanRate ?? 0, isReadOnly:true});
-        }
+    // useEffect(()=>{
+    //     let newLoan = [...loan].filter((item)=>{return item.loanId != "carLoan" && item.loanId != "houseLoan"});
+    //     if(surveyData.base?.housePriceLoan > 0){
+    //         if(surveyData.base?.livingType == "rent"){
+    //             newLoan.unshift({loanId:"houseLoan", loanName:"전·월세자금대출금(사전입력 : 2-ⓐ)", loanAmount:surveyData.base?.housePriceLoan ?? 0, loanInterest:surveyData.base?.housePriceLoanRate ?? 0, isReadOnly:true});
+    //         }else if(surveyData.base?.livingType == "own"){
+    //             newLoan.unshift({loanId:"houseLoan", loanName:"주택담보대출(사전입력 : 2-ⓐ)", loanAmount:surveyData.base?.housePriceLoan ?? 0, loanInterest:surveyData.base?.housePriceLoanRate ?? 0, isReadOnly:true});
+    //         }
+    //     }
+    //     if(surveyData.base?.carLoan > 0){
+    //         newLoan.unshift({loanId:"carLoan", loanName:"자동차 대출(사전입력 : 3-ⓐ)", loanAmount:surveyData.base?.carLoan ?? 0, loanInterest:surveyData.base?.carLoanRate ?? 0, isReadOnly:true});
+    //     }
 
-        surveyData.base.loan = newLoan;
-        dispatch(SvSave(surveyData));
-    },[]);
+    //     surveyData.base.loan = newLoan;
+    //     dispatch(SvSave(surveyData));
+    // },[]);
 
     const surveyOnChange = (e, div) => {
         if(div==="currAssetSaving"){

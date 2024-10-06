@@ -19,12 +19,21 @@ export const MenuProvider = ({ children }) => {
     
     let base2 = "";
     let base3 = "";
+    let baseSalary="";
+    let baseConsumption="";
+    let baseSpouse="";
     if(surveyData.base?.marryYn==="Y"){
-        base2 = "부부 자산";
-        base3 = "부부 수입/지출";
+        base2 = "자산(부부합산)";
+        base3 = "수입/지출(부부합산)";
+        baseSalary="5. 개인 수입";
+        baseConsumption="6. 개인 지출";
+        baseSpouse="7. 배우자 수입/지출";
     }else{
         base2 = "자산";
         base3 = "수입/지출";
+        baseSalary="5. 수입";
+        baseConsumption="6. 지출";
+        baseSpouse="";
     }
     const menuEnum = {
         GUIDE : "가이드",
@@ -35,8 +44,9 @@ export const MenuProvider = ({ children }) => {
         BASE_CAR : "3. 자동차",
         BASE_ASSET : "4. 자산",
         BASE3 : base3,
-        BASE_SALARY : "5. 수입",
-        BASE_CONSUMPTION : "6. 지출",
+        BASE_SALARY : baseSalary,
+        BASE_CONSUMPTION : baseConsumption,
+        BASE_SPOUSE : baseSpouse,
         ADD : "이벤트",
         ADD_MARRY : "7. 결혼",
         ADD_BABY : "8. 아기",

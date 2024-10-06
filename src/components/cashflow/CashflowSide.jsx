@@ -45,10 +45,16 @@ function CashflowSide(){
             {isSurveyCompleted.consumption !== null 
             ? <li className={(surveyDiv==="consumption"?"on":"") + (isSurveyCompleted.consumption?" ok":"")} onClick={()=>{setSurveyDivition("consumption")}}><span>{menuEnum.BASE_CONSUMPTION}</span> {surveyDiv==="consumption"?<span>〉</span>:null}</li>
             : <li className='disable'><span>{menuEnum.BASE_CONSUMPTION}</span></li>}
+
+            {surveyData.base.marryYn === "Y"
+            ? isSurveyCompleted.marry !== null 
+                ? <li className={(surveyDiv==="marry"?"on":"") + (isSurveyCompleted.marry?" ok":"")} onClick={()=>{setSurveyDivition("marry")}}><span>{menuEnum.BASE_SPOUSE}</span> {surveyDiv==="marry"?<span>〉</span>:null}</li>
+                : <li className='disable'><span>{menuEnum.BASE_SPOUSE}</span></li>
+            :null}
         </ul>
         <ul className='add'>{menuEnum.ADD}
-            {isSurveyCompleted.marry !== null 
-            ? <li className={(surveyDiv==="marry"?"on":"") + (isSurveyCompleted.marry?" ok":"")} onClick={()=>{setSurveyDivition("marry")}}>{menuEnum.ADD_MARRY} {surveyDiv==="marry"?<span>〉</span>:null}</li>
+            {surveyData.base.marryYn !== "N" ? null
+            : isSurveyCompleted.marry !== null ? <li className={(surveyDiv==="marry"?"on":"") + (isSurveyCompleted.marry?" ok":"")} onClick={()=>{setSurveyDivition("marry")}}>{menuEnum.ADD_MARRY} {surveyDiv==="marry"?<span>〉</span>:null}</li>
             : <li className='disable'><span>{menuEnum.ADD_MARRY}</span></li>}
             
             {isSurveyCompleted.baby !== null 
