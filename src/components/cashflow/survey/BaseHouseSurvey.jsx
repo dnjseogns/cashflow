@@ -88,7 +88,7 @@ const BaseHouseSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
                         <input className='btn1' value={housePriceLoan.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"housePriceLoan")}}/>({toKoreanMoneyUnit(housePriceLoan)}),
                         <span style={{marginLeft:"20px"}}>대출금리 : </span>
                         <input className='btn1' value={housePriceLoanRate.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"housePriceLoanRate")}}/> %
-                        <span> (<Mapping txt="ⓐ"/> 월 대출이자 : {toKoreanMoneyUnit(Math.round(housePriceLoan*(housePriceLoanRate/100)/12))})</span>
+                        <span> (월 대출이자 : {toKoreanMoneyUnit(Math.round(housePriceLoan*(housePriceLoanRate/100)/12))})</span>
                     </p>
                     <p>- <Mapping txt="ⓑ"/>보증금 중 자기자본(자동계산) : <input className='btn1 readonly' value={(housePriceTotal - housePriceLoan).toLocaleString('ko-KR')} readOnly={true}/>({toKoreanMoneyUnit(housePriceTotal - housePriceLoan)})</p>
                 </div>
@@ -108,7 +108,7 @@ const BaseHouseSurvey = ({completeBtnClickCnt, commonCompleteLogic}) => {
                         <input className='btn1' value={housePriceLoan.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"housePriceLoan")}}/>({toKoreanMoneyUnit(housePriceLoan)}),
                         <span style={{marginLeft:"20px"}}><Mapping txt="ⓓ"/>대출금리 : </span>
                         <input className='btn1' value={housePriceLoanRate.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"housePriceLoanRate")}}/> %
-                        <span> (<Mapping txt="ⓐ"/> 월 대출이자 : {toKoreanMoneyUnit(Math.round(housePriceLoan*(housePriceLoanRate/100)/12))})</span>
+                        <span> (월 대출이자 : {toKoreanMoneyUnit(Math.round(housePriceLoan*(housePriceLoanRate/100)/12))})</span>
                     </p>
                     {/* 자기소유면 자기자본은 필요없는 것 같음
                     <p>- 자기자본(자동계산) : <input className='btn1 readonly' value={(housePriceTotal - housePriceLoan).toLocaleString('ko-KR')} readOnly={true}/>({toKoreanMoneyUnit(housePriceTotal - housePriceLoan)})</p> */}

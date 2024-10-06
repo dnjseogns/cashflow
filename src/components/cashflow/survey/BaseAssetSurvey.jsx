@@ -18,6 +18,9 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
     const loan = (Array.isArray(surveyData.base?.loan) && surveyData.base?.loan?.length >= 1) ? surveyData.base?.loan : [];
     const currAssetSaving = surveyData.base?.currAssetSaving ?? 0;
     const currAssetInvest = surveyData.base?.currAssetInvest ?? 0;
+    const currAssetHousePrice = surveyData.base?.livingType=="rent" ? surveyData.base?.housePriceOwn
+                                : surveyData.base?.livingType=="own" ? surveyData.base?.housePriceTotal
+                                : 0;
 
     const loanInterest = surveyData.base?.loanInterest ?? "6.0";
     const bankInterest = surveyData.base?.bankInterest ?? "3.0";
@@ -34,7 +37,7 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
             }
         }
         if(surveyData.base?.carLoan > 0){
-            newLoan.unshift({loanId:"carLoan", loanName:"자동차 대출(사전입력 : 1-ⓐ)", loanAmount:surveyData.base?.carLoan ?? 0, loanInterest:surveyData.base?.carLoanRate ?? 0, isReadOnly:true});
+            newLoan.unshift({loanId:"carLoan", loanName:"자동차 대출(사전입력 : 3-ⓐ)", loanAmount:surveyData.base?.carLoan ?? 0, loanInterest:surveyData.base?.carLoanRate ?? 0, isReadOnly:true});
         }
 
         surveyData.base.loan = newLoan;
@@ -133,7 +136,7 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
     return(
     <Fragment>
         <div>
-            <p className="question">(1) 현재 자산 현황을 추가해주세요.</p>
+            <p className="question">(1) 현재 자산 현황을 추가 및 입력해주세요.</p>
             <p>- <Mapping txt="ⓐ"/>대출금</p>
             <table className='survey-table'>
                 <colgroup>
@@ -175,6 +178,7 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
             </table>
             <p>- <Mapping txt="ⓑ"/>예·적금 : <input className='btn1' value={currAssetSaving.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"currAssetSaving")}}/>({toKoreanMoneyUnit(currAssetSaving)})</p>
             <p>- <Mapping txt="ⓒ"/>투자금 : <input className='btn1' value={currAssetInvest.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"currAssetInvest")}}/>({toKoreanMoneyUnit(currAssetInvest)})</p>
+            <p>- <Mapping txt="ⓓ"/>주택자금(사전입력) : <input className='btn1 readonly' readOnly={true} value={currAssetHousePrice.toLocaleString('ko-KR')}/>({toKoreanMoneyUnit(currAssetHousePrice)})</p>
             
         </div>
         <div>
@@ -187,7 +191,8 @@ function BaseAssetSurvey({completeBtnClickCnt, commonCompleteLogic}){
             <p className='note'>※ 투자수익률은 미래자산에 큰 영향을 끼칩니다. 현실적인 누적자산을 확인하기 위해선, <i>대출금리({loanInterest}%)</i>를 크게 벗어나지 않는 수익률로 설정해주시길 바랍니다.</p>
             <p className='note'>※ 투자대상 : 주식, 금, 코인, 실거주 아닌 주택 등...(실거주 주택은 별도로 계산되므로, 투자대상에 포함하지 않습니다.)</p>
             <p>- <Mapping txt="ⓓ"/>부동산 상승률 : <input className='btn1' value={realEstateGrouthRate} onChange={(e)=>{surveyOnChange(e,"realEstateGrouthRate")}}/> %</p>
-            <p className='note'>※ 실거주 주택도 투자의 한 부분입니다. 현실적인 누적자산을 확인하기 위해선, <i>예금금리({bankInterest}%)</i> ~ <i>대출금리({loanInterest}%)</i> 사이로 설정해주시길 바랍니다.</p>
+            <p className='note'>※ 2012년 ~ 2024년 전국 주택가격 상승률은 약 4.0%입니다.(한국부동산원 통계 참고)</p>
+            {/* <p className='note'>※ 실거주 주택도 투자의 한 부분입니다. 현실적인 누적자산을 확인하기 위해선, <i>예금금리({bankInterest}%)</i> ~ <i>대출금리({loanInterest}%)</i> 사이로 설정해주시길 바랍니다.</p> */}
         </div>
     </Fragment>);
 }

@@ -43,7 +43,7 @@ export const useCashflowTableData = () => {
                 base.loan.splice(idx, 1);
             }
             if(base?.carLoan > 0){
-                base.loan.unshift({loanId:"carLoan", loanName:"자동차 대출(사전입력 : 1-ⓐ)", loanAmount:base?.carLoan ?? 0, loanInterest:base?.carLoanRate ?? 0, isReadOnly:true});
+                base.loan.unshift({loanId:"carLoan", loanName:"자동차 대출(사전입력 : 3-ⓐ)", loanAmount:base?.carLoan ?? 0, loanInterest:base?.carLoanRate ?? 0, isReadOnly:true});
             }
         }
         //추가 대출(시스템)
@@ -110,7 +110,6 @@ export const useCashflowTableData = () => {
             if(isCompleted?.age === true && isCompleted?.house === true){
                 //집 소비
                 row.houseCost = Math.round((base?.houseCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
-                // row.consumption -= row.houseCost;
 
                 // 실거주 가격
                 const newHouse = base?.house?.find((item)=>(item.age === base.age));
@@ -118,7 +117,7 @@ export const useCashflowTableData = () => {
                     curHouse = newHouse;
                     assetHousePriceStack = newHouse.amount;
                 }else{
-                    assetHousePriceStack = assetHousePriceStack * (1 + curHouse.interest/100);
+                    assetHousePriceStack = assetHousePriceStack * (1 + curHouse?.interest/100);
                 }
                 row.assetHousePriceStack = assetHousePriceStack;
             }
@@ -126,7 +125,6 @@ export const useCashflowTableData = () => {
             if(isCompleted?.age === true && isCompleted?.house === true && isCompleted?.car === true){
                 //차 소비
                 row.carCost = Math.round((base?.carCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
-                // row.consumption -= row.carCost;
             }
 
             if(isCompleted?.age === true && isCompleted?.house === true){
@@ -171,14 +169,11 @@ export const useCashflowTableData = () => {
 
             if(isCompleted?.age === true && isCompleted?.house === true && isCompleted?.car === true && isCompleted?.asset === true
                 && isCompleted?.salary === true && isCompleted?.consumption === true){
-                // 소비
-                row.consumption = Math.round((base?.etcExpenseMonthly ?? 0) * 12 * row.inflationStack) * -1;
-                
+                // 기타소비
+                row.etcExpense = Math.round((base?.etcExpenseMonthly ?? 0) * 12 * -1 * row.inflationStack);
+
                 //전체소비
-                row.totalConsumption = row.consumption;
-                
-                //잔액
-                row.totalBalance = row.totalIncome + row.totalConsumption + (row.totalEvent ?? 0);
+                row.totalConsumption = row.houseCost + row.carCost + row.loanCost + row.etcExpense;
             }
 
 
@@ -190,12 +185,18 @@ export const useCashflowTableData = () => {
                 if(row.age == base?.retireAge){
                     const totalWorkYear = loopCnt + (base?.workYear ?? 1);
                     row.eventRetirementPay = base?.salaryMonthly * row.salaryRiseRateStack * totalWorkYear;
-                    row.totalEventNote = (row?.totalEventNote ?? "") + "퇴직금(4-ⓑ)"
+                    row.totalEventNote = (row?.totalEventNote ?? "") + "퇴직금(5-ⓑ)"
                 }else{
                     row.eventRetirementPay = row.eventRetirementPay;
                 }
 
                 row.totalEvent = row.eventRetirementPay;
+            }
+                
+            //잔액
+            if(isCompleted?.age === true && isCompleted?.house === true && isCompleted?.car === true && isCompleted?.asset === true
+                && isCompleted?.salary === true && isCompleted?.consumption === true){
+                row.totalBalance = row.totalIncome + row.totalConsumption + (row.totalEvent ?? 0);
             }
 
             //누적자산
@@ -265,8 +266,9 @@ export const useCashflowTableData = () => {
                 });
                 row.assetLoanStack = assetLoanStack;
 
+                
                 //전체 자산
-                row.totalAsset = row.assetSavingStack + row.assetInvestStack + row.assetLoanStack;
+                row.totalAsset = row.assetSavingStack + row.assetInvestStack + row.assetLoanStack + row.assetHousePriceStack;
 
             }
 
@@ -288,6 +290,5 @@ export const useCashflowTableData = () => {
     //     sideJobMonthly
     //     : 
     //     0
-    //     console.log("base",base);
     // },[surveyDataOrgin])
 }

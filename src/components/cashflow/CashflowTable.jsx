@@ -77,14 +77,14 @@ function CashflowTable(){
                         <th>누적 물가상승률<br/><Mapping txt="(1-ⓑ)"/></th>
 
                         {isSalaryRiseRateStackVisible ? <th>연봉상승률(누적)</th> : null}
-                        <th>연봉<br/><Mapping txt="(4-ⓐ)"/></th>
-                        {isSideJobVisible ? <th>부업<br/><Mapping txt="(4-ⓒ)"/></th> : null}
+                        <th>연봉<br/><Mapping txt="(5-ⓐ)"/></th>
+                        {isSideJobVisible ? <th>부업<br/><Mapping txt="(5-ⓓ)"/></th> : null}
                         <th>합계</th>
 
-                        <th>주거비<br/><Mapping txt="(2-ⓑ)"/></th>
-                        <th>차량비<br/><Mapping txt="(1-ⓑ)"/></th>
-                        <th>대출이자<br/><Mapping txt="(5-ⓐ)"/></th>
-                        <th>기타소비<br/><Mapping txt="(5-ⓐ)"/></th>
+                        <th>주거비<br/><Mapping txt="(6-ⓐ)"/></th>
+                        <th>차량비<br/><Mapping txt="(6-ⓑ)"/></th>
+                        <th>대출이자<br/><Mapping txt="(6-ⓒ)"/></th>
+                        <th>기타소비<br/><Mapping txt="(6-ⓓ)"/></th>
                         <th>합계</th>
 
                         <th>내용</th>
@@ -94,16 +94,15 @@ function CashflowTable(){
 
                         <th className='gap'></th>
 
-                        <th>대출<br/><Mapping txt="(7-ⓐ)"/></th>
-                        <th>예금({base?.bankInterest}%)<br/><Mapping txt="(7-ⓐ)"/></th>
-                        <th>투자({base?.investIncome}%)<br/><Mapping txt="(7-ⓐ)"/></th>
-                        {isAssetHouseVisible ? <th>주택({base?.realEstateGrouthRate}%)<br/><Mapping txt="(7-ⓐ)"/></th> : null}
+                        <th>대출<br/><Mapping txt="(4-ⓐ)"/></th>
+                        <th>예금({base?.bankInterest}%)<br/><Mapping txt="(4-ⓑ)"/></th>
+                        <th>투자({base?.investIncome}%)<br/><Mapping txt="(4-ⓒ)"/></th>
+                        {isAssetHouseVisible ? <th>주택({base?.realEstateGrouthRate}%)<br/><Mapping txt="(4-ⓓ)"/></th> : null}
                         <th>합계</th>
                     </tr>
                 </thead>
                 <tbody>
                     {cashflowData?.timeline.map((row, i) => {
-                        
                     return(
                         <tr key={i}>
                             <td>{row?.age}</td>
@@ -117,7 +116,7 @@ function CashflowTable(){
                             <td className={`${row?.houseCost < 0 ? 'minus' : ''}`}>{toKoreanMoneySimpleUnit(row?.houseCost)}</td>
                             <td className={`${row?.carCost < 0 ? 'minus' : ''}`}>{toKoreanMoneySimpleUnit(row?.carCost)}</td>
                             <td className={`${row?.loanCost < 0 ? 'minus' : ''}`}>{toKoreanMoneySimpleUnit(row?.loanCost)}</td>
-                            <td className={`${row?.consumption < 0 ? 'minus' : ''}`}>{toKoreanMoneySimpleUnit(row?.consumption)}</td>
+                            <td className={`${row?.etcExpense < 0 ? 'minus' : ''}`}>{toKoreanMoneySimpleUnit(row?.etcExpense)}</td>
                             <td className={`sum ${row?.totalConsumption < 0 ? 'minus' : ''}`}>{toKoreanMoneySimpleUnit(row?.totalConsumption)}</td>
                             
                             {row?.totalEventNote ? <td><Mapping txt={row?.totalEventNote}/></td> : <td></td>}
