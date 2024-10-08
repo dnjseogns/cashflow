@@ -15,6 +15,8 @@ import BaseSalarySurvey from './survey/BaseSalarySurvey';
 import BaseConsumptionSurvey from './survey/BaseConsumptionSurvey';
 import BaseAssetSurvey from './survey/BaseAssetSurvey';
 import { useMenuContext } from '@/components/cashflow/MenuContext.jsx';
+import SurveyBaseMode from './survey/base/SurveyBaseMode';
+import SurveyBaseIndex from './survey/base/SurveyBaseIndex';
 
 /* 입력해주신 자료는 이번 계산에만 활용합니다. 이 사이트는 어떤 개인 정보도 저장하지 않습니다. */
 
@@ -30,39 +32,80 @@ function CashflowSurvey(){
         //완료
         const isSurveyCompleted = surveyData.isCompleted;
         isSurveyCompleted[surveyDiv] = true;
-        if(surveyDiv === "guide"){
-            if(isSurveyCompleted.age === null) {isSurveyCompleted.age = false;}
-            setSurveyDivition("age");
+        if(surveyDiv === menuEnum.GUIDE){
+            if(isSurveyCompleted.BASE_MODE === undefined) {isSurveyCompleted.BASE_MODE = false;}
+            setSurveyDivition(menuEnum.BASE_MODE);
         }
-        if(surveyDiv === "age"){
-            if(isSurveyCompleted.house === null) isSurveyCompleted.house = false;
-            setSurveyDivition("house");
+
+        if(surveyDiv === menuEnum.BASE_MODE){
+            if(isSurveyCompleted.BASE_INDEX === undefined) {isSurveyCompleted.BASE_INDEX = false;}
+            setSurveyDivition(menuEnum.BASE_INDEX);
         }
-        if(surveyDiv === "house"){
-            if(isSurveyCompleted.car === null) isSurveyCompleted.car = false;
-            setSurveyDivition("car");
-        }
-        if(surveyDiv === "car"){
-            if(isSurveyCompleted.asset === null) isSurveyCompleted.asset = false;
-            setSurveyDivition("asset");
-        }
-        if(surveyDiv === "asset"){
-            if(isSurveyCompleted.salary === null) isSurveyCompleted.salary = false;
-            setSurveyDivition("salary");
-        }
-        if(surveyDiv === "salary"){
-            if(isSurveyCompleted.consumption === null) isSurveyCompleted.consumption = false;
-            setSurveyDivition("consumption");
-        }
-        if(surveyDiv === "consumption"){
+        if(surveyDiv === menuEnum.BASE_INDEX){
+            if(isSurveyCompleted.MY_AGE === undefined) {isSurveyCompleted.MY_AGE = false;}
             setSurveyDivition("");
-            if(isSurveyCompleted.marry === null) isSurveyCompleted.marry = false;
-            if(isSurveyCompleted.baby === null) isSurveyCompleted.baby = false;
-            if(isSurveyCompleted.house2 === null) isSurveyCompleted.house2 = false;
-            if(isSurveyCompleted.car2 === null) isSurveyCompleted.car2 = false;
-            if(isSurveyCompleted.retire === null) isSurveyCompleted.retire = false;
-            if(isSurveyCompleted.parent === null) isSurveyCompleted.parent = false;
-            if(isSurveyCompleted.lotto === null) isSurveyCompleted.lotto = false;
+        }
+        
+        if(surveyDiv === menuEnum.MY_AGE){
+            if(isSurveyCompleted.MY_ASSET === undefined) {isSurveyCompleted.MY_ASSET = false;}
+            setSurveyDivition("");
+        }
+        if(surveyDiv === menuEnum.MY_ASSET){
+            if(isSurveyCompleted.MY_INCOME === undefined) {isSurveyCompleted.MY_INCOME = false;}
+            setSurveyDivition("");
+        }
+        if(surveyDiv === menuEnum.MY_INCOME){
+            if(isSurveyCompleted.MY_SPENDING === undefined) {isSurveyCompleted.MY_SPENDING = false;}
+            setSurveyDivition("");
+        }
+        if(surveyDiv === menuEnum.MY_SPENDING){
+            if(isSurveyCompleted.YOUR_AGE === undefined) {isSurveyCompleted.YOUR_AGE = false;}
+            setSurveyDivition("");
+        }
+        
+        if(surveyDiv === menuEnum.YOUR_AGE){
+            if(isSurveyCompleted.YOUR_ASSET === undefined) {isSurveyCompleted.YOUR_ASSET = false;}
+            setSurveyDivition("");
+        }
+        if(surveyDiv === menuEnum.YOUR_ASSET){
+            if(isSurveyCompleted.YOUR_INCOME === undefined) {isSurveyCompleted.YOUR_INCOME = false;}
+            setSurveyDivition("");
+        }
+        if(surveyDiv === menuEnum.YOUR_INCOME){
+            if(isSurveyCompleted.YOUR_SPENDING === undefined) {isSurveyCompleted.YOUR_SPENDING = false;}
+            setSurveyDivition("");
+        }
+        if(surveyDiv === menuEnum.YOUR_SPENDING){
+            if(isSurveyCompleted.ADD_MARRY === undefined) {isSurveyCompleted.ADD_MARRY = false;}
+            setSurveyDivition("");
+        }
+        
+        if(surveyDiv === menuEnum.ADD_MARRY){
+            if(isSurveyCompleted.ADD_BABY === undefined) {isSurveyCompleted.ADD_BABY = false;}
+            setSurveyDivition("");
+        }
+        if(surveyDiv === menuEnum.ADD_BABY){
+            if(isSurveyCompleted.ADD_HOUSE === undefined) {isSurveyCompleted.ADD_HOUSE = false;}
+            setSurveyDivition("");
+        }
+        if(surveyDiv === menuEnum.ADD_HOUSE){
+            if(isSurveyCompleted.ADD_CAR === undefined) {isSurveyCompleted.ADD_CAR = false;}
+            setSurveyDivition("");
+        }
+        if(surveyDiv === menuEnum.ADD_CAR){
+            if(isSurveyCompleted.ADD_PARENT === undefined) {isSurveyCompleted.ADD_PARENT = false;}
+            setSurveyDivition("");
+        }
+        if(surveyDiv === menuEnum.ADD_PARENT){
+            if(isSurveyCompleted.ADD_RETIRE === undefined) {isSurveyCompleted.ADD_RETIRE = false;}
+            setSurveyDivition("");
+        }
+        if(surveyDiv === menuEnum.ADD_RETIRE){
+            if(isSurveyCompleted.ADD_ETC === undefined) {isSurveyCompleted.ADD_ETC = false;}
+            setSurveyDivition("");
+        }
+        if(surveyDiv === menuEnum.ADD_ETC){
+            setSurveyDivition("");
         }
         surveyData.isCompleted = isSurveyCompleted;
         dispatch(SvSave(surveyData));
@@ -75,25 +118,32 @@ function CashflowSurvey(){
             <article className={'survey-area '+surveyDiv}>
                 <div className='survey-title'><span>{surveyTitle}</span><a onClick={()=>{setSurveyDiv("");}}>⨉</a></div>
                 <div className='survey-content'>
-                {surveyDiv==="guide"?<GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                //
-                //
-                :surveyDiv==="age"?<BaseAgeSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                :surveyDiv==="salary"?<BaseSalarySurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                :surveyDiv==="consumption"?<BaseConsumptionSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                :surveyDiv==="car"?<BaseCarSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                :surveyDiv==="house"?<BaseHouseSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                :surveyDiv==="asset"?<BaseAssetSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                //
-                // :surveyDiv==="index"?<BaseIndexSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                // :surveyDiv==="house"?<BasicHouseSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                // :surveyDiv==="asset"?<BasicAssetSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                // :surveyDiv==="marry"?<AddMarry completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                // :surveyDiv==="baby"?<AddBaby completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                // :surveyDiv==="retire"?<AddRetire completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                // :surveyDiv==="parent"?<AddParent completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                // :surveyDiv==="lotto"?<AddLotto completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                :null}
+                {
+                    // 가이드
+                    surveyDiv===menuEnum.GUIDE? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    // 기본 정보
+                    : surveyDiv===menuEnum.BASE_MODE? <SurveyBaseMode completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.BASE_INDEX? <SurveyBaseIndex completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    // 내 정보
+                    : surveyDiv===menuEnum.MY_AGE? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.MY_ASSET? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.MY_INCOME? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.MY_SPENDING? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    // 배우자 정보
+                    : surveyDiv===menuEnum.YOUR_AGE? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.YOUR_ASSET? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.YOUR_INCOME? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.YOUR_SPENDING? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    // 추가 정보
+                    : surveyDiv===menuEnum.ADD_MARRY? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.ADD_BABY? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.ADD_HOUSE? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.ADD_CAR? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.ADD_PARENT? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.ADD_RETIRE? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.ADD_ETC? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : null
+                }
                 </div>
                 <div className='survey-tail'>
                     <button className='complete' onClick={()=>{setCompleteBtnClickCnt(completeBtnClickCnt+1)}}>

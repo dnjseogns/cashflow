@@ -5,30 +5,19 @@ const initialize = {
     data : 
     {
         isCompleted:{
-            guide:true,
-
-            age:null,
-            salary:null,
-            consumption:null,
-            house:null,
-            car:null,
-            asset:null,
-
-            marry:null,
-            baby:null,
-            house2:null,
-            car2:null,
-            retire:null,
-            parent:null,
-            lotto:null
+            GUIDE:true
         },
         base:{
-            loan:[],
-            curHouse:{},
-            house:[]
+        },
+        my:{
+            loan:[]
+        },
+        your:{
+            loan:[]
         },
         add:{
-
+            house:[],
+            car:[]
         }
     }
 };

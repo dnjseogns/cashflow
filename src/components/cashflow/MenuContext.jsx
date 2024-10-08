@@ -13,49 +13,63 @@ export const useMenuContext = () => {
 };
 
 export const MenuProvider = ({ children }) => {
-    const [surveyDiv,setSurveyDiv] = useState("guide");
+    const [surveyDiv,setSurveyDiv] = useState("가이드");
     const [surveyTitle,setSurveyTitle] = useState("");
     const surveyData = useSelector((store) => store.Survey).data;
-    
-    let base2 = "";
-    let base3 = "";
-    let baseSalary="";
-    let baseConsumption="";
-    let baseSpouse="";
-    if(surveyData.base?.marryYn==="Y"){
-        base2 = "자산(부부합산)";
-        base3 = "수입/지출(부부합산)";
-        baseSalary="5. 개인 수입";
-        baseConsumption="6. 개인 지출";
-        baseSpouse="7. 배우자 수입/지출";
-    }else{
-        base2 = "자산";
-        base3 = "수입/지출";
-        baseSalary="5. 수입";
-        baseConsumption="6. 지출";
-        baseSpouse="";
-    }
-    const menuEnum = {
+
+    console.log("surveyDiv",surveyDiv);
+
+    const menuEnum = 
+    surveyData.base?.marryYn==="Y"
+    ? {
         GUIDE : "가이드",
         BASE : "기본정보",
-        BASE_AGE : "1. 기본정보",
-        BASE2 : base2,
-        BASE_HOUSE : "2. 집",
-        BASE_CAR : "3. 자동차",
-        BASE_ASSET : "4. 자산",
-        BASE3 : base3,
-        BASE_SALARY : baseSalary,
-        BASE_CONSUMPTION : baseConsumption,
-        BASE_SPOUSE : baseSpouse,
-        ADD : "이벤트",
-        ADD_MARRY : "7. 결혼",
-        ADD_BABY : "8. 아기",
-        ADD_HOUSE : "9. 집",
-        ADD_CAR : "10. 자동차",
-        ADD_RETIRE : "11. 재취업",
-        ADD_PARENT : "12. 부모님 부양",
-        ADD_LOTTO : "13. 복권"
+        BASE_MODE : "1. 싱글/듀오",
+        BASE_INDEX : "2. 지수",
+        MY : "내 정보",
+        MY_AGE : "3. 나이",
+        MY_ASSET : "4. 자산",
+        MY_INCOME : "5. 수입",
+        MY_SPENDING : "6. 지출",
+        YOUR : "배우자 정보",
+        YOUR_AGE : "7. 나이",
+        YOUR_ASSET : "8. 자산",
+        YOUR_INCOME : "9. 수입",
+        YOUR_SPENDING : "10. 지출",
+        ADD : "추가 정보",
+        ADD_MARRY : "11. 결혼",
+        ADD_BABY : "12. 아기",
+        ADD_HOUSE : "13. 집",
+        ADD_CAR : "14. 자동차",
+        ADD_PARENT : "15. 부모님 부양",
+        ADD_RETIRE : "16. 재취업",
+        ADD_ETC : "17. 기타 이벤트 추가"
     }
+    : {
+        GUIDE : "가이드",
+        BASE : "기본정보",
+        BASE_MODE : "1. 싱글/듀오",
+        BASE_INDEX : "2. 지수",
+        MY : "내 정보",
+        MY_AGE : "3. 나이",
+        MY_ASSET : "4. 자산",
+        MY_INCOME : "5. 수입",
+        MY_SPENDING : "6. 지출",
+        YOUR : "배우자 정보",
+        YOUR_AGE : "7. 나이",
+        YOUR_ASSET : "8. 자산",
+        YOUR_INCOME : "9. 수입",
+        YOUR_SPENDING : "10. 지출",
+        ADD : "추가 정보",
+        ADD_MARRY : "11. 결혼",
+        ADD_BABY : "12. 아기",
+        ADD_HOUSE : "13. 집",
+        ADD_CAR : "14. 자동차",
+        ADD_PARENT : "15. 부모님 부양",
+        ADD_RETIRE : "16. 재취업",
+        ADD_ETC : "17. 기타 이벤트 추가"
+    };
+    
     
 
     const setSurveyDivition = (div) => {
@@ -71,21 +85,28 @@ export const MenuProvider = ({ children }) => {
 
     const changeSurveyTitle = (div) => {
         const surveyTitle
-            = div==="guide"?menuEnum.GUIDE
-            :div==="age"?menuEnum.BASE + " 〉 " + menuEnum.BASE_AGE
-            :div==="house"?menuEnum.BASE2 + " 〉 " + menuEnum.BASE_HOUSE
-            :div==="car"?menuEnum.BASE2 + " 〉 " + menuEnum.BASE_CAR
-            :div==="asset"?menuEnum.BASE2 + " 〉 " + menuEnum.BASE_ASSET
-            :div==="salary"?menuEnum.BASE3 + " 〉 " + menuEnum.BASE_SALARY
-            :div==="consumption"?menuEnum.BASE3 + " 〉 " + menuEnum.BASE_CONSUMPTION
-            :div==="marry"?menuEnum.ADD + " 〉 " + menuEnum.ADD_MARRY
-            :div==="baby"?menuEnum.ADD + " 〉 " + menuEnum.ADD_BABY
-            :div==="house2"?menuEnum.ADD + " 〉 " + menuEnum.ADD_HOUSE
-            :div==="car2"?menuEnum.ADD + " 〉 " + menuEnum.ADD_CAR
-            :div==="retire"?menuEnum.ADD + " 〉 " + menuEnum.ADD_RETIRE
-            :div==="parent"?menuEnum.ADD + " 〉 " + menuEnum.ADD_PARENT
-            :div==="lotto"?menuEnum.ADD + " 〉 " + menuEnum.ADD_LOTTO
-            :"";
+            = div===menuEnum.GUIDE? menuEnum.GUIDE
+            : div===menuEnum.BASE_MODE? menuEnum.BASE + " 〉 " + menuEnum.BASE_MODE
+            : div===menuEnum.BASE_INDEX? menuEnum.BASE + " 〉 " + menuEnum.BASE_INDEX
+            
+            : div===menuEnum.MY_AGE? menuEnum.MY + " 〉 " + menuEnum.MY_AGE
+            : div===menuEnum.MY_ASSET? menuEnum.MY + " 〉 " + menuEnum.MY_ASSET
+            : div===menuEnum.MY_INCOME? menuEnum.MY + " 〉 " + menuEnum.MY_INCOME
+            : div===menuEnum.MY_SPENDING? menuEnum.MY + " 〉 " + menuEnum.MY_SPENDING
+            
+            : div===menuEnum.YOUR_AGE? menuEnum.YOUR + " 〉 " + menuEnum.YOUR_AGE
+            : div===menuEnum.YOUR_ASSET? menuEnum.YOUR + " 〉 " + menuEnum.YOUR_ASSET
+            : div===menuEnum.YOUR_INCOME? menuEnum.YOUR + " 〉 " + menuEnum.YOUR_INCOME
+            : div===menuEnum.YOUR_SPENDING? menuEnum.YOUR + " 〉 " + menuEnum.YOUR_SPENDING
+
+            : div===menuEnum.ADD_MARRY? menuEnum.ADD + " 〉 " + menuEnum.ADD_MARRY
+            : div===menuEnum.ADD_BABY? menuEnum.ADD + " 〉 " + menuEnum.ADD_BABY
+            : div===menuEnum.ADD_HOUSE? menuEnum.ADD + " 〉 " + menuEnum.ADD_HOUSE
+            : div===menuEnum.ADD_CAR? menuEnum.ADD + " 〉 " + menuEnum.ADD_CAR
+            : div===menuEnum.ADD_PARENT? menuEnum.ADD + " 〉 " + menuEnum.ADD_PARENT
+            : div===menuEnum.ADD_RETIRE? menuEnum.ADD + " 〉 " + menuEnum.ADD_RETIRE
+            : div===menuEnum.ADD_ETC? menuEnum.ADD + " 〉 " + menuEnum.ADD_ETC
+            : "";
         setSurveyTitle(surveyTitle);
     }
 
