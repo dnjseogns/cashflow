@@ -38,14 +38,6 @@ function CashflowSide(){
 
         <ul className='base '>{menuEnum.MY}
             {/*  */}
-            {isSurveyCompleted?.MY_AGE !== undefined
-            ? <li className={(surveyDiv===menuEnum.MY_AGE?"on ":"") + (isSurveyCompleted?.MY_AGE===true?"ok ":"")} onClick={()=>{setSurveyDivition(menuEnum.MY_AGE)}}>
-                <span>{menuEnum.MY_AGE}</span> {surveyDiv===menuEnum.MY_AGE?<span>〉</span>:null}
-            </li>
-            : <li className='disable'>
-                <span>{menuEnum.MY_AGE}</span>
-            </li>}
-            {/*  */}
             {isSurveyCompleted?.MY_ASSET !== undefined
             ? <li className={(surveyDiv===menuEnum.MY_ASSET?"on ":"") + (isSurveyCompleted?.MY_ASSET===true?"ok ":"")} onClick={()=>{setSurveyDivition(menuEnum.MY_ASSET)}}>
                 <span>{menuEnum.MY_ASSET}</span> {surveyDiv===menuEnum.MY_ASSET?<span>〉</span>:null}
@@ -73,14 +65,6 @@ function CashflowSide(){
 
         {surveyData.base.marryYn === "Y"
         ? <ul className='base '>{menuEnum.YOUR}
-            {/*  */}
-            {isSurveyCompleted?.YOUR_AGE !== undefined
-            ? <li className={(surveyDiv===menuEnum.YOUR_AGE?"on ":"") + (isSurveyCompleted?.YOUR_AGE===true?"ok ":"")} onClick={()=>{setSurveyDivition(menuEnum.YOUR_AGE)}}>
-                <span>{menuEnum.YOUR_AGE}</span> {surveyDiv===menuEnum.YOUR_AGE?<span>〉</span>:null}
-            </li>
-            : <li className='disable'>
-                <span>{menuEnum.YOUR_AGE}</span>
-            </li>}
             {/*  */}
             {isSurveyCompleted?.YOUR_ASSET !== undefined
             ? <li className={(surveyDiv===menuEnum.YOUR_ASSET?"on ":"") + (isSurveyCompleted?.YOUR_ASSET===true?"ok ":"")} onClick={()=>{setSurveyDivition(menuEnum.YOUR_ASSET)}}>

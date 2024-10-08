@@ -17,7 +17,7 @@ export const MenuProvider = ({ children }) => {
     const [surveyTitle,setSurveyTitle] = useState("");
     const surveyData = useSelector((store) => store.Survey).data;
 
-    console.log("surveyDiv",surveyDiv);
+    // console.log("surveyDiv",surveyDiv);
 
     const menuEnum = 
     surveyData.base?.marryYn==="Y"
@@ -27,23 +27,21 @@ export const MenuProvider = ({ children }) => {
         BASE_MODE : "1. 싱글/듀오",
         BASE_INDEX : "2. 지수",
         MY : "내 정보",
-        MY_AGE : "3. 나이",
-        MY_ASSET : "4. 자산",
-        MY_INCOME : "5. 수입",
-        MY_SPENDING : "6. 지출",
+        MY_ASSET : "3. 자산",
+        MY_INCOME : "4. 수입",
+        MY_SPENDING : "5. 지출",
         YOUR : "배우자 정보",
-        YOUR_AGE : "7. 나이",
-        YOUR_ASSET : "8. 자산",
-        YOUR_INCOME : "9. 수입",
-        YOUR_SPENDING : "10. 지출",
+        YOUR_ASSET : "3. 자산",
+        YOUR_INCOME : "4. 수입",
+        YOUR_SPENDING : "5. 지출",
         ADD : "추가 정보",
-        ADD_MARRY : "11. 결혼",
-        ADD_BABY : "12. 아기",
-        ADD_HOUSE : "13. 집",
-        ADD_CAR : "14. 자동차",
-        ADD_PARENT : "15. 부모님 부양",
-        ADD_RETIRE : "16. 재취업",
-        ADD_ETC : "17. 기타 이벤트 추가"
+        ADD_MARRY : "6. 결혼",
+        ADD_BABY : "7. 아기",
+        ADD_HOUSE : "8. 집",
+        ADD_CAR : "9. 자동차",
+        ADD_PARENT : "10. 부모님 부양",
+        ADD_RETIRE : "11. 재취업",
+        ADD_ETC : "12. 기타 이벤트 추가"
     }
     : {
         GUIDE : "가이드",
@@ -51,23 +49,21 @@ export const MenuProvider = ({ children }) => {
         BASE_MODE : "1. 싱글/듀오",
         BASE_INDEX : "2. 지수",
         MY : "내 정보",
-        MY_AGE : "3. 나이",
-        MY_ASSET : "4. 자산",
-        MY_INCOME : "5. 수입",
-        MY_SPENDING : "6. 지출",
+        MY_ASSET : "3. 자산",
+        MY_INCOME : "4. 수입",
+        MY_SPENDING : "5. 지출",
         YOUR : "배우자 정보",
-        YOUR_AGE : "7. 나이",
-        YOUR_ASSET : "8. 자산",
-        YOUR_INCOME : "9. 수입",
-        YOUR_SPENDING : "10. 지출",
+        YOUR_ASSET : "3. 자산",
+        YOUR_INCOME : "4. 수입",
+        YOUR_SPENDING : "5. 지출",
         ADD : "추가 정보",
-        ADD_MARRY : "11. 결혼",
-        ADD_BABY : "12. 아기",
-        ADD_HOUSE : "13. 집",
-        ADD_CAR : "14. 자동차",
-        ADD_PARENT : "15. 부모님 부양",
-        ADD_RETIRE : "16. 재취업",
-        ADD_ETC : "17. 기타 이벤트 추가"
+        ADD_MARRY : "6. 결혼",
+        ADD_BABY : "7. 아기",
+        ADD_HOUSE : "8. 집",
+        ADD_CAR : "9. 자동차",
+        ADD_PARENT : "10. 부모님 부양",
+        ADD_RETIRE : "11. 재취업",
+        ADD_ETC : "12. 기타 이벤트 추가"
     };
     
     
@@ -89,12 +85,10 @@ export const MenuProvider = ({ children }) => {
             : div===menuEnum.BASE_MODE? menuEnum.BASE + " 〉 " + menuEnum.BASE_MODE
             : div===menuEnum.BASE_INDEX? menuEnum.BASE + " 〉 " + menuEnum.BASE_INDEX
             
-            : div===menuEnum.MY_AGE? menuEnum.MY + " 〉 " + menuEnum.MY_AGE
             : div===menuEnum.MY_ASSET? menuEnum.MY + " 〉 " + menuEnum.MY_ASSET
             : div===menuEnum.MY_INCOME? menuEnum.MY + " 〉 " + menuEnum.MY_INCOME
             : div===menuEnum.MY_SPENDING? menuEnum.MY + " 〉 " + menuEnum.MY_SPENDING
             
-            : div===menuEnum.YOUR_AGE? menuEnum.YOUR + " 〉 " + menuEnum.YOUR_AGE
             : div===menuEnum.YOUR_ASSET? menuEnum.YOUR + " 〉 " + menuEnum.YOUR_ASSET
             : div===menuEnum.YOUR_INCOME? menuEnum.YOUR + " 〉 " + menuEnum.YOUR_INCOME
             : div===menuEnum.YOUR_SPENDING? menuEnum.YOUR + " 〉 " + menuEnum.YOUR_SPENDING

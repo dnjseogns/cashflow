@@ -15,19 +15,26 @@ function SurveyBaseIndex({completeBtnClickCnt, commonCompleteLogic}){
     const bankInterest = surveyData.base?.bankInterest ?? "2.7";
     const loanInterest = surveyData.base?.loanInterest ?? "5.0";
     const realEstateGrouthRate = surveyData.base?.realEstateGrouthRate ?? "4.0";
-    const carDepreciation = surveyData.base?.realEstateGrouthRate ?? "15.0";
+    const carDepreciationRate = surveyData.base?.carDepreciationRate ?? "15.0";
     const investIncomeRate = surveyData.base?.investIncomeRate ?? "3.0";
 
-    const surveyOnChange = (e, div) => {
-        // if(div==="marryYn"){
-        //     surveyData.base.marryYn = e.target.value;
-        // }
-        
+    const dispatchValue = (div, value) => {
+        if(value === null){return;}
+        else{ surveyData.base[div] = value;}
         dispatch(SvSave(surveyData));
+    }
+    const surveyOnChange = (e, div) => {
+        dispatchValue(div, expCheckDouble(e.target.value, 0, 100, 5));
     };
 
     useEffectNoMount(()=>{
-        // dispatch(SvSave(surveyData));
+        surveyData.base.indexInflation = indexInflation;
+        surveyData.base.bankInterest = bankInterest;
+        surveyData.base.loanInterest = loanInterest;
+        surveyData.base.realEstateGrouthRate = realEstateGrouthRate;
+        surveyData.base.carDepreciationRate = carDepreciationRate;
+        surveyData.base.investIncomeRate = investIncomeRate;
+        dispatch(SvSave(surveyData));
         commonCompleteLogic();
     },[completeBtnClickCnt]);
 
@@ -53,7 +60,7 @@ function SurveyBaseIndex({completeBtnClickCnt, commonCompleteLogic}){
         </div>
         <div>
             <p className="question">(4) 자동차 감가상각을 입력해주세요.</p>
-            <p>- <Mapping txt="ⓔ"/> : <input className='btn1' value={carDepreciation} onChange={(e)=>{surveyOnChange(e,"realEstateGrouthRate")}}/> %</p>
+            <p>- <Mapping txt="ⓔ"/> : <input className='btn1' value={carDepreciationRate} onChange={(e)=>{surveyOnChange(e,"carDepreciationRate")}}/> %</p>
             <p className='note'>※ 10 ~ 20% 사이의 값을 추천합니다.</p>
             <p className='note'>※ 자동차 판매 계산에 사용됩니다.</p>
         </div>

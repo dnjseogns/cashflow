@@ -22,6 +22,7 @@ function SurveyBaseMode({completeBtnClickCnt, commonCompleteLogic}){
     };
 
     useEffectNoMount(()=>{
+        surveyData.base.marryYn = marryYn;
         dispatch(SvSave(surveyData));
         commonCompleteLogic();
     },[completeBtnClickCnt]);

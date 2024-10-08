@@ -10,7 +10,6 @@ import GuideSurvey from './survey/GuideSurvey';
 import BaseCarSurvey from './survey/BaseCarSurvey';
 import BaseHouseSurvey from './survey/BaseHouseSurvey';
 //
-import BaseAgeSurvey from './survey/BaseAgeSurvey';
 import BaseSalarySurvey from './survey/BaseSalarySurvey';
 import BaseConsumptionSurvey from './survey/BaseConsumptionSurvey';
 import BaseAssetSurvey from './survey/BaseAssetSurvey';
@@ -39,17 +38,13 @@ function CashflowSurvey(){
 
         if(surveyDiv === menuEnum.BASE_MODE){
             if(isSurveyCompleted.BASE_INDEX === undefined) {isSurveyCompleted.BASE_INDEX = false;}
-            setSurveyDivition(menuEnum.BASE_INDEX);
-        }
-        if(surveyDiv === menuEnum.BASE_INDEX){
-            if(isSurveyCompleted.MY_AGE === undefined) {isSurveyCompleted.MY_AGE = false;}
             setSurveyDivition("");
         }
-        
-        if(surveyDiv === menuEnum.MY_AGE){
+        if(surveyDiv === menuEnum.BASE_INDEX){
             if(isSurveyCompleted.MY_ASSET === undefined) {isSurveyCompleted.MY_ASSET = false;}
             setSurveyDivition("");
         }
+        
         if(surveyDiv === menuEnum.MY_ASSET){
             if(isSurveyCompleted.MY_INCOME === undefined) {isSurveyCompleted.MY_INCOME = false;}
             setSurveyDivition("");
@@ -59,14 +54,10 @@ function CashflowSurvey(){
             setSurveyDivition("");
         }
         if(surveyDiv === menuEnum.MY_SPENDING){
-            if(isSurveyCompleted.YOUR_AGE === undefined) {isSurveyCompleted.YOUR_AGE = false;}
-            setSurveyDivition("");
-        }
-        
-        if(surveyDiv === menuEnum.YOUR_AGE){
             if(isSurveyCompleted.YOUR_ASSET === undefined) {isSurveyCompleted.YOUR_ASSET = false;}
             setSurveyDivition("");
         }
+        
         if(surveyDiv === menuEnum.YOUR_ASSET){
             if(isSurveyCompleted.YOUR_INCOME === undefined) {isSurveyCompleted.YOUR_INCOME = false;}
             setSurveyDivition("");
@@ -125,12 +116,10 @@ function CashflowSurvey(){
                     : surveyDiv===menuEnum.BASE_MODE? <SurveyBaseMode completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.BASE_INDEX? <SurveyBaseIndex completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     // 내 정보
-                    : surveyDiv===menuEnum.MY_AGE? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.MY_ASSET? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.MY_INCOME? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.MY_SPENDING? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     // 배우자 정보
-                    : surveyDiv===menuEnum.YOUR_AGE? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.YOUR_ASSET? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.YOUR_INCOME? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.YOUR_SPENDING? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
@@ -147,10 +136,8 @@ function CashflowSurvey(){
                 </div>
                 <div className='survey-tail'>
                     <button className='complete' onClick={()=>{setCompleteBtnClickCnt(completeBtnClickCnt+1)}}>
-                        {surveyDiv === "guide" ? "시작하기" 
-                        : surveyDiv === "age" || surveyDiv === "salary" || surveyDiv === "consumption" 
-                        ||surveyDiv === "house" || surveyDiv === "car"? "다음"
-                        :"완료"}</button>
+                        {surveyDiv === menuEnum.GUIDE ? "시작하기" : "완료"}
+                    </button>
                 </div>
             </article>
             </Fragment>
