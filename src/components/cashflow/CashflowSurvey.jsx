@@ -16,6 +16,7 @@ import BaseAssetSurvey from './survey/BaseAssetSurvey';
 import { useMenuContext } from '@/components/cashflow/MenuContext.jsx';
 import SurveyBaseMode from './survey/base/SurveyBaseMode';
 import SurveyBaseIndex from './survey/base/SurveyBaseIndex';
+import SurveyMyAsset from './survey/my/SurveyMyAsset';
 
 /* 입력해주신 자료는 이번 계산에만 활용합니다. 이 사이트는 어떤 개인 정보도 저장하지 않습니다. */
 
@@ -50,74 +51,6 @@ function CashflowSurvey(){
             setSurveyDivition(nextValue);
         }
 
-
-        // if(surveyDiv === menuEnum.GUIDE){
-        //     if(isSurveyCompleted[menuEnum.BASE_MODE] === undefined) {isSurveyCompleted[menuEnum.BASE_MODE] = false;}
-        //     setSurveyDivition(menuEnum.BASE_MODE);
-        // }
-
-        // if(surveyDiv === menuEnum.BASE_MODE){
-        //     if(isSurveyCompleted[menuEnum.BASE_INDEX] === undefined) {isSurveyCompleted[menuEnum.BASE_INDEX] = false;}
-        //     setSurveyDivition("");
-        // }
-        // if(surveyDiv === menuEnum.BASE_INDEX){
-        //     if(isSurveyCompleted[menuEnum.MY_ASSET] === undefined) {isSurveyCompleted[menuEnum.MY_ASSET] = false;}
-        //     setSurveyDivition("");
-        // }
-        
-        // if(surveyDiv === menuEnum.MY_ASSET){
-        //     if(isSurveyCompleted[menuEnum.MY_INCOME] === undefined) {isSurveyCompleted[menuEnum.MY_INCOME] = false;}
-        //     setSurveyDivition("");
-        // }
-        // if(surveyDiv === menuEnum.MY_INCOME){
-        //     if(isSurveyCompleted[menuEnum.MY_SPENDING] === undefined) {isSurveyCompleted[menuEnum.MY_SPENDING] = false;}
-        //     setSurveyDivition("");
-        // }
-        // if(surveyDiv === menuEnum.MY_SPENDING){
-        //     if(isSurveyCompleted[menuEnum.YOUR_ASSET] === undefined) {isSurveyCompleted[menuEnum.YOUR_ASSET] = false;}
-        //     setSurveyDivition("");
-        // }
-        
-        // if(surveyDiv === menuEnum.YOUR_ASSET){
-        //     if(isSurveyCompleted[menuEnum.YOUR_INCOME] === undefined) {isSurveyCompleted[menuEnum.YOUR_INCOME] = false;}
-        //     setSurveyDivition("");
-        // }
-        // if(surveyDiv === menuEnum.YOUR_INCOME){
-        //     if(isSurveyCompleted[menuEnum.YOUR_SPENDING] === undefined) {isSurveyCompleted[menuEnum.YOUR_SPENDING] = false;}
-        //     setSurveyDivition("");
-        // }
-        // if(surveyDiv === menuEnum.YOUR_SPENDING){
-        //     if(isSurveyCompleted[menuEnum.ADD_MARRY] === undefined) {isSurveyCompleted[menuEnum.ADD_MARRY] = false;}
-        //     setSurveyDivition("");
-        // }
-        
-        // if(surveyDiv === menuEnum.ADD_MARRY){
-        //     if(isSurveyCompleted[menuEnum.ADD_BABY] === undefined) {isSurveyCompleted[menuEnum.ADD_BABY] = false;}
-        //     setSurveyDivition("");
-        // }
-        // if(surveyDiv === menuEnum.ADD_BABY){
-        //     if(isSurveyCompleted[menuEnum.ADD_HOUSE] === undefined) {isSurveyCompleted[menuEnum.ADD_HOUSE] = false;}
-        //     setSurveyDivition("");
-        // }
-        // if(surveyDiv === menuEnum.ADD_HOUSE){
-        //     if(isSurveyCompleted[menuEnum.ADD_CAR] === undefined) {isSurveyCompleted[menuEnum.ADD_CAR] = false;}
-        //     setSurveyDivition("");
-        // }
-        // if(surveyDiv === menuEnum.ADD_CAR){
-        //     if(isSurveyCompleted[menuEnum.ADD_PARENT] === undefined) {isSurveyCompleted[menuEnum.ADD_PARENT] = false;}
-        //     setSurveyDivition("");
-        // }
-        // if(surveyDiv === menuEnum.ADD_PARENT){
-        //     if(isSurveyCompleted[menuEnum.ADD_RETIRE] === undefined) {isSurveyCompleted[menuEnum.ADD_RETIRE] = false;}
-        //     setSurveyDivition("");
-        // }
-        // if(surveyDiv === menuEnum.ADD_RETIRE){
-        //     if(isSurveyCompleted[menuEnum.ADD_ETC] === undefined) {isSurveyCompleted[menuEnum.ADD_ETC] = false;}
-        //     setSurveyDivition("");
-        // }
-        // if(surveyDiv === menuEnum.ADD_ETC){
-        //     setSurveyDivition("");
-        // }
         surveyData.isCompleted = isSurveyCompleted;
         dispatch(SvSave(surveyData));
     }
@@ -136,7 +69,7 @@ function CashflowSurvey(){
                     : surveyDiv===menuEnum.BASE_MODE? <SurveyBaseMode completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.BASE_INDEX? <SurveyBaseIndex completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     // 내 정보
-                    : surveyDiv===menuEnum.MY_ASSET? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.MY_ASSET? <SurveyMyAsset completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.MY_INCOME? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.MY_SPENDING? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     // 배우자 정보

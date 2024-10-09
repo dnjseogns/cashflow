@@ -14,6 +14,8 @@ const initialize = {
         },
         your:{
             loan:[]
+            // car:[],
+            // house:[]
         },
         add:{
             house:[],

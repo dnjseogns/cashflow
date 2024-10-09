@@ -98,7 +98,7 @@ function CashflowTable(){
 
                         <th>대출<br/><Mapping txt="(4-ⓐ)"/></th>
                         <th>예금({base?.bankInterest}%)<br/><Mapping txt="(4-ⓑ)"/></th>
-                        <th>투자({base?.investIncome}%)<br/><Mapping txt="(4-ⓒ)"/></th>
+                        <th>투자({base?.investIncomeRate}%)<br/><Mapping txt="(4-ⓒ)"/></th>
                         {isAssetHouseVisible ? <th>주택({base?.realEstateGrouthRate}%)<br/><Mapping txt="(4-ⓓ)"/></th> : null}
                         <th>합계</th>
                     </tr>
