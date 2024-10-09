@@ -70,7 +70,7 @@ function SurveyBaseIndex({completeBtnClickCnt, commonCompleteLogic}){
             <p className='note'>※ 투자대상 : 주식, 금, 코인, 실거주 외 주택</p>
             <p className='note'>※ 아래 내용을 참고하여 작성해주세요.</p>
             <p className='note'>- 저축만 할 경우 : {bankInterest}%</p>
-            <p className='note'>- 주식 배당,금투자를 할 경우 : {bankInterest}% ~ {loanInterest}%</p>
+            <p className='note'>- 주식 배당,금 등을 소극적으로 투자하고 있는 경우 : {bankInterest}% ~ {loanInterest}%</p>
             <p className='note'>- 빚투하여 수익 낼 자신이 있는 경우 : {loanInterest}% 이상</p>
         </div>
     </Fragment>);

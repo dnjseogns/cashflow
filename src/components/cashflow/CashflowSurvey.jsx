@@ -31,73 +31,93 @@ function CashflowSurvey(){
         //완료
         const isSurveyCompleted = surveyData.isCompleted;
         isSurveyCompleted[surveyDiv] = true;
-        if(surveyDiv === menuEnum.GUIDE){
-            if(isSurveyCompleted.BASE_MODE === undefined) {isSurveyCompleted.BASE_MODE = false;}
-            setSurveyDivition(menuEnum.BASE_MODE);
+
+        // console.log("aa", ;
+
+        const menuEnumKeyArr = Object.keys(menuEnum);
+        let menuEnumValueArr = [];
+        menuEnumKeyArr.forEach((item)=>{
+            if(menuEnum[item].includes('.')){
+                menuEnumValueArr.push(menuEnum[item]);
+            }
+        });
+        const indexOfValue = menuEnumValueArr.indexOf(surveyDiv);
+        if(indexOfValue === menuEnumValueArr.length - 1){
+            setSurveyDivition(""); //마지막이라면
+        }else{
+            const nextValue = menuEnumValueArr[indexOfValue + 1];
+            if(isSurveyCompleted[nextValue] === undefined) {isSurveyCompleted[nextValue] = false;}
+            setSurveyDivition(nextValue);
         }
 
-        if(surveyDiv === menuEnum.BASE_MODE){
-            if(isSurveyCompleted.BASE_INDEX === undefined) {isSurveyCompleted.BASE_INDEX = false;}
-            setSurveyDivition("");
-        }
-        if(surveyDiv === menuEnum.BASE_INDEX){
-            if(isSurveyCompleted.MY_ASSET === undefined) {isSurveyCompleted.MY_ASSET = false;}
-            setSurveyDivition("");
-        }
+
+        // if(surveyDiv === menuEnum.GUIDE){
+        //     if(isSurveyCompleted[menuEnum.BASE_MODE] === undefined) {isSurveyCompleted[menuEnum.BASE_MODE] = false;}
+        //     setSurveyDivition(menuEnum.BASE_MODE);
+        // }
+
+        // if(surveyDiv === menuEnum.BASE_MODE){
+        //     if(isSurveyCompleted[menuEnum.BASE_INDEX] === undefined) {isSurveyCompleted[menuEnum.BASE_INDEX] = false;}
+        //     setSurveyDivition("");
+        // }
+        // if(surveyDiv === menuEnum.BASE_INDEX){
+        //     if(isSurveyCompleted[menuEnum.MY_ASSET] === undefined) {isSurveyCompleted[menuEnum.MY_ASSET] = false;}
+        //     setSurveyDivition("");
+        // }
         
-        if(surveyDiv === menuEnum.MY_ASSET){
-            if(isSurveyCompleted.MY_INCOME === undefined) {isSurveyCompleted.MY_INCOME = false;}
-            setSurveyDivition("");
-        }
-        if(surveyDiv === menuEnum.MY_INCOME){
-            if(isSurveyCompleted.MY_SPENDING === undefined) {isSurveyCompleted.MY_SPENDING = false;}
-            setSurveyDivition("");
-        }
-        if(surveyDiv === menuEnum.MY_SPENDING){
-            if(isSurveyCompleted.YOUR_ASSET === undefined) {isSurveyCompleted.YOUR_ASSET = false;}
-            setSurveyDivition("");
-        }
+        // if(surveyDiv === menuEnum.MY_ASSET){
+        //     if(isSurveyCompleted[menuEnum.MY_INCOME] === undefined) {isSurveyCompleted[menuEnum.MY_INCOME] = false;}
+        //     setSurveyDivition("");
+        // }
+        // if(surveyDiv === menuEnum.MY_INCOME){
+        //     if(isSurveyCompleted[menuEnum.MY_SPENDING] === undefined) {isSurveyCompleted[menuEnum.MY_SPENDING] = false;}
+        //     setSurveyDivition("");
+        // }
+        // if(surveyDiv === menuEnum.MY_SPENDING){
+        //     if(isSurveyCompleted[menuEnum.YOUR_ASSET] === undefined) {isSurveyCompleted[menuEnum.YOUR_ASSET] = false;}
+        //     setSurveyDivition("");
+        // }
         
-        if(surveyDiv === menuEnum.YOUR_ASSET){
-            if(isSurveyCompleted.YOUR_INCOME === undefined) {isSurveyCompleted.YOUR_INCOME = false;}
-            setSurveyDivition("");
-        }
-        if(surveyDiv === menuEnum.YOUR_INCOME){
-            if(isSurveyCompleted.YOUR_SPENDING === undefined) {isSurveyCompleted.YOUR_SPENDING = false;}
-            setSurveyDivition("");
-        }
-        if(surveyDiv === menuEnum.YOUR_SPENDING){
-            if(isSurveyCompleted.ADD_MARRY === undefined) {isSurveyCompleted.ADD_MARRY = false;}
-            setSurveyDivition("");
-        }
+        // if(surveyDiv === menuEnum.YOUR_ASSET){
+        //     if(isSurveyCompleted[menuEnum.YOUR_INCOME] === undefined) {isSurveyCompleted[menuEnum.YOUR_INCOME] = false;}
+        //     setSurveyDivition("");
+        // }
+        // if(surveyDiv === menuEnum.YOUR_INCOME){
+        //     if(isSurveyCompleted[menuEnum.YOUR_SPENDING] === undefined) {isSurveyCompleted[menuEnum.YOUR_SPENDING] = false;}
+        //     setSurveyDivition("");
+        // }
+        // if(surveyDiv === menuEnum.YOUR_SPENDING){
+        //     if(isSurveyCompleted[menuEnum.ADD_MARRY] === undefined) {isSurveyCompleted[menuEnum.ADD_MARRY] = false;}
+        //     setSurveyDivition("");
+        // }
         
-        if(surveyDiv === menuEnum.ADD_MARRY){
-            if(isSurveyCompleted.ADD_BABY === undefined) {isSurveyCompleted.ADD_BABY = false;}
-            setSurveyDivition("");
-        }
-        if(surveyDiv === menuEnum.ADD_BABY){
-            if(isSurveyCompleted.ADD_HOUSE === undefined) {isSurveyCompleted.ADD_HOUSE = false;}
-            setSurveyDivition("");
-        }
-        if(surveyDiv === menuEnum.ADD_HOUSE){
-            if(isSurveyCompleted.ADD_CAR === undefined) {isSurveyCompleted.ADD_CAR = false;}
-            setSurveyDivition("");
-        }
-        if(surveyDiv === menuEnum.ADD_CAR){
-            if(isSurveyCompleted.ADD_PARENT === undefined) {isSurveyCompleted.ADD_PARENT = false;}
-            setSurveyDivition("");
-        }
-        if(surveyDiv === menuEnum.ADD_PARENT){
-            if(isSurveyCompleted.ADD_RETIRE === undefined) {isSurveyCompleted.ADD_RETIRE = false;}
-            setSurveyDivition("");
-        }
-        if(surveyDiv === menuEnum.ADD_RETIRE){
-            if(isSurveyCompleted.ADD_ETC === undefined) {isSurveyCompleted.ADD_ETC = false;}
-            setSurveyDivition("");
-        }
-        if(surveyDiv === menuEnum.ADD_ETC){
-            setSurveyDivition("");
-        }
+        // if(surveyDiv === menuEnum.ADD_MARRY){
+        //     if(isSurveyCompleted[menuEnum.ADD_BABY] === undefined) {isSurveyCompleted[menuEnum.ADD_BABY] = false;}
+        //     setSurveyDivition("");
+        // }
+        // if(surveyDiv === menuEnum.ADD_BABY){
+        //     if(isSurveyCompleted[menuEnum.ADD_HOUSE] === undefined) {isSurveyCompleted[menuEnum.ADD_HOUSE] = false;}
+        //     setSurveyDivition("");
+        // }
+        // if(surveyDiv === menuEnum.ADD_HOUSE){
+        //     if(isSurveyCompleted[menuEnum.ADD_CAR] === undefined) {isSurveyCompleted[menuEnum.ADD_CAR] = false;}
+        //     setSurveyDivition("");
+        // }
+        // if(surveyDiv === menuEnum.ADD_CAR){
+        //     if(isSurveyCompleted[menuEnum.ADD_PARENT] === undefined) {isSurveyCompleted[menuEnum.ADD_PARENT] = false;}
+        //     setSurveyDivition("");
+        // }
+        // if(surveyDiv === menuEnum.ADD_PARENT){
+        //     if(isSurveyCompleted[menuEnum.ADD_RETIRE] === undefined) {isSurveyCompleted[menuEnum.ADD_RETIRE] = false;}
+        //     setSurveyDivition("");
+        // }
+        // if(surveyDiv === menuEnum.ADD_RETIRE){
+        //     if(isSurveyCompleted[menuEnum.ADD_ETC] === undefined) {isSurveyCompleted[menuEnum.ADD_ETC] = false;}
+        //     setSurveyDivition("");
+        // }
+        // if(surveyDiv === menuEnum.ADD_ETC){
+        //     setSurveyDivition("");
+        // }
         surveyData.isCompleted = isSurveyCompleted;
         dispatch(SvSave(surveyData));
     }

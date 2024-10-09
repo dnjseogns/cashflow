@@ -107,7 +107,7 @@ function CashflowTable(){
                     {cashflowData?.timeline.map((row, i) => {
                     return(
                         <tr key={i}>
-                            <td>{row?.age}</td>
+                            <td>{row?.myAge}</td>
                             <td>{row?.inflationStack}</td>
 
                             {isSalaryRiseRateStackVisible ? <td>{row?.salaryRiseRateStack}</td> : null}
