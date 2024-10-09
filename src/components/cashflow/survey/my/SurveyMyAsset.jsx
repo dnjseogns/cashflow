@@ -17,14 +17,14 @@ function SurveyMyAsset({completeBtnClickCnt, commonCompleteLogic}){
     const livingType = surveyData.my?.livingType ?? "parent";
     const housePriceTotal = surveyData.my?.housePriceTotal ?? 0;
     const housePriceLoan = surveyData.my?.housePriceLoan ?? 0;
-    const housePriceLoanRate = surveyData.my?.housePriceLoanRate ?? "5.0";
+    const housePriceLoanRate = surveyData.my?.housePriceLoanRate ?? surveyData.base.loanInterest;
     const houseCostMonthly = surveyData.my?.houseCostMonthly ?? 0;
 
     //car
     const carYn = surveyData.my?.carYn ?? "N";
     const carPrice = surveyData.my?.carPrice ?? 30000000;
     const carLoan = surveyData.my?.carLoan ?? 0;
-    const carLoanRate = surveyData.my?.carLoanRate ?? "5.0";
+    const carLoanRate = surveyData.my?.carLoanRate ?? surveyData.base.loanInterest;
     const carCostMonthly = surveyData.my?.carCostMonthly ?? 0;
 
     // asset

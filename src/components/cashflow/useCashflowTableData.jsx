@@ -82,13 +82,13 @@ export const useCashflowTableData = () => {
             let newLoan = [...my.loan].filter((item)=>{return item.loanId != "carLoan" && item.loanId != "houseLoan"});
             if(my?.housePriceLoan > 0){
                 if(my?.livingType == "rent"){
-                    newLoan.unshift({loanId:"houseLoan", loanName:"전·월세자금대출금(사전입력 : 2-ⓐ)", loanAmount:my?.housePriceLoan ?? 0, loanInterest:my?.housePriceLoanRate ?? 0, isReadOnly:true});
+                    newLoan.unshift({loanId:"houseLoan", loanName:"전·월세자금대출금(사전입력 : 2-ⓐ)", loanAmount:my?.housePriceLoan ?? 0, loanInterest:my?.housePriceLoanRate ?? base.loanInterest, isReadOnly:true});
                 }else if(my?.livingType == "own"){
-                    newLoan.unshift({loanId:"houseLoan", loanName:"주택담보대출(사전입력 : 2-ⓐ)", loanAmount:my?.housePriceLoan ?? 0, loanInterest:my?.housePriceLoanRate ?? 0, isReadOnly:true});
+                    newLoan.unshift({loanId:"houseLoan", loanName:"주택담보대출(사전입력 : 2-ⓐ)", loanAmount:my?.housePriceLoan ?? 0, loanInterest:my?.housePriceLoanRate ?? base.loanInterest, isReadOnly:true});
                 }
             }
             if(my?.carLoan > 0){
-                newLoan.unshift({loanId:"carLoan", loanName:"자동차 대출(사전입력 : 3-ⓐ)", loanAmount:my?.carLoan ?? 0, loanInterest:my?.carLoanRate ?? 0, isReadOnly:true});
+                newLoan.unshift({loanId:"carLoan", loanName:"자동차 대출(사전입력 : 3-ⓐ)", loanAmount:my?.carLoan ?? 0, loanInterest:my?.carLoanRate ?? base.loanInterest, isReadOnly:true});
             }
 
             my.loan = newLoan;
@@ -132,13 +132,14 @@ export const useCashflowTableData = () => {
 
         //결과 변수
         let rows = [];
-        // //과정 누적 변수
+        // 기본 누적
         let loopCnt = 0;
         let inflationStack = 1.0;
+        // 자산 누적
+        let assetSavingStack = my?.currAssetSaving ?? 0;
+        let assetInvestStack = my?.currAssetInvest ?? 0;
         
         // let salaryRiseRateStack = 1.0;
-        // let assetSavingStack = base?.currAssetSaving ?? 0;
-        // let assetInvestStack = base?.currAssetInvest ?? 0;
         // let assetHousePriceStack = curHouse?.amount ?? 0;
 
         for(var i=0; i<=100; i++){
@@ -152,7 +153,9 @@ export const useCashflowTableData = () => {
                 //나이(myAge)
                 row.myAge = i;
                 loopCnt++;
+            }
 
+            if(isCompleted?.[menuEnum.BASE_INDEX] === true){
                 //물가상승률
                 if(loopCnt <= 1){
                     inflationStack = 1.0;
@@ -180,6 +183,85 @@ export const useCashflowTableData = () => {
                 //     }
                 // }
                 // row.assetHousePriceStack = assetHousePriceStack;
+            }
+
+            if(isCompleted?.[menuEnum.MY_ASSET] === true){
+                // 대출이자
+                let loanCost = 0;
+                my.loan.forEach((item)=>{
+                    loanCost += item.loanAmountStack*(item.loanInterest/100);
+                });
+                row.loanCost = Math.round(loanCost/12)*12;
+
+                // 예금 / 투자 stack
+                let tmpBalance = row.totalBalance ?? 0; //잔액
+                if(tmpBalance < 0){ // 잔액이 음수일 경우.
+                    if(assetSavingStack + tmpBalance >= 0){ // 1. 예금 충분할 경우(차감)
+                        assetSavingStack = assetSavingStack + tmpBalance;
+                        tmpBalance = 0;
+                    }else{ 
+                        assetSavingStack = 0;
+                        tmpBalance = assetSavingStack + tmpBalance; // 1-2. 예금 부족할 경우(부분 차감)
+
+                        if(assetInvestStack + tmpBalance >= 0){ // 2. 투자 충분할 경우(차감)
+                            assetInvestStack = assetInvestStack + tmpBalance;
+                            tmpBalance = 0;
+                        }else{
+                            assetInvestStack = 0;
+                            tmpBalance = tmpBalance + assetInvestStack;// 2-2. 투자 부족할 경우(부분 차감)
+
+                            // 3. 최총(대출)
+                            my.loan = my.loan.map((item)=>{
+                                if(item.loanId=="systemLoan"){
+                                    return {...item, loanAmountStack : item.loanAmountStack + tmpBalance}
+                                }else{
+                                    return item;
+                                }
+                            });
+                        }
+                    }
+                }else{
+                    let assetLoanTotalAmount = 0; //전체 대출 금액
+                    my.loan.forEach(item => {
+                        assetLoanTotalAmount += item?.loanAmountStack ?? 0;
+                    });
+
+                    if(assetLoanTotalAmount < 0){ // 잔액이 양수일 경우 + 대출이 있을 경우(음수)
+
+                        my.loan = my.loan.map((loanItem)=>{
+                            if(loanItem.loanAmountStack + tmpBalance <= 0){ //대출이 더 많을 때
+                                const retVal = {...loanItem, loanAmountStack : loanItem.loanAmountStack + tmpBalance};
+                                tmpBalance = 0;
+                                return retVal;
+                            }else{ //대출이 더 적을 때
+                                tmpBalance = tmpBalance + loanItem.loanAmountStack;
+                                return {...loanItem, loanAmountStack : 0}
+                            }
+                        })
+                    }else{ // 잔액이 양수일 경우 + 대출 없을 경우
+                        assetSavingStack = assetSavingStack + Math.round(tmpBalance * my.bankRate/100);
+                        assetInvestStack = assetInvestStack + Math.round(tmpBalance * my.investRate/100);
+                    }
+                }
+
+                // 예금
+                assetSavingStack = Math.round(assetSavingStack * (1 + base.bankInterest/100));
+                row.assetSavingStack = assetSavingStack;
+                // 투자
+                assetInvestStack = Math.round(assetInvestStack * (1 + base.investIncomeRate/100));
+                row.assetInvestStack = assetInvestStack;
+                // 대출
+                let assetLoanStack = 0;
+                my.loan.forEach(item => {
+                    assetLoanStack += item?.loanAmountStack ?? 0;
+                });
+                row.assetLoanStack = assetLoanStack;
+
+                
+                //전체 자산
+                row.totalAsset = (row.assetSavingStack ?? 0) + (row.assetInvestStack ?? 0) 
+                                + (row.assetLoanStack ?? 0) + (row.assetHousePriceStack ?? 0);
+
             }
 
             //결과 쌓기

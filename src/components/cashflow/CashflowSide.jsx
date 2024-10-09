@@ -46,6 +46,14 @@ function CashflowSide(){
                 <span>{menuEnum.MY_ASSET}</span>
             </li>}
             {/*  */}
+            {isSurveyCompleted?.[menuEnum.MY_SPENDING] !== undefined
+            ? <li className={(surveyDiv===menuEnum.MY_SPENDING?"on ":"") + (isSurveyCompleted?.[menuEnum.MY_SPENDING]===true?"ok ":"")} onClick={()=>{setSurveyDivition(menuEnum.MY_SPENDING)}}>
+                <span>{menuEnum.MY_SPENDING}</span> {surveyDiv===menuEnum.MY_SPENDING?<span>〉</span>:null}
+            </li>
+            : <li className='disable'>
+                <span>{menuEnum.MY_SPENDING}</span>
+            </li>}
+            {/*  */}
             {isSurveyCompleted?.[menuEnum.MY_INCOME] !== undefined
             ? <li className={(surveyDiv===menuEnum.MY_INCOME?"on ":"") + (isSurveyCompleted?.[menuEnum.MY_INCOME]===true?"ok ":"")} onClick={()=>{setSurveyDivition(menuEnum.MY_INCOME)}}>
                 <span>{menuEnum.MY_INCOME}</span> {surveyDiv===menuEnum.MY_INCOME?<span>〉</span>:null}
@@ -54,43 +62,16 @@ function CashflowSide(){
                 <span>{menuEnum.MY_INCOME}</span>
             </li>}
             {/*  */}
-            {isSurveyCompleted?.[menuEnum.MY_SPENDING] !== undefined
-            ? <li className={(surveyDiv===menuEnum.MY_SPENDING?"on ":"") + (isSurveyCompleted?.[menuEnum.MY_SPENDING]===true?"ok ":"")} onClick={()=>{setSurveyDivition(menuEnum.MY_SPENDING)}}>
-                <span>{menuEnum.MY_SPENDING}</span> {surveyDiv===menuEnum.MY_SPENDING?<span>〉</span>:null}
-            </li>
-            : <li className='disable'>
-                <span>{menuEnum.MY_SPENDING}</span>
-            </li>}
+            {surveyData.base.marryYn === "Y"
+            ? (isSurveyCompleted?.[menuEnum.YOUR_INCOME] !== undefined
+                ? <li className={(surveyDiv===menuEnum.YOUR_INCOME?"on ":"") + (isSurveyCompleted?.[menuEnum.YOUR_INCOME]===true?"ok ":"")} onClick={()=>{setSurveyDivition(menuEnum.YOUR_INCOME)}}>
+                    <span>{menuEnum.YOUR_INCOME}</span> {surveyDiv===menuEnum.YOUR_INCOME?<span>〉</span>:null}
+                </li>
+                : <li className='disable'>
+                    <span>{menuEnum.YOUR_INCOME}</span>
+                </li>)
+            : null}
         </ul>
-
-        {surveyData.base.marryYn === "Y"
-        ? <ul className='base '>{menuEnum.YOUR}
-            {/*  */}
-            {isSurveyCompleted?.[menuEnum.YOUR_ASSET] !== undefined
-            ? <li className={(surveyDiv===menuEnum.YOUR_ASSET?"on ":"") + (isSurveyCompleted?.[menuEnum.YOUR_ASSET]===true?"ok ":"")} onClick={()=>{setSurveyDivition(menuEnum.YOUR_ASSET)}}>
-                <span>{menuEnum.YOUR_ASSET}</span> {surveyDiv===menuEnum.YOUR_ASSET?<span>〉</span>:null}
-            </li>
-            : <li className='disable'>
-                <span>{menuEnum.YOUR_ASSET}</span>
-            </li>}
-            {/*  */}
-            {isSurveyCompleted?.[menuEnum.YOUR_INCOME] !== undefined
-            ? <li className={(surveyDiv===menuEnum.YOUR_INCOME?"on ":"") + (isSurveyCompleted?.[menuEnum.YOUR_INCOME]===true?"ok ":"")} onClick={()=>{setSurveyDivition(menuEnum.YOUR_INCOME)}}>
-                <span>{menuEnum.YOUR_INCOME}</span> {surveyDiv===menuEnum.YOUR_INCOME?<span>〉</span>:null}
-            </li>
-            : <li className='disable'>
-                <span>{menuEnum.YOUR_INCOME}</span>
-            </li>}
-            {/*  */}
-            {isSurveyCompleted?.[menuEnum.YOUR_SPENDING] !== undefined
-            ? <li className={(surveyDiv===menuEnum.YOUR_SPENDING?"on ":"") + (isSurveyCompleted?.[menuEnum.YOUR_SPENDING]===true?"ok ":"")} onClick={()=>{setSurveyDivition(menuEnum.YOUR_SPENDING)}}>
-                <span>{menuEnum.YOUR_SPENDING}</span> {surveyDiv===menuEnum.YOUR_SPENDING?<span>〉</span>:null}
-            </li>
-            : <li className='disable'>
-                <span>{menuEnum.YOUR_SPENDING}</span>
-            </li>}
-        </ul>
-        : null}
 
         <ul className='add'>{menuEnum.ADD}
             {/*  */}
