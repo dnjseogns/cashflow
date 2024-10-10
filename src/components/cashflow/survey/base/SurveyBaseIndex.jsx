@@ -15,7 +15,7 @@ function SurveyBaseIndex({completeBtnClickCnt, commonCompleteLogic}){
     const bankInterest = surveyData.base?.bankInterest ?? "2.7";
     const loanInterest = surveyData.base?.loanInterest ?? "5.0";
     const realEstateGrouthRate = surveyData.base?.realEstateGrouthRate ?? "4.0";
-    const carDepreciationRate = surveyData.base?.carDepreciationRate ?? "15.0";
+    // const carDepreciationRate = surveyData.base?.carDepreciationRate ?? "15.0";
     const investIncomeRate = surveyData.base?.investIncomeRate ?? "3.5";
 
     const dispatchValue = (div, value) => {
@@ -32,7 +32,7 @@ function SurveyBaseIndex({completeBtnClickCnt, commonCompleteLogic}){
         surveyData.base.bankInterest = bankInterest;
         surveyData.base.loanInterest = loanInterest;
         surveyData.base.realEstateGrouthRate = realEstateGrouthRate;
-        surveyData.base.carDepreciationRate = carDepreciationRate;
+        // surveyData.base.carDepreciationRate = carDepreciationRate;
         surveyData.base.investIncomeRate = investIncomeRate;
         dispatch(SvSave(surveyData));
         commonCompleteLogic();
@@ -58,14 +58,14 @@ function SurveyBaseIndex({completeBtnClickCnt, commonCompleteLogic}){
             <p className='note'>※ 2012년 ~ 2024년 전국 주택가격 상승률은 약 4.0%입니다.(한국부동산원 통계 참고)</p>
             <p className='note'>※ 실거주 주택값 상승률 계산에 사용됩니다.</p>
         </div>
-        <div>
+        {/* <div>
             <p className="question">(4) 자동차 감가상각을 입력해주세요.</p>
             <p>- <Mapping txt="ⓔ"/> : <input className='btn1' value={carDepreciationRate} onChange={(e)=>{surveyOnChange(e,"carDepreciationRate")}}/> %</p>
             <p className='note'>※ 10 ~ 20% 사이의 값을 추천합니다.</p>
             <p className='note'>※ 자동차 판매 계산에 사용됩니다.</p>
-        </div>
+        </div> */}
         <div>
-            <p className="question">(5) 개인 투자수익률을 입력해주세요.</p>
+            <p className="question">(4) 개인 투자수익률을 입력해주세요.</p>
             <p>- <Mapping txt="ⓕ"/> : <input className='btn1' value={investIncomeRate} onChange={(e)=>{surveyOnChange(e,"investIncomeRate")}}/> %</p>
             <p className='note'>※ 투자대상 : 주식, 금, 코인, 실거주 외 주택</p>
             <p className='note'>※ 아래 내용을 참고하여 작성해주세요.</p>

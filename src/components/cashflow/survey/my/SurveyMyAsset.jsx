@@ -59,7 +59,7 @@ function SurveyMyAsset({completeBtnClickCnt, commonCompleteLogic}){
         } else if(div === "carPrice"){
             dispatchValue(div, expCheckInt(e.target.value, 0, 10000000000));
         } else if(div === "carLoan"){
-            dispatchValue(div, expCheckInt(e.target.value, 0, carPrice));
+            dispatchValue(div, expCheckInt(e.target.value, 0, 10000000000));
         } else if(div === "carLoanRate"){
             dispatchValue(div, expCheckDouble(e.target.value, 0, 100, 5));
         } else if(div === "carCostMonthly"){

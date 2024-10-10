@@ -76,9 +76,11 @@ export const useCashflowTableData = () => {
         let add = surveyData.add;
 
         {
+            //주택 중 자기자본금
             my.housePriceOwn = my?.housePriceTotal - my?.housePriceLoan;
         }
         {
+            //대출list
             let newLoan = [...my.loan].filter((item)=>{return item.loanId != "carLoan" && item.loanId != "houseLoan"});
             if(my?.housePriceLoan > 0){
                 if(my?.livingType == "rent"){
@@ -94,6 +96,7 @@ export const useCashflowTableData = () => {
             my.loan = newLoan;
         }
         {
+            //집list
             let newHouse = [...add.house].filter((item)=>{return item.age != -1});
             if(my?.livingType == "rent"){
                 newHouse.push({age:-1, price:my?.housePriceOwn, rate:0});
@@ -103,9 +106,10 @@ export const useCashflowTableData = () => {
             add.house = newHouse;
         }
         {
+            //차list
             let newCar = [...add.car].filter((item)=>{return item.age != -1});
             if(my?.carYn == "Y"){
-                newCar.push({age:-1, price:my?.housePrice, rate:base?.carDepreciationRate});
+                newCar.push({age:-1, price:my?.carPrice, sellPrice:0});
             }
             add.car = newCar;
         }
@@ -300,9 +304,13 @@ export const useCashflowTableData = () => {
                     if(newHouse){
                         assetHousePriceStack = newHouse.price;
                     }else{
-                        const tmpCurHouseArr = add.house.filter((houseItem)=>houseItem.age < i);
-                        const tmpGrouthRate = tmpCurHouseArr[tmpCurHouseArr.length-1].rate;
-                        assetHousePriceStack = assetHousePriceStack * (1 + tmpGrouthRate/100);
+                        if(loopCnt === 1){
+                            // assetHousePriceStack = assetHousePriceStack;
+                        }else{
+                            const tmpCurHouseArr = add.house.filter((houseItem)=>houseItem.age < i);
+                            const tmpGrouthRate = tmpCurHouseArr[tmpCurHouseArr.length-1].rate;
+                            assetHousePriceStack = assetHousePriceStack * (1 + tmpGrouthRate/100);
+                        }
                     }
                 }
                 row.assetHousePriceStack = assetHousePriceStack;
