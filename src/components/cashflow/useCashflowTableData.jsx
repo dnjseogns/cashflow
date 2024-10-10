@@ -110,7 +110,6 @@ export const useCashflowTableData = () => {
             add.car = newCar;
         }
 
-
         dispatch(SvSave(surveyData));
     };
     
@@ -121,6 +120,7 @@ export const useCashflowTableData = () => {
         let isCompleted = surveyData.isCompleted;
         let base = surveyData.base;
         let my = surveyData.my;
+        let add = surveyData.add;
 
         //추가 대출(시스템 계산용)
         {
@@ -138,9 +138,11 @@ export const useCashflowTableData = () => {
         // 자산 누적
         let assetSavingStack = my?.currAssetSaving ?? 0;
         let assetInvestStack = my?.currAssetInvest ?? 0;
-        
+        let assetHousePriceStack = add.house?.find((item)=>item.age === -1)?.price ?? 0;
+
+        console.log("assetHousePriceStack",assetHousePriceStack);
+
         // let salaryRiseRateStack = 1.0;
-        // let assetHousePriceStack = curHouse?.amount ?? 0;
 
         for(var i=0; i<=100; i++){
             let row = {};
@@ -150,13 +152,13 @@ export const useCashflowTableData = () => {
             else if(i < base?.myAge){ continue; }
 
             if(isCompleted?.[menuEnum.BASE_MODE] === true){
-                //나이(myAge)
+                //기본 -> 나이
                 row.myAge = i;
                 loopCnt++;
             }
 
             if(isCompleted?.[menuEnum.BASE_INDEX] === true){
-                //물가상승률
+                //기본 -> 물가상승률
                 if(loopCnt <= 1){
                     inflationStack = 1.0;
                 }else{
@@ -166,33 +168,65 @@ export const useCashflowTableData = () => {
                 row.inflationStack = inflationStack;
             }
 
-            if(isCompleted?.[menuEnum.MY_ASSET] === true){
-                //집 소비
-                row.houseCost = Math.round((my?.houseCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
 
-                // // 실거주 가격 ★★★여기할 차례★★★
-                // const newHouse = my?.house?.find((item)=>(item.age === base.age));
-                // if(newHouse){
-                //     curHouse = newHouse;
-                //     assetHousePriceStack = newHouse.amount;
-                // }else{
-                //     if(curHouse){
-                //         assetHousePriceStack = assetHousePriceStack * (1 + curHouse?.interest/100);
-                //     }else{
-                //         assetHousePriceStack = null;
-                //     }
-                // }
-                // row.assetHousePriceStack = assetHousePriceStack;
+
+
+            if(isCompleted?.[menuEnum.MY_ASSET] === true){
+                //수입 -> 연봉
+                //
+            }
+            if(isCompleted?.[menuEnum.MY_ASSET] === true){
+                //수입 -> 국민연금
+                //
+            }
+            if(isCompleted?.[menuEnum.MY_ASSET] === true){
+                //수입 -> 합계
+                row.totalIncome = (row?.salary??0) + (row?.sideJob??0) + (row?.pension??0);
             }
 
+
+
+
             if(isCompleted?.[menuEnum.MY_ASSET] === true){
-                // 대출이자
+                //지출 -> 주거비
+                row.houseCost = Math.round((my?.houseCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
+            }
+            if(isCompleted?.[menuEnum.MY_ASSET] === true){
+                //지출 -> 차량비
+                row.carCost = Math.round((my?.carCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
+            }
+            if(isCompleted?.[menuEnum.MY_ASSET] === true){
+                // 지출 -> 대출이자
                 let loanCost = 0;
                 my.loan.forEach((item)=>{
                     loanCost += item.loanAmountStack*(item.loanInterest/100);
                 });
                 row.loanCost = Math.round(loanCost/12)*12;
+            }
+            if(isCompleted?.[menuEnum.MY_ASSET] === true){
+                //지출 -> 기타소비
+                //
+            }
+            if(isCompleted?.[menuEnum.MY_ASSET] === true){
+                //지출 -> 합계
+                row.totalConsumption = (row?.houseCost??0) + (row?.carCost??0) + (row?.loanCost??0) + (row?.etcExpense??0);
+            }
 
+
+
+
+
+            if(isCompleted?.[menuEnum.MY_ASSET] === true){
+                //잔액
+                row.totalBalance = row.totalIncome + row.totalConsumption;
+            }
+
+
+
+
+
+
+            if(isCompleted?.[menuEnum.MY_ASSET] === true){
                 // 예금 / 투자 stack
                 let tmpBalance = row.totalBalance ?? 0; //잔액
                 if(tmpBalance < 0){ // 잔액이 음수일 경우.
@@ -257,11 +291,26 @@ export const useCashflowTableData = () => {
                 });
                 row.assetLoanStack = assetLoanStack;
 
-                
-                //전체 자산
-                row.totalAsset = (row.assetSavingStack ?? 0) + (row.assetInvestStack ?? 0) 
-                                + (row.assetLoanStack ?? 0) + (row.assetHousePriceStack ?? 0);
+            }
 
+            if(isCompleted?.[menuEnum.MY_ASSET] === true){
+                //누적자산 -> 주택
+                if(Array.isArray(add.house) && add.house.length >= 1){
+                    const newHouse = add.house.find((houseItem)=>(houseItem.age === i));
+                    if(newHouse){
+                        assetHousePriceStack = newHouse.price;
+                    }else{
+                        const tmpCurHouseArr = add.house.filter((houseItem)=>houseItem.age < i);
+                        const tmpGrouthRate = tmpCurHouseArr[tmpCurHouseArr.length-1].rate;
+                        assetHousePriceStack = assetHousePriceStack * (1 + tmpGrouthRate/100);
+                    }
+                }
+                row.assetHousePriceStack = assetHousePriceStack;
+            }
+
+            if(isCompleted?.[menuEnum.MY_ASSET] === true){
+                //누적자산 -> 합계
+                row.totalAsset = (row.assetLoanStack ?? 0) + (row.assetSavingStack ?? 0) + (row.assetInvestStack ?? 0)  + (row.assetHousePriceStack ?? 0);
             }
 
             //결과 쌓기

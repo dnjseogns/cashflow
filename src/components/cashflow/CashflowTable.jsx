@@ -14,14 +14,15 @@ function CashflowTable(){
     const cashflowData = useSelector((store) => store.Cashflow).data;
 
     const base = surveyData?.base;
+    const my = surveyData?.my;
 
     useCashflowTableData();
 
     const isSalaryRiseRateStackVisible = false;
     const isSideJobVisible = !!(cashflowData?.timeline ?? [])[0]?.sideJob;
 
-    const isAssetHouseVisible = (base?.livingType == "rent" &&  base?.housePriceOwn > 0) 
-                                || (base?.livingType == "own" &&  base?.housePriceTotal > 0);
+    const isAssetHouseVisible = (my?.livingType == "rent" &&  my?.housePriceOwn > 0) 
+                                || (my?.livingType == "own" &&  my?.housePriceTotal > 0);
     // const isHouseCostVisible = !!(cashflowData?.timeline ?? [])[0]?.houseCost;
     // const isCarCostVisible = !!(cashflowData?.timeline ?? [])[0]?.carCost;
 
