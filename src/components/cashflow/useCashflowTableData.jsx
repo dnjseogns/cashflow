@@ -73,6 +73,7 @@ export const useCashflowTableData = () => {
         let isCompleted = surveyData.isCompleted;
         let base = surveyData.base;
         let my = surveyData.my;
+        let your = surveyData.your;
         let add = surveyData.add;
 
         {
@@ -89,7 +90,7 @@ export const useCashflowTableData = () => {
                     newLoan.unshift({loanId:"houseLoan", loanName:"주택담보대출(사전입력 : 2-ⓐ)", loanAmount:my?.housePriceLoan ?? 0, loanInterest:my?.housePriceLoanRate ?? base.loanInterest, isReadOnly:true});
                 }
             }
-            if(my?.carLoan > 0){
+            if(my?.carYn === "Y" && my?.carLoan > 0){
                 newLoan.unshift({loanId:"carLoan", loanName:"자동차 대출(사전입력 : 3-ⓐ)", loanAmount:my?.carLoan ?? 0, loanInterest:my?.carLoanRate ?? base.loanInterest, isReadOnly:true});
             }
 
@@ -113,6 +114,28 @@ export const useCashflowTableData = () => {
             }
             add.car = newCar;
         }
+        if(isCompleted?.[menuEnum.BASE_INDEX] === true){
+            //나 -> 국민연금 관련 40세 연봉
+            const powCnt = 0 <= 40 - my.age ? 40 - my.age : 0;
+            const over40 = Math.pow(1.045, powCnt); //1.045 수치 : 급여상승률 평균
+            const salaryMonthly = my?.salaryMonthly ?? 2000000;
+            const workYear = my?.workYear ?? 1;
+
+            const tmpPensionYear = 65 - (my?.age - workYear) - 20;
+            const pensionMonthly = Math.round((1.2 * ((salaryMonthly*over40) + 2989237) * (1 + (tmpPensionYear < 0 ? 0 : tmpPensionYear)*0.05))/12);
+            my.pensionMonthly = pensionMonthly;
+        }
+        if(isCompleted?.[menuEnum.BASE_INDEX] === true){
+            //배우자 -> 국민연금 관련 40세 연봉
+            const powCnt = 0 <= 40 - your.age ? 40 - your.age : 0;
+            const over40 = Math.pow(1.045, powCnt); //1.045 수치 : 급여상승률 평균
+            const salaryMonthly = your?.salaryMonthly ?? 2000000;
+            const workYear = your?.workYear ?? 1;
+
+            const tmpPensionYear = 65 - (your?.age - workYear) - 20;
+            const pensionMonthly = Math.round((1.2 * ((salaryMonthly*over40) + 2989237) * (1 + (tmpPensionYear < 0 ? 0 : tmpPensionYear)*0.05))/12);
+            your.pensionMonthly = pensionMonthly;
+        }
 
         dispatch(SvSave(surveyData));
     };
@@ -124,12 +147,13 @@ export const useCashflowTableData = () => {
         let isCompleted = surveyData.isCompleted;
         let base = surveyData.base;
         let my = surveyData.my;
+        let your = surveyData.your;
         let add = surveyData.add;
 
         //추가 대출(시스템 계산용)
         {
             my.loan = my.loan.filter((item)=>(item.loanId !== "systemLoan"));
-            my.loan.push({loanId:"systemLoan", loanName:"추가대출", loanAmount:0, loanInterest: my?.loanInterest ?? 6.0, isReadOnly:true});
+            my.loan.push({loanId:"systemLoan", loanName:"추가대출", loanAmount:0, loanInterest: base?.loanInterest ?? 5.0, isReadOnly:true});
             my.loan = my.loan.map((item)=> ({...item, "loanAmountStack":-1*item.loanAmount})) // loanAmountStack 컬럼 추가
                                 .sort((a,b)=>(b.loanInterest - a.loanInterest)); // 대출금리 높은 걸 위로
         }
@@ -140,24 +164,24 @@ export const useCashflowTableData = () => {
         let loopCnt = 0;
         let inflationStack = 1.0;
         // 자산 누적
+        let salaryRiseRateStack = 1.0;
         let assetSavingStack = my?.currAssetSaving ?? 0;
         let assetInvestStack = my?.currAssetInvest ?? 0;
         let assetHousePriceStack = add.house?.find((item)=>item.age === -1)?.price ?? 0;
-
-        console.log("assetHousePriceStack",assetHousePriceStack);
-
-        // let salaryRiseRateStack = 1.0;
+        // 배우자
+        let yourSalaryRiseRateStack = 1.0;
 
         for(var i=0; i<=100; i++){
             let row = {};
             //나이 설문 작성 완료 시점부터 table 만들기
             if(!isCompleted?.[menuEnum.BASE_MODE]){ return; }
             //나이보다 적으면 skip
-            else if(i < base?.myAge){ continue; }
+            else if(i < my?.age){ continue; }
 
             if(isCompleted?.[menuEnum.BASE_MODE] === true){
                 //기본 -> 나이
-                row.myAge = i;
+                row.age = Number(my?.age) + loopCnt;
+                row.yourAge = Number(your?.age) + loopCnt;
                 loopCnt++;
             }
 
@@ -175,18 +199,82 @@ export const useCashflowTableData = () => {
 
 
 
-            if(isCompleted?.[menuEnum.MY_ASSET] === true){
-                //수입 -> 연봉
-                //
+
+
+            if(isCompleted?.[menuEnum.MY_INCOME] === true){
+                //내 수입 -> 연봉상승률(누적)
+                const salaryRiseRateGap = (my?.salaryRiseRate1 - my?.salaryRiseRate25) / 25;
+                let salaryRiseRate = my?.salaryRiseRate1 - salaryRiseRateGap * (my?.workYear + loopCnt - 3) // 1년차 + loop (1) - 3
+                salaryRiseRate = salaryRiseRate < my?.salaryRiseRate25 ? my?.salaryRiseRate25 : salaryRiseRate;
+                if(loopCnt === 1){
+                    salaryRiseRateStack = 1.0;
+                } else {
+                    salaryRiseRateStack = numRound(salaryRiseRateStack * (1 + salaryRiseRate/100),3);
+                }
+                row.salaryRiseRateStack = salaryRiseRateStack;
             }
-            if(isCompleted?.[menuEnum.MY_ASSET] === true){
-                //수입 -> 국민연금
-                //
+            if(isCompleted?.[menuEnum.MY_INCOME] === true){
+                //내 수입 -> 연봉
+                if(row.age > my?.retireAge){ //은퇴 체크
+                    row.salary = 0;
+                }else{
+                    row.salary = Math.round((my?.salaryMonthly * 12) * row.salaryRiseRateStack);
+                }
             }
-            if(isCompleted?.[menuEnum.MY_ASSET] === true){
+            if(isCompleted?.[menuEnum.MY_INCOME] === true){
+                //내 수입 -> 부업
+                row.sideJob = Math.round(my?.sideJobMonthly * 12 * row.inflationStack);
+            }
+            if(isCompleted?.[menuEnum.MY_INCOME] === true){
+                //내 국민연금
+                row.pension = 0;
+                if(row.age >= 65){
+                    row.pension = my?.pensionMonthly*12 * Math.pow((1 + base.indexInflation/100), row?.age - 65);
+                }
+            }
+
+            if(isCompleted?.[menuEnum.YOUR_INCOME] === true){
+                //배우자 수입 -> 연봉상승률(누적)
+                const yourSalaryRiseRateGap = (your?.salaryRiseRate1 - your?.salaryRiseRate25) / 25;
+                let yourSalaryRiseRate = your?.salaryRiseRate1 - yourSalaryRiseRateGap * (your?.workYear + loopCnt - 3) // 1년차 + loop (1) - 3
+                yourSalaryRiseRate = yourSalaryRiseRate < your?.salaryRiseRate25 ? your?.salaryRiseRate25 : yourSalaryRiseRate;
+                if(loopCnt === 1){
+                    yourSalaryRiseRateStack = 1.0;
+                } else {
+                    yourSalaryRiseRateStack = numRound(yourSalaryRiseRateStack * (1 + yourSalaryRiseRate/100),3);
+                }
+                row.yourSalaryRiseRateStack = yourSalaryRiseRateStack;
+                
+                //배우자 수입 -> 연봉
+                if(row.yourAge > your?.retireAge){ //은퇴 체크
+                    row.yourSalary = 0;
+                }else{
+                    row.yourSalary = Math.round((your?.salaryMonthly * 12) * row.yourSalaryRiseRateStack);
+                }
+
+                //배우자  국민연금
+                row.yourPension = 0;
+                if(row.yourAge >= 65){
+                    row.yourPension = your?.pensionMonthly*12 * Math.pow((1 + base.indexInflation/100), row?.yourAge - 65);
+                }
+
+                //배우자 국민연금
+                row.yourPension = 0;
+                if(row.yourAge >= 65){
+                    row.yourPension = your?.pensionMonthly*12 * Math.pow((1 + base.indexInflation/100), row?.yourAge - 65);
+                }
+
+                row.yourTotalIncome = (row?.yourSalary??0) + (row?.yourSideJob??0) + (row?.yourPension??0);
+            }
+
+
+            if(isCompleted?.[menuEnum.MY_INCOME] === true){
                 //수입 -> 합계
-                row.totalIncome = (row?.salary??0) + (row?.sideJob??0) + (row?.pension??0);
+                row.totalIncome = (row?.salary??0) + (row?.sideJob??0) + (row?.pension??0) + (row.yourTotalIncome??0);
             }
+
+
+            
 
 
 
@@ -220,10 +308,36 @@ export const useCashflowTableData = () => {
 
 
 
+
+            if(isCompleted?.[menuEnum.MY_INCOME] === true){
+                //퇴직금
+                if(row.age == base?.retireAge){
+                    const totalWorkYear = loopCnt + (base?.workYear ?? 1);
+                    row.eventRetirementPay = base?.salaryMonthly * row.salaryRiseRateStack * totalWorkYear;
+                    row.totalEventNote = (row?.totalEventNote ?? "") + "퇴직금(5-ⓑ)"
+                }else{
+                    // row.eventRetirementPay = row.eventRetirementPay;
+                }
+
+                row.totalEvent = row.eventRetirementPay;
+            }
+
+            if(isCompleted?.[menuEnum.MY_INCOME] === true)
+            {
+                row.totalEvent = row.eventRetirementPay;
+            }
+
+
+
+
+
+
             if(isCompleted?.[menuEnum.MY_ASSET] === true){
                 //잔액
-                row.totalBalance = row.totalIncome + row.totalConsumption;
+                row.totalBalance = (row?.totalIncome??0) + (row?.totalConsumption??0);
             }
+
+
 
 
 
@@ -238,15 +352,15 @@ export const useCashflowTableData = () => {
                         assetSavingStack = assetSavingStack + tmpBalance;
                         tmpBalance = 0;
                     }else{ 
-                        assetSavingStack = 0;
                         tmpBalance = assetSavingStack + tmpBalance; // 1-2. 예금 부족할 경우(부분 차감)
+                        assetSavingStack = 0;
 
                         if(assetInvestStack + tmpBalance >= 0){ // 2. 투자 충분할 경우(차감)
                             assetInvestStack = assetInvestStack + tmpBalance;
                             tmpBalance = 0;
                         }else{
-                            assetInvestStack = 0;
                             tmpBalance = tmpBalance + assetInvestStack;// 2-2. 투자 부족할 경우(부분 차감)
+                            assetInvestStack = 0;
 
                             // 3. 최총(대출)
                             my.loan = my.loan.map((item)=>{
@@ -277,8 +391,8 @@ export const useCashflowTableData = () => {
                             }
                         })
                     }else{ // 잔액이 양수일 경우 + 대출 없을 경우
-                        assetSavingStack = assetSavingStack + Math.round(tmpBalance * my.bankRate/100);
-                        assetInvestStack = assetInvestStack + Math.round(tmpBalance * my.investRate/100);
+                        assetSavingStack = assetSavingStack + Math.round(tmpBalance * (my?.bankRate??100)/100);
+                        assetInvestStack = assetInvestStack + Math.round(tmpBalance * (my?.investRate??0)/100);
                     }
                 }
 

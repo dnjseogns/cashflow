@@ -12,16 +12,16 @@ function SurveyBaseMode({completeBtnClickCnt, commonCompleteLogic}){
     const surveyData = useSelector((store) => store.Survey).data;
 
     const marryYn = surveyData?.base?.marryYn ?? "N";
-    const myAge = surveyData?.base?.myAge ?? "25";
-    const yourAge = surveyData?.base?.yourAge ?? "25";
+    const myAge = surveyData?.my?.age ?? "25";
+    const yourAge = surveyData?.your?.age ?? "25";
 
     const surveyOnChange = (e, div) => {
         if(div==="marryYn"){
             surveyData.base.marryYn = e.target.value;
         }else if(div==="myAge"){
-            surveyData.base.myAge = e.target.value;
+            surveyData.my.age = e.target.value;
         }if(div==="yourAge"){
-            surveyData.base.yourAge = e.target.value;
+            surveyData.your.age = e.target.value;
         }
         
         dispatch(SvSave(surveyData));
@@ -30,12 +30,12 @@ function SurveyBaseMode({completeBtnClickCnt, commonCompleteLogic}){
     useEffectNoMount(()=>{
         if(surveyData?.base?.marryYn === "Y"){
             surveyData.base.marryYn = marryYn;
-            surveyData.base.myAge = myAge;
-            surveyData.base.yourAge = yourAge;
+            surveyData.my.age = myAge;
+            surveyData.your.age = yourAge;
         }else{
             surveyData.base.marryYn = marryYn;
-            surveyData.base.myAge = myAge;
-            surveyData.base.yourAge = undefined;
+            surveyData.my.age = myAge;
+            surveyData.your.age = undefined;
         }
         dispatch(SvSave(surveyData));
         commonCompleteLogic();

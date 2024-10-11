@@ -17,6 +17,9 @@ import { useMenuContext } from '@/components/cashflow/MenuContext.jsx';
 import SurveyBaseMode from './survey/base/SurveyBaseMode';
 import SurveyBaseIndex from './survey/base/SurveyBaseIndex';
 import SurveyMyAsset from './survey/my/SurveyMyAsset';
+import SurveyMySpending from './survey/my/SurveyMySpending';
+import SurveyMyIncome from './survey/my/SurveyMyIncome';
+import SurveyYourIncome from './survey/your/SurveyYourIncome';
 
 /* 입력해주신 자료는 이번 계산에만 활용합니다. 이 사이트는 어떤 개인 정보도 저장하지 않습니다. */
 
@@ -70,12 +73,12 @@ function CashflowSurvey(){
                     : surveyDiv===menuEnum.BASE_INDEX? <SurveyBaseIndex completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     // 내 정보
                     : surveyDiv===menuEnum.MY_ASSET? <SurveyMyAsset completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                    : surveyDiv===menuEnum.MY_INCOME? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                    : surveyDiv===menuEnum.MY_SPENDING? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                    // 배우자 정보
-                    : surveyDiv===menuEnum.YOUR_ASSET? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                    : surveyDiv===menuEnum.YOUR_INCOME? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                    : surveyDiv===menuEnum.YOUR_SPENDING? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.MY_INCOME? <SurveyMyIncome completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.YOUR_INCOME? <SurveyYourIncome completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.MY_SPENDING? <SurveyMySpending completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    // // 배우자 정보
+                    // : surveyDiv===menuEnum.YOUR_ASSET? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    // : surveyDiv===menuEnum.YOUR_SPENDING? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     // 추가 정보
                     : surveyDiv===menuEnum.ADD_MARRY? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.ADD_BABY? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>

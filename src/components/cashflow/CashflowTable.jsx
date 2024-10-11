@@ -23,6 +23,7 @@ function CashflowTable(){
 
     const isAssetHouseVisible = (my?.livingType == "rent" &&  my?.housePriceOwn > 0) 
                                 || (my?.livingType == "own" &&  my?.housePriceTotal > 0);
+    const isPartnerIncomeVisible = true;
     // const isHouseCostVisible = !!(cashflowData?.timeline ?? [])[0]?.houseCost;
     // const isCarCostVisible = !!(cashflowData?.timeline ?? [])[0]?.carCost;
 
@@ -43,6 +44,7 @@ function CashflowTable(){
                     <col width="100px"/>
                     <col width="100px"/>
                     {isSideJobVisible ? <col width="100px"/> : null}
+                    {isPartnerIncomeVisible ? <col width="100px"/> : null}
                     <col width="100px"/>
                     {/* 지출 */}
                     <col width="100px"/>
@@ -67,7 +69,7 @@ function CashflowTable(){
                 <thead>
                     <tr>
                         <th colSpan={2}></th>
-                        <th colSpan={3 + (isSalaryRiseRateStackVisible ? 1 : 0) + (isSideJobVisible ? 1 : 0)}>수입</th>
+                        <th colSpan={3 + (isSalaryRiseRateStackVisible ? 1 : 0) + (isSideJobVisible ? 1 : 0) + (isPartnerIncomeVisible ? 1 : 0)}>수입</th>
                         <th colSpan={5}>지출</th>
                         <th colSpan={2}>이벤트</th>
                         <th colSpan={1}>잔액(수입+지출+이벤트)</th>
@@ -82,6 +84,7 @@ function CashflowTable(){
                         <th>연봉<br/><Mapping txt="(5-ⓐ)"/></th>
                         <th>국민연금<br/><Mapping txt="(5-ⓒ)"/></th>
                         {isSideJobVisible ? <th>부업<br/><Mapping txt="(5-ⓓ)"/></th> : null}
+                        {isPartnerIncomeVisible ? <th>배우자 수입<br/><Mapping txt="(5-ⓓ)"/></th> : null}
                         <th>합계</th>
 
                         <th>주거비<br/><Mapping txt="(6-ⓐ)"/></th>
@@ -108,13 +111,14 @@ function CashflowTable(){
                     {cashflowData?.timeline.map((row, i) => {
                     return(
                         <tr key={i}>
-                            <td>{row?.myAge}</td>
+                            <td>{row?.age}</td>
                             <td>{row?.inflationStack}</td>
 
                             {isSalaryRiseRateStackVisible ? <td>{row?.salaryRiseRateStack}</td> : null}
                             <td>{toKoreanMoneySimpleUnit(row?.salary)}</td>
                             <td>{toKoreanMoneySimpleUnit(row?.pension)}</td>
                             {isSideJobVisible ? <td>{toKoreanMoneySimpleUnit(row?.sideJob)}</td> : null}
+                            {isPartnerIncomeVisible ? <td>{toKoreanMoneySimpleUnit(row?.yourTotalIncome)}</td> : null}
                             <td className='sum'>{toKoreanMoneySimpleUnit(row?.totalIncome)}</td>
                             
                             <td className={`${row?.houseCost < 0 ? 'minus' : ''}`}>{toKoreanMoneySimpleUnit(row?.houseCost)}</td>

@@ -46,14 +46,6 @@ function CashflowSide(){
                 <span>{menuEnum.MY_ASSET}</span>
             </li>}
             {/*  */}
-            {isSurveyCompleted?.[menuEnum.MY_SPENDING] !== undefined
-            ? <li className={(surveyDiv===menuEnum.MY_SPENDING?"on ":"") + (isSurveyCompleted?.[menuEnum.MY_SPENDING]===true?"ok ":"")} onClick={()=>{setSurveyDivition(menuEnum.MY_SPENDING)}}>
-                <span>{menuEnum.MY_SPENDING}</span> {surveyDiv===menuEnum.MY_SPENDING?<span>〉</span>:null}
-            </li>
-            : <li className='disable'>
-                <span>{menuEnum.MY_SPENDING}</span>
-            </li>}
-            {/*  */}
             {isSurveyCompleted?.[menuEnum.MY_INCOME] !== undefined
             ? <li className={(surveyDiv===menuEnum.MY_INCOME?"on ":"") + (isSurveyCompleted?.[menuEnum.MY_INCOME]===true?"ok ":"")} onClick={()=>{setSurveyDivition(menuEnum.MY_INCOME)}}>
                 <span>{menuEnum.MY_INCOME}</span> {surveyDiv===menuEnum.MY_INCOME?<span>〉</span>:null}
@@ -71,6 +63,14 @@ function CashflowSide(){
                     <span>{menuEnum.YOUR_INCOME}</span>
                 </li>)
             : null}
+            {/*  */}
+            {isSurveyCompleted?.[menuEnum.MY_SPENDING] !== undefined
+            ? <li className={(surveyDiv===menuEnum.MY_SPENDING?"on ":"") + (isSurveyCompleted?.[menuEnum.MY_SPENDING]===true?"ok ":"")} onClick={()=>{setSurveyDivition(menuEnum.MY_SPENDING)}}>
+                <span>{menuEnum.MY_SPENDING}</span> {surveyDiv===menuEnum.MY_SPENDING?<span>〉</span>:null}
+            </li>
+            : <li className='disable'>
+                <span>{menuEnum.MY_SPENDING}</span>
+            </li>}
         </ul>
 
         <ul className='add'>{menuEnum.ADD}

@@ -22,7 +22,6 @@ function SurveyMyAsset({completeBtnClickCnt, commonCompleteLogic}){
 
     //car
     const carYn = surveyData.my?.carYn ?? "N";
-    const carPrice = surveyData.my?.carPrice ?? 30000000;
     const carLoan = surveyData.my?.carLoan ?? 0;
     const carLoanRate = surveyData.my?.carLoanRate ?? surveyData.base.loanInterest;
     const carCostMonthly = surveyData.my?.carCostMonthly ?? 0;
@@ -56,8 +55,6 @@ function SurveyMyAsset({completeBtnClickCnt, commonCompleteLogic}){
         // 차
         if(div === "carYn"){
             surveyData.my.carYn = e.target.value;
-        } else if(div === "carPrice"){
-            dispatchValue(div, expCheckInt(e.target.value, 0, 10000000000));
         } else if(div === "carLoan"){
             dispatchValue(div, expCheckInt(e.target.value, 0, 10000000000));
         } else if(div === "carLoanRate"){
@@ -81,7 +78,7 @@ function SurveyMyAsset({completeBtnClickCnt, commonCompleteLogic}){
     const addLoan = () => {
         const newLoan = [...loan];
         const loanNumber = (loan.length + 1).toString();
-        const newObj = {loanId : "loan"+loanNumber, loanName : "대출"+loanNumber, loanAmount : 1000000, loanInterest : "6.0", isReadOnly : false};
+        const newObj = {loanId : "loan"+loanNumber, loanName : "대출"+loanNumber, loanAmount : 1000000, loanInterest : "5.0", isReadOnly : false};
         newLoan.push(newObj);
 
         surveyData.my.loan = newLoan;
@@ -143,12 +140,10 @@ function SurveyMyAsset({completeBtnClickCnt, commonCompleteLogic}){
 
         // 차
         if(carYn === "Y"){
-            surveyData.my.carPrice = carPrice;
             surveyData.my.carLoan = carLoan;
             surveyData.my.carLoanRate = carLoanRate;
             surveyData.my.carCostMonthly = carCostMonthly;
         }else{
-            surveyData.my.carPrice = 0;
             surveyData.my.carLoan = 0;
             surveyData.my.carLoanRate = carLoanRate;
             surveyData.my.carCostMonthly = 0;
@@ -220,7 +215,6 @@ function SurveyMyAsset({completeBtnClickCnt, commonCompleteLogic}){
         {carYn === "Y"
         ? <Fragment>
             <p className="question-add">① 자동차 대출 정보를 입력해주세요.</p>
-            <p>- 가격(현재시세) : <input className='btn1' value={carPrice.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"carPrice")}}/>({toKoreanMoneyUnit(carPrice)})</p>
             <p>- <Mapping txt="ⓐ"/>잔여 대출금 : <input className='btn1' value={carLoan.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"carLoan")}}/>({toKoreanMoneyUnit(carLoan)}),
             대출금리 : <input className='btn1' value={carLoanRate.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"carLoanRate")}}/> %
             <span> (월 대출이자 : {toKoreanMoneyUnit(Math.round(carLoan*(carLoanRate/100)/12))})</span>

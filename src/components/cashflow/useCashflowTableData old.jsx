@@ -232,7 +232,7 @@ export const useCashflowTableData = () => {
                     row.eventRetirementPay = base?.salaryMonthly * row.salaryRiseRateStack * totalWorkYear;
                     row.totalEventNote = (row?.totalEventNote ?? "") + "퇴직금(5-ⓑ)"
                 }else{
-                    row.eventRetirementPay = row.eventRetirementPay;
+                    // row.eventRetirementPay = row.eventRetirementPay;
                 }
 
                 row.totalEvent = row.eventRetirementPay;

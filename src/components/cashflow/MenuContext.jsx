@@ -28,9 +28,9 @@ export const MenuProvider = ({ children }) => {
         BASE_INDEX : "2. 지수",
         MY : "합산 정보",
         MY_ASSET : "3. 부부 자산",
-        MY_SPENDING : "4. 부부 지출",
-        MY_INCOME : "5-1. 내 수입",
-        YOUR_INCOME : "5-2. 배우자 수입",
+        MY_INCOME : "4-1. 내 수입",
+        YOUR_INCOME : "4-2. 배우자 수입",
+        MY_SPENDING : "5. 부부 지출",
         ADD : "추가 정보",
         ADD_MARRY : "6. 결혼",
         ADD_BABY : "7. 아기",
@@ -47,8 +47,8 @@ export const MenuProvider = ({ children }) => {
         BASE_INDEX : "2. 지수",
         MY : "기본 정보",
         MY_ASSET : "3. 자산",
-        MY_SPENDING : "4. 지출",
-        MY_INCOME : "5. 수입",
+        MY_INCOME : "4. 수입",
+        MY_SPENDING : "5. 지출",
         // YOUR_INCOME : "6. 배우자 수입",
         ADD : "추가 정보",
         ADD_MARRY : "6. 결혼",
@@ -81,11 +81,10 @@ export const MenuProvider = ({ children }) => {
             
             : div===menuEnum.MY_ASSET? menuEnum.MY + " 〉 " + menuEnum.MY_ASSET
             : div===menuEnum.MY_INCOME? menuEnum.MY + " 〉 " + menuEnum.MY_INCOME
+            : div===menuEnum.YOUR_INCOME? menuEnum.MY + " 〉 " + menuEnum.YOUR_INCOME
             : div===menuEnum.MY_SPENDING? menuEnum.MY + " 〉 " + menuEnum.MY_SPENDING
-            
-            : div===menuEnum.YOUR_ASSET? menuEnum.YOUR + " 〉 " + menuEnum.YOUR_ASSET
-            : div===menuEnum.YOUR_INCOME? menuEnum.YOUR + " 〉 " + menuEnum.YOUR_INCOME
-            : div===menuEnum.YOUR_SPENDING? menuEnum.YOUR + " 〉 " + menuEnum.YOUR_SPENDING
+            // : div===menuEnum.YOUR_ASSET? menuEnum.YOUR + " 〉 " + menuEnum.YOUR_ASSET
+            // : div===menuEnum.YOUR_SPENDING? menuEnum.YOUR + " 〉 " + menuEnum.YOUR_SPENDING
 
             : div===menuEnum.ADD_MARRY? menuEnum.ADD + " 〉 " + menuEnum.ADD_MARRY
             : div===menuEnum.ADD_BABY? menuEnum.ADD + " 〉 " + menuEnum.ADD_BABY

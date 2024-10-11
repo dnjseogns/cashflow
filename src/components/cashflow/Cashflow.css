@@ -51,7 +51,7 @@
 /*******************************************/
 /* survey */
 .cf-right .survey-area{ background: #F1F1F1; border: 1px solid #9BBEC8; border-left: 0px solid #9BBEC8; 
-    width: 84.5%; min-width: 500px; z-index: 10;
+    width: 59%; min-width: 500px; z-index: 10;
     overflow: auto; max-height: 95%; height: auto;
 }
 
