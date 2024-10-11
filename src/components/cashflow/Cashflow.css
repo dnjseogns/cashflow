@@ -59,7 +59,7 @@
 .cf-right .survey-area .survey-title{padding: 20px; background-color: #427D9D; font-weight: 600; color:white;display:flex; justify-content:space-between;}
 .cf-right .survey-area .survey-title a{cursor: pointer;}
 /* survey tail*/
-.cf-right .survey-area .survey-tail{padding: 20px; font-weight: 600; color:white; display: flex; justify-content: flex-end;}
+.cf-right .survey-area .survey-tail{padding: 20px; font-weight: 600; color:white; display: flex; justify-content: space-between;}
 .cf-right .survey-area .survey-tail button.complete{padding: 6px 30px 6px 30px; font-weight: 600; background-color: #427D9D; color: white;
     border: none; border-radius: 10px;}
 /* survey content */

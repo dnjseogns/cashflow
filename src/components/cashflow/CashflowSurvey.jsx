@@ -30,13 +30,13 @@ function CashflowSurvey(){
     const surveyData = useSelector((store) => store.Survey).data;
     const dispatch = useDispatch();
     const [completeBtnClickCnt,setCompleteBtnClickCnt] = useState(0);
+
+    const [prevNextDiv, setPrevNextDiv] = useState("NEXT");
     
     const commonCompleteLogic = () => {
         //완료
         const isSurveyCompleted = surveyData.isCompleted;
         isSurveyCompleted[surveyDiv] = true;
-
-        // console.log("aa", ;
 
         const menuEnumKeyArr = Object.keys(menuEnum);
         let menuEnumValueArr = [];
@@ -46,17 +46,31 @@ function CashflowSurvey(){
             }
         });
         const indexOfValue = menuEnumValueArr.indexOf(surveyDiv);
-        if(indexOfValue === menuEnumValueArr.length - 1){
-            setSurveyDivition(""); //마지막이라면
+
+        if(prevNextDiv === "NEXT"){
+            if(indexOfValue === menuEnumValueArr.length - 1){
+                setSurveyDivition(""); //마지막이라면
+            }else{
+                const nextValue = menuEnumValueArr[indexOfValue + 1];
+                if(isSurveyCompleted[nextValue] === undefined) {isSurveyCompleted[nextValue] = false;}
+                setSurveyDivition(nextValue);
+            }
         }else{
-            const nextValue = menuEnumValueArr[indexOfValue + 1];
-            if(isSurveyCompleted[nextValue] === undefined) {isSurveyCompleted[nextValue] = false;}
-            setSurveyDivition(nextValue);
+            if(indexOfValue === 0){
+                setSurveyDivition(""); //처음이라면
+            }else{
+                const nextValue = menuEnumValueArr[indexOfValue - 1];
+                if(isSurveyCompleted[nextValue] === undefined) {isSurveyCompleted[nextValue] = false;}
+                setSurveyDivition(nextValue);
+            }
         }
 
         surveyData.isCompleted = isSurveyCompleted;
         dispatch(SvSave(surveyData));
     }
+
+    console.log("surveyDiv",surveyDiv);
+
     return (
     <Fragment>
         {surveyDiv===""
@@ -91,7 +105,14 @@ function CashflowSurvey(){
                 }
                 </div>
                 <div className='survey-tail'>
-                    <button className='complete' onClick={()=>{setCompleteBtnClickCnt(completeBtnClickCnt+1)}}>
+                {surveyDiv === menuEnum.GUIDE 
+                ? <button className='complete' onClick={()=>{setPrevNextDiv("PREV"); setCompleteBtnClickCnt(completeBtnClickCnt+1);}}>
+                    이전
+                </button>
+                : <button className='complete' onClick={()=>{setPrevNextDiv("PREV"); setCompleteBtnClickCnt(completeBtnClickCnt+1);}}>
+                    이전
+                </button>}
+                    <button className='complete' onClick={()=>{setPrevNextDiv("NEXT"); setCompleteBtnClickCnt(completeBtnClickCnt+1); }}>
                         {surveyDiv === menuEnum.GUIDE ? "시작하기" : "완료"}
                     </button>
                 </div>

@@ -232,7 +232,6 @@ export const useCashflowTableData = () => {
                     row.pension = my?.pensionMonthly*12 * Math.pow((1 + base.indexInflation/100), row?.age - 65);
                 }
             }
-
             if(isCompleted?.[menuEnum.YOUR_INCOME] === true){
                 //배우자 수입 -> 연봉상승률(누적)
                 const yourSalaryRiseRateGap = (your?.salaryRiseRate1 - your?.salaryRiseRate25) / 25;
@@ -266,8 +265,6 @@ export const useCashflowTableData = () => {
 
                 row.yourTotalIncome = (row?.yourSalary??0) + (row?.yourSideJob??0) + (row?.yourPension??0);
             }
-
-
             if(isCompleted?.[menuEnum.MY_INCOME] === true){
                 //수입 -> 합계
                 row.totalIncome = (row?.salary??0) + (row?.sideJob??0) + (row?.pension??0) + (row.yourTotalIncome??0);
@@ -295,10 +292,11 @@ export const useCashflowTableData = () => {
                 });
                 row.loanCost = Math.round(loanCost/12)*12;
             }
-            if(isCompleted?.[menuEnum.MY_ASSET] === true){
+            if(isCompleted?.[menuEnum.MY_SPENDING] === true){
                 //지출 -> 기타소비
-                //
+                row.etcExpense = Math.round((my?.etcExpenseMonthly ?? 0) * 12 * row.inflationStack) * -1;
             }
+
             if(isCompleted?.[menuEnum.MY_ASSET] === true){
                 //지출 -> 합계
                 row.totalConsumption = (row?.houseCost??0) + (row?.carCost??0) + (row?.loanCost??0) + (row?.etcExpense??0);
