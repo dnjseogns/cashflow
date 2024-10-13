@@ -308,21 +308,44 @@ export const useCashflowTableData = () => {
 
 
             if(isCompleted?.[menuEnum.MY_INCOME] === true){
-                //퇴직금
-                if(row.age == base?.retireAge){
-                    const totalWorkYear = loopCnt + (base?.workYear ?? 1);
-                    row.eventRetirementPay = base?.salaryMonthly * row.salaryRiseRateStack * totalWorkYear;
-                    row.totalEventNote = (row?.totalEventNote ?? "") + "퇴직금(5-ⓑ)"
-                }else{
-                    // row.eventRetirementPay = row.eventRetirementPay;
+                //이벤트 -> 퇴직금
+                if(row.age == my?.retireAge){
+                    const totalWorkYear = loopCnt + (my?.workYear ?? 1);
+                    row.eventRetirementPay = my?.salaryMonthly * row.salaryRiseRateStack * totalWorkYear;
+                    row.eventRetirementMemo = "퇴직금,";
                 }
-
-                row.totalEvent = row.eventRetirementPay;
+            }
+            if(isCompleted?.[menuEnum.YOUR_INCOME] === true){
+                //이벤트 -> 퇴직금
+                if(row.yourAge == your?.retireAge){
+                    const totalWorkYear = loopCnt + (your?.workYear ?? 1);
+                    row.eventYourRetirementPay = your?.salaryMonthly * row.yourSalaryRiseRateStack * totalWorkYear;
+                    row.eventYourRetirementMemo = "배우자 퇴직금,";
+                }
+            }
+            if(isCompleted?.[menuEnum.ADD_MARRY] === true){
+                //이벤트 -> 결혼비용
+                if(add.marryYn === "Y"){
+                    if(row.age == add.marryAge){
+                        row.eventMarryPay = (add.marryPrice + add.marryTripPrice + add.furniturePrice) * -1
+                                                + (add.parentSupportPrice);
+                        row.eventMarryMemo = "결혼,";
+                    }
+                }
             }
 
             if(isCompleted?.[menuEnum.MY_INCOME] === true)
             {
-                row.totalEvent = row.eventRetirementPay;
+                //이벤트 합계
+                if(row?.eventRetirementPay === undefined 
+                    && row?.eventYourRetirementPay === undefined 
+                    && (row.eventMarryPay === undefined)){
+                    //
+                }else{
+                    row.totalEventPrice = (row?.eventRetirementPay??0)+(row?.eventYourRetirementPay??0)+(row.eventMarryPay??0);
+                    row.totalEventMemo = (row?.eventRetirementMemo??"")+(row?.eventYourRetirementMemo??"")+(row.eventMarryMemo??"");
+                    row.totalEventMemo = row.totalEventMemo.substring(0, row.totalEventMemo.length-1);
+                }
             }
 
 
@@ -332,7 +355,7 @@ export const useCashflowTableData = () => {
 
             if(isCompleted?.[menuEnum.MY_ASSET] === true){
                 //잔액
-                row.totalBalance = (row?.totalIncome??0) + (row?.totalConsumption??0);
+                row.totalBalance = (row?.totalIncome??0) + (row?.totalConsumption??0) + (row.totalEventPrice??0);
             }
 
 

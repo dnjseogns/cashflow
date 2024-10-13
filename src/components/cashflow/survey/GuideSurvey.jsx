@@ -9,7 +9,7 @@ function GuideSurvey ({completeBtnClickCnt, commonCompleteLogic}){
     return (
         <Fragment>
             <div style={{height:"400px", position:"relative"}}>
-                <p className='question'>(1) 누적자산 계산 방법</p>
+                <p className='question'>※ 누적자산 계산 방법</p>
                 <span className='guideSubTitleTxt' style={{top:"10%"}}>수입/지출</span>
                 <span className='guideTxt' style={{top:"20%"}}>수입<span className='guideDetailTxt'>(현재 연봉 × 연봉상승률)</span></span>
                 <span className='guideTxt' style={{top:"30%"}}>지출<span className='guideDetailTxt'>(현재 지출 × 물가상승률)</span></span>
@@ -51,7 +51,6 @@ function GuideSurvey ({completeBtnClickCnt, commonCompleteLogic}){
             </div>
             <div>
                 <p className='question'>※ 참고해주세요!</p>
-                <p className='note'>- 현재 맞벌이 이신 경우, 부부합산 소득 및 자산으로 작성해주세요.</p>
                 <p className='note'>- 모든 소득은 세후로 고려하며, 세금계산은 하지 않습니다.</p>
                 <p className='note'>- 입력해주신 데이터는 수집되지 않으며, 계산에만 활용됩니다.</p>
             </div>

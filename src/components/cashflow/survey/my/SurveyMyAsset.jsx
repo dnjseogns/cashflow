@@ -180,10 +180,9 @@ function SurveyMyAsset({completeBtnClickCnt, commonCompleteLogic}){
                     </p>
                     <p>- <Mapping txt="ⓑ"/>보증금 중 자기자본(자동계산) : <input className='btn1 readonly' value={(housePriceTotal - housePriceLoan).toLocaleString('ko-KR')} readOnly={true}/>({toKoreanMoneyUnit(housePriceTotal - housePriceLoan)})</p>
                 
-                <div>
                     <p className="question-add">② 월 주거비(월세 + 관리비 + 공과금 등...)를 입력해주세요.</p>
                     <p>- <Mapping txt="ⓒ"/> : <input className='btn1' value={houseCostMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"houseCostMonthly")}}/>({toKoreanMoneyUnit(houseCostMonthly)})</p>
-                </div>
+                
             </Fragment>
             : null}
 

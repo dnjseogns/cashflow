@@ -127,8 +127,8 @@ function CashflowTable(){
                             <td className={`${row?.etcExpense < 0 ? 'minus' : ''}`}>{toKoreanMoneySimpleUnit(row?.etcExpense)}</td>
                             <td className={`sum ${row?.totalConsumption < 0 ? 'minus' : ''}`}>{toKoreanMoneySimpleUnit(row?.totalConsumption)}</td>
                             
-                            {row?.totalEventNote ? <td><Mapping txt={row?.totalEventNote}/></td> : <td></td>}
-                            <td className={`sum ${row?.totalEvent < 0 ? 'minus' : ''}`}>{toKoreanMoneySimpleUnit(row?.totalEvent)}</td>
+                            {row?.totalEventMemo ? <td><Mapping txt={row?.totalEventMemo}/></td> : <td></td>}
+                            <td className={`sum ${row?.totalEventPrice < 0 ? 'minus' : ''}`}>{toKoreanMoneySimpleUnit(row?.totalEventPrice)}</td>
 
                             <td className={`sum ${row?.totalBalance < 0 ? 'minus' : ''}`}>{toKoreanMoneySimpleUnit(row?.totalBalance)}</td>
 

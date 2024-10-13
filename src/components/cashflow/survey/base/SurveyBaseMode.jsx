@@ -19,8 +19,13 @@ function SurveyBaseMode({completeBtnClickCnt, commonCompleteLogic}){
         if(div==="marryYn"){
             surveyData.base.marryYn = e.target.value;
         }else if(div==="myAge"){
-            surveyData.my.age = e.target.value;
+            const ret = expCheckInt(e.target.value, 0, 100);
+            if(ret === null){return;}
+            else{ surveyData.my.age = ret; }
         }if(div==="yourAge"){
+            const ret = expCheckInt(e.target.value, 0, 100);
+            if(ret === null){return;}
+            else{ surveyData.your.age = ret; }
             surveyData.your.age = e.target.value;
         }
         

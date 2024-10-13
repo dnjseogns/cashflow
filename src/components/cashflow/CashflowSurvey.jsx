@@ -20,6 +20,7 @@ import SurveyMyAsset from './survey/my/SurveyMyAsset';
 import SurveyMySpending from './survey/my/SurveyMySpending';
 import SurveyMyIncome from './survey/my/SurveyMyIncome';
 import SurveyYourIncome from './survey/your/SurveyYourIncome';
+import SurveyAddMarry from './survey/add/SurveyAddMarry';
 
 /* 입력해주신 자료는 이번 계산에만 활용합니다. 이 사이트는 어떤 개인 정보도 저장하지 않습니다. */
 
@@ -35,32 +36,69 @@ function CashflowSurvey(){
     
     const commonCompleteLogic = () => {
         //완료
-        const isSurveyCompleted = surveyData.isCompleted;
+        const isSurveyCompleted = JSON.parse(JSON.stringify(surveyData.isCompleted));
         isSurveyCompleted[surveyDiv] = true;
 
         const menuEnumKeyArr = Object.keys(menuEnum);
         let menuEnumValueArr = [];
         menuEnumKeyArr.forEach((item)=>{
-            if(menuEnum[item].includes('.')){
+            if(menuEnum[item].includes('.') || menuEnum[item].includes('시작하기') || menuEnum[item].includes('다시하기')){
                 menuEnumValueArr.push(menuEnum[item]);
             }
         });
+
         const indexOfValue = menuEnumValueArr.indexOf(surveyDiv);
 
         if(prevNextDiv === "NEXT"){
-            if(indexOfValue === menuEnumValueArr.length - 1){
-                setSurveyDivition(""); //마지막이라면
-            }else{
-                const nextValue = menuEnumValueArr[indexOfValue + 1];
-                if(isSurveyCompleted[nextValue] === undefined) {isSurveyCompleted[nextValue] = false;}
+            if(indexOfValue === 0 && Object.keys(isSurveyCompleted).filter((key)=>isSurveyCompleted[key] !== undefined).length >= 2){ //처음
+                Object.keys(isSurveyCompleted).map((key)=>{
+                    if(key === menuEnum.BASE_MODE){
+                        isSurveyCompleted[key] = false;
+                        setSurveyDivition(key);
+                    }else{
+                        isSurveyCompleted[key] = undefined;
+                    }
+                });
+            }
+            else if(indexOfValue === menuEnumValueArr.length -1){ //마지막
+                Object.keys(isSurveyCompleted).map((key)=>{
+                    if(key === menuEnum.BASE_MODE){
+                        isSurveyCompleted[key] = false;
+                        setSurveyDivition(key);
+                    }else{
+                        isSurveyCompleted[key] = undefined;
+                    }
+                });
+            } else if(surveyData.base.marryYn == "Y" && menuEnumValueArr[indexOfValue + 1] == menuEnum.ADD_MARRY){
+                const curValue = menuEnumValueArr[indexOfValue];
+                isSurveyCompleted[curValue] = true;
+                const nextValue = menuEnumValueArr[indexOfValue + 2];
+                isSurveyCompleted[nextValue] = false;
                 setSurveyDivition(nextValue);
             }
-        }else{
+            else{
+                const curValue = menuEnumValueArr[indexOfValue];
+                isSurveyCompleted[curValue] = true;
+                const nextValue = menuEnumValueArr[indexOfValue + 1];
+                isSurveyCompleted[nextValue] = false;
+                setSurveyDivition(nextValue);
+            }
+        }else if(prevNextDiv === "PREV"){
             if(indexOfValue === 0){
                 setSurveyDivition(""); //처음이라면
-            }else{
+            }
+            else if(surveyData.base.marryYn == "Y" && menuEnumValueArr[indexOfValue - 1] == menuEnum.ADD_MARRY){
+                const curValue = menuEnumValueArr[indexOfValue];
+                isSurveyCompleted[curValue] = undefined;
+                const nextValue = menuEnumValueArr[indexOfValue - 2];
+                isSurveyCompleted[nextValue] = false;
+                setSurveyDivition(nextValue);
+            }
+            else{
+                const curValue = menuEnumValueArr[indexOfValue];
+                isSurveyCompleted[curValue] = undefined;
                 const nextValue = menuEnumValueArr[indexOfValue - 1];
-                if(isSurveyCompleted[nextValue] === undefined) {isSurveyCompleted[nextValue] = false;}
+                isSurveyCompleted[nextValue] = false;
                 setSurveyDivition(nextValue);
             }
         }
@@ -69,7 +107,11 @@ function CashflowSurvey(){
         dispatch(SvSave(surveyData));
     }
 
-    console.log("surveyDiv",surveyDiv);
+
+    const tmpSurveyTitle = 
+    Object.keys(surveyData.isCompleted).length >= 2 && surveyDiv===menuEnum.GUIDE
+    ? "다시하기"
+    : surveyTitle;
 
     return (
     <Fragment>
@@ -77,10 +119,10 @@ function CashflowSurvey(){
         ? null
         : <Fragment>
             <article className={'survey-area '+surveyDiv}>
-                <div className='survey-title'><span>{surveyTitle}</span><a onClick={()=>{setSurveyDiv("");}}>⨉</a></div>
+                <div className='survey-title'><span>{tmpSurveyTitle}</span><a onClick={()=>{setSurveyDiv("");}}>⨉</a></div>
                 <div className='survey-content'>
                 {
-                    // 가이드
+                    // 시작하기
                     surveyDiv===menuEnum.GUIDE? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     // 기본 정보
                     : surveyDiv===menuEnum.BASE_MODE? <SurveyBaseMode completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
@@ -94,26 +136,28 @@ function CashflowSurvey(){
                     // : surveyDiv===menuEnum.YOUR_ASSET? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     // : surveyDiv===menuEnum.YOUR_SPENDING? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     // 추가 정보
-                    : surveyDiv===menuEnum.ADD_MARRY? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.ADD_MARRY? <SurveyAddMarry completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.ADD_BABY? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.ADD_HOUSE? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.ADD_CAR? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.ADD_PARENT? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.ADD_RETIRE? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.ADD_ETC? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.DONE? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : null
                 }
                 </div>
                 <div className='survey-tail'>
-                {surveyDiv === menuEnum.GUIDE 
-                ? <button className='complete' onClick={()=>{setPrevNextDiv("PREV"); setCompleteBtnClickCnt(completeBtnClickCnt+1);}}>
-                    이전
-                </button>
+                {surveyDiv === menuEnum.GUIDE || surveyDiv === menuEnum.BASE_MODE
+                ? <button className='complete' style={{visibility:"hidden"}}>이전</button>
                 : <button className='complete' onClick={()=>{setPrevNextDiv("PREV"); setCompleteBtnClickCnt(completeBtnClickCnt+1);}}>
                     이전
                 </button>}
                     <button className='complete' onClick={()=>{setPrevNextDiv("NEXT"); setCompleteBtnClickCnt(completeBtnClickCnt+1); }}>
-                        {surveyDiv === menuEnum.GUIDE ? "시작하기" : "완료"}
+                        {surveyDiv === menuEnum.GUIDE && Object.keys(surveyData.isCompleted).length <= 1 ? "시작하기" 
+                        : surveyDiv === menuEnum.GUIDE && Object.keys(surveyData.isCompleted).length > 1 ? "다시하기" 
+                        : surveyDiv===menuEnum.ADD_ETC ? "완료"
+                        : "다음"}
                     </button>
                 </div>
             </article>
