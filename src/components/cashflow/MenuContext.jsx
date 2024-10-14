@@ -95,6 +95,7 @@ export const MenuProvider = ({ children }) => {
             : div===menuEnum.ADD_PARENT? menuEnum.ADD + " 〉 " + menuEnum.ADD_PARENT
             : div===menuEnum.ADD_RETIRE? menuEnum.ADD + " 〉 " + menuEnum.ADD_RETIRE
             : div===menuEnum.ADD_ETC? menuEnum.ADD + " 〉 " + menuEnum.ADD_ETC
+            : div===menuEnum.DONE? menuEnum.DONE
             : "";
         setSurveyTitle(surveyTitle);
     }

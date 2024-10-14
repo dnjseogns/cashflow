@@ -39,7 +39,6 @@ const SurveyAddHouse = ({completeBtnClickCnt, commonCompleteLogic}) => {
         commonCompleteLogic();
     },[completeBtnClickCnt]);
 
-    console.log("house",house);
     return (
         <Fragment>
         <div>

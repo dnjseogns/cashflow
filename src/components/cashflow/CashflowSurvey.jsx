@@ -17,6 +17,11 @@ import SurveyYourIncome from './survey/your/SurveyYourIncome';
 import SurveyAddMarry from './survey/add/SurveyAddMarry';
 import SurveyAddBaby from './survey/add/SurveyAddBaby';
 import SurveyAddHouse from './survey/add/SurveyAddHouse';
+import SurveyAddCar from './survey/add/SurveyAddCar';
+import SurveyAddParent from './survey/add/SurveyAddParent';
+import SurveyAddReemployment from './survey/add/SurveyAddReemployment';
+import SurveyAddCustomEvent from './survey/add/SurveyAddCustomEvent';
+import SurveySave from './survey/SurveySave';
 
 /* 입력해주신 자료는 이번 계산에만 활용합니다. 이 사이트는 어떤 개인 정보도 저장하지 않습니다. */
 
@@ -57,14 +62,15 @@ function CashflowSurvey(){
                 });
             }
             else if(indexOfValue === menuEnumValueArr.length -1){ //마지막
-                Object.keys(isSurveyCompleted).map((key)=>{
-                    if(key === menuEnum.BASE_MODE){
-                        isSurveyCompleted[key] = false;
-                        setSurveyDivition(key);
-                    }else{
-                        isSurveyCompleted[key] = undefined;
-                    }
-                });
+                alert("저장 클릭 시 저장 그래프에 반영 예정");
+                // Object.keys(isSurveyCompleted).map((key)=>{
+                //     if(key === menuEnum.BASE_MODE){
+                //         isSurveyCompleted[key] = false;
+                //         setSurveyDivition(key);
+                //     }else{
+                //         isSurveyCompleted[key] = undefined;
+                //     }
+                // });
             } else if(surveyData.base.marryYn == "Y" && menuEnumValueArr[indexOfValue + 1] == menuEnum.ADD_MARRY){
                 const curValue = menuEnumValueArr[indexOfValue];
                 isSurveyCompleted[curValue] = true;
@@ -135,11 +141,11 @@ function CashflowSurvey(){
                     : surveyDiv===menuEnum.ADD_MARRY? <SurveyAddMarry completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.ADD_BABY? <SurveyAddBaby completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.ADD_HOUSE? <SurveyAddHouse completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                    : surveyDiv===menuEnum.ADD_CAR? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                    : surveyDiv===menuEnum.ADD_PARENT? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                    : surveyDiv===menuEnum.ADD_RETIRE? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                    : surveyDiv===menuEnum.ADD_ETC? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                    : surveyDiv===menuEnum.DONE? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.ADD_CAR? <SurveyAddCar completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.ADD_PARENT? <SurveyAddParent completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.ADD_RETIRE? <SurveyAddReemployment completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.ADD_ETC? <SurveyAddCustomEvent completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.DONE? <SurveySave completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : null
                 }
                 </div>
@@ -152,7 +158,7 @@ function CashflowSurvey(){
                     <button className='complete' onClick={()=>{setPrevNextDiv("NEXT"); setCompleteBtnClickCnt(completeBtnClickCnt+1); }}>
                         {surveyDiv === menuEnum.GUIDE && Object.keys(surveyData.isCompleted).length <= 1 ? "시작하기" 
                         : surveyDiv === menuEnum.GUIDE && Object.keys(surveyData.isCompleted).length > 1 ? "다시하기" 
-                        : surveyDiv===menuEnum.ADD_ETC ? "완료"
+                        : surveyDiv===menuEnum.DONE ? "저장하기"
                         : "다음"}
                     </button>
                 </div>

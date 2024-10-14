@@ -35,13 +35,7 @@ function CashflowTable(){
     const isBabyCostVisible = (isCompleted?.[menuEnum.ADD_BABY] === true 
         && ((add.curBabyYn === "Y" && add.curBabyList.length >= 1) || (add.willBabyYn === "Y" && add.willBabyList.length >= 1))
     );
-    // const isHouseCostVisible = !!(cashflowData?.timeline ?? [])[0]?.houseCost;
-    // const isCarCostVisible = !!(cashflowData?.timeline ?? [])[0]?.carCost;
-
-    // const isAssetLoanVisible = !!(cashflowData?.timeline ?? [])[0]?.assetLoan;
-    // const isAssetHouseLoanVisible = !!(cashflowData?.timeline ?? [])[0]?.assetLoan;
-    // const isAssetSavingVisible = !!(cashflowData?.timeline ?? [])[0]?.assetSaving;
-    // const isAssetInvestVisible = !!(cashflowData?.timeline ?? [])[0]?.assetInvest;
+    const isParentCostVisible = isCompleted?.[menuEnum.ADD_PARENT] === true && add.parentCareYn === "Y";
 
     return (
         <Fragment>
@@ -65,6 +59,7 @@ function CashflowTable(){
                     <col width="100px"/>
                     {isPartnerSpendingVisible ? <col width="100px"/> : null}
                     {isBabyCostVisible ? <col width="100px"/> : null}
+                    {isParentCostVisible ? <col width="100px"/> : null}
                     <col width="100px"/>
                     {/* 이벤트 */}
                     <col width="100px"/>
@@ -86,7 +81,7 @@ function CashflowTable(){
                         <th colSpan={3 + (isSalaryRiseRateStackVisible ? 1 : 0) + (isSideJobVisible ? 1 : 0) + (isYourIncomeVisible ? 1 : 0)
                                          + (isPartnerIncomeVisible ? 1 : 0)
                         }>수입(가)</th>
-                        <th colSpan={5 + (isPartnerSpendingVisible ? 1 : 0) + (isBabyCostVisible ? 1 : 0)}>지출(나)</th>
+                        <th colSpan={5 + (isPartnerSpendingVisible ? 1 : 0) + (isBabyCostVisible ? 1 : 0) + (isParentCostVisible ? 1 : 0)}>지출(나)</th>
                         <th colSpan={2}>이벤트(다)</th>
                         <th colSpan={1}>잔액(가+나+다)</th>
                         <th colSpan={1} className='gap'></th>
@@ -110,6 +105,7 @@ function CashflowTable(){
                         <th>기타소비<br/><Mapping txt="(5.)"/></th>
                         {isPartnerSpendingVisible ? <th>배우자 지출<br/><Mapping txt="(6.)"/></th> : null}
                         {isBabyCostVisible ? <th>양육비<br/><Mapping txt="(7.)"/></th> : null}
+                        {isParentCostVisible ? <th>요양비<br/><Mapping txt="(10.)"/></th> : null}
                         <th>합계</th>
 
                         <th>내용</th>
@@ -147,6 +143,7 @@ function CashflowTable(){
                             <td className={`${row?.etcExpense < 0 ? 'minus' : ''}`}>{toKoreanMoneySimpleUnit(row?.etcExpense)}</td>
                             {isPartnerSpendingVisible ? <td className={`${row?.partnerTotalSpending < 0 ? 'minus' : ''}`}>{toKoreanMoneySimpleUnit(row?.partnerTotalSpending)}</td> : null}
                             {isBabyCostVisible ? <td className={`${row?.babyCost < 0 ? 'minus' : ''}`}>{toKoreanMoneySimpleUnit(row?.babyCost)}</td> : null}
+                            {isParentCostVisible ? <td className={`${row?.parentCost < 0 ? 'minus' : ''}`}>{toKoreanMoneySimpleUnit(row?.parentCost)}</td> : null}
                             <td className={`sum ${row?.totalConsumption < 0 ? 'minus' : ''}`}>{toKoreanMoneySimpleUnit(row?.totalConsumption)}</td>
                             
                             {row?.totalEventMemo ? <td><Mapping txt={row?.totalEventMemo}/></td> : <td></td>}

@@ -182,7 +182,7 @@ export const useCashflowTableData = () => {
         let salaryRiseRateStack = 1.0;
         let assetSavingStack = my?.currAssetSaving ?? 0;
         let assetInvestStack = my?.currAssetInvest ?? 0;
-        let assetHousePriceStack = add.house?.find((item)=>item.age === -1)?.price ?? 0;
+        let assetHousePriceStack = add.house?.find((item)=>item.age == -1)?.price ?? 0;
         // 배우자
         let yourSalaryRiseRateStack = 1.0;
 
@@ -221,7 +221,7 @@ export const useCashflowTableData = () => {
                 const salaryRiseRateGap = (my?.salaryRiseRate1 - my?.salaryRiseRate25) / 25;
                 let salaryRiseRate = my?.salaryRiseRate1 - salaryRiseRateGap * (my?.workYear + loopCnt - 3) // 1년차 + loop (1) - 3
                 salaryRiseRate = salaryRiseRate < my?.salaryRiseRate25 ? my?.salaryRiseRate25 : salaryRiseRate;
-                if(loopCnt === 1){
+                if(loopCnt == 1){
                     salaryRiseRateStack = 1.0;
                 } else {
                     salaryRiseRateStack = numRound(salaryRiseRateStack * (1 + salaryRiseRate/100),3);
@@ -234,6 +234,14 @@ export const useCashflowTableData = () => {
                     row.salary = 0;
                 }else{
                     row.salary = Math.round((my?.salaryMonthly * 12) * row.salaryRiseRateStack);
+                }
+            }
+            if(isCompleted?.[menuEnum.ADD_RETIRE] === true){
+                //내 수입 -> 재취업
+                if(add.reemploymentYn === "Y"){
+                    if(my?.retireAge < row.age && row.age <= add.reemploymentAge){ //은퇴 체크
+                        row.salary = Math.round((my?.salaryMonthly * 12) * row.salaryRiseRateStack) * 0.6;
+                    }
                 }
             }
             if(isCompleted?.[menuEnum.MY_INCOME] === true){
@@ -252,7 +260,7 @@ export const useCashflowTableData = () => {
                 const yourSalaryRiseRateGap = (your?.salaryRiseRate1 - your?.salaryRiseRate25) / 25;
                 let yourSalaryRiseRate = your?.salaryRiseRate1 - yourSalaryRiseRateGap * (your?.workYear + loopCnt - 3) // 1년차 + loop (1) - 3
                 yourSalaryRiseRate = yourSalaryRiseRate < your?.salaryRiseRate25 ? your?.salaryRiseRate25 : yourSalaryRiseRate;
-                if(loopCnt === 1){
+                if(loopCnt == 1){
                     yourSalaryRiseRateStack = 1.0;
                 } else {
                     yourSalaryRiseRateStack = numRound(yourSalaryRiseRateStack * (1 + yourSalaryRiseRate/100),3);
@@ -368,11 +376,22 @@ export const useCashflowTableData = () => {
                 });
                 row.babyCost = babyCost;
             }
+            if(isCompleted?.[menuEnum.ADD_PARENT] === true){
+                if(add.parentCareYn === "Y"){
+                    let parentCost = 0;
+                    const parentAge = add.parentCurrentAge + loopCnt - 1;
+                    if(add.parentNursingHomeAge <= parentAge && parentAge < add.parentNursingHomeAge + add.parentNursingHomePeriod){
+                        parentCost = Math.round((add.parentNursingHomePriceMonthly * 12) * row.inflationStack);
+                    }
+                    // console.log("parentCost", parentAge, parentCost);
+                    row.parentCost = parentCost * -1;
+                }
+            }
 
             if(isCompleted?.[menuEnum.MY_ASSET] === true){
                 //지출 -> 합계
                 row.totalConsumption = (row?.houseCost??0) + (row?.carCost??0) + (row?.loanCost??0) + (row?.etcExpense??0)
-                                        + (row?.partnerTotalSpending??0) + (row?.babyCost??0);
+                                        + (row?.partnerTotalSpending??0) + (row?.babyCost??0) + (row?.parentCost??0);
             }
 
 
@@ -421,23 +440,39 @@ export const useCashflowTableData = () => {
                     }
                 }
             }
+            if(isCompleted?.[menuEnum.ADD_ETC] === true){
+                if(Array.isArray(add.eventList) && add.eventList.length >= 1){
+                    row.eventEtcAmount = 0;
+                    row.eventEtcMemo = "";
+                    add.eventList.forEach((eventItem)=>{
+                        if(row.age == eventItem.age){
+                            row.eventEtcAmount = row.eventEtcAmount + eventItem.price;
+                            row.eventEtcMemo = row.eventEtcMemo + eventItem.name + ",";
+                        }
+                    })
+
+                }
+            }
             if(isCompleted?.[menuEnum.MY_INCOME] === true)
             {
                 //이벤트 합계
                 if(row?.eventRetirementPay === undefined 
                     && row?.eventYourRetirementPay === undefined 
                     && row?.eventMarryPay === undefined
-                    && row?.eventPartnerAsset === undefined){
+                    && row?.eventPartnerAsset === undefined
+                    && row?.eventEtcAmount === undefined){
                     //
                 }else{
                     row.totalEventPrice = (row?.eventRetirementPay??0)
                                         +(row?.eventYourRetirementPay??0)
                                         +(row?.eventMarryPay??0)
-                                        +(row?.eventPartnerAsset??0);
+                                        +(row?.eventPartnerAsset??0)
+                                        +(row?.eventEtcAmount??0);
                     row.totalEventMemo = (row?.eventRetirementMemo??"")
                                         +(row?.eventYourRetirementMemo??"")
                                         +(row?.eventMarryMemo??"")
-                                        +(row?.eventPartnerAssetMemo??"");
+                                        +(row?.eventPartnerAssetMemo??"")
+                                        +(row?.eventEtcMemo??"");
                     row.totalEventMemo = row.totalEventMemo.substring(0, row.totalEventMemo.length-1);
                 }
             }
@@ -494,7 +529,6 @@ export const useCashflowTableData = () => {
                     });
 
                     if(assetLoanTotalAmount < 0){ // 잔액이 양수일 경우 + 대출이 있을 경우(음수)
-
                         my.loan = my.loan.map((loanItem)=>{
                             if(loanItem.loanAmountStack + tmpBalance <= 0){ //대출이 더 많을 때
                                 const retVal = {...loanItem, loanAmountStack : loanItem.loanAmountStack + tmpBalance};
@@ -504,7 +538,12 @@ export const useCashflowTableData = () => {
                                 tmpBalance = tmpBalance + loanItem.loanAmountStack;
                                 return {...loanItem, loanAmountStack : 0}
                             }
-                        })
+                        });
+
+                        if(tmpBalance > 0){ //대출 다 갚고 남은 금액
+                            assetSavingStack = assetSavingStack + Math.round(tmpBalance * (my?.bankRate??100)/100);
+                            assetInvestStack = assetInvestStack + Math.round(tmpBalance * (my?.investRate??0)/100);
+                        }
                     }else{ // 잔액이 양수일 경우 + 대출 없을 경우
                         assetSavingStack = assetSavingStack + Math.round(tmpBalance * (my?.bankRate??100)/100);
                         assetInvestStack = assetInvestStack + Math.round(tmpBalance * (my?.investRate??0)/100);
@@ -529,11 +568,11 @@ export const useCashflowTableData = () => {
             if(isCompleted?.[menuEnum.MY_ASSET] === true){
                 //누적자산 -> 주택
                 if(Array.isArray(add.house) && add.house.length >= 1){
-                    const newHouse = add.house.find((houseItem)=>(houseItem.age === i));
+                    const newHouse = add.house.find((houseItem)=>(houseItem.age == i));
                     if(newHouse){
                         assetHousePriceStack = newHouse.price;
                     }else{
-                        if(loopCnt === 1){
+                        if(loopCnt == 1){
                             // assetHousePriceStack = assetHousePriceStack;
                         }else{
                             const tmpCurHouseArr = add.house.filter((houseItem)=>houseItem.age < i);
