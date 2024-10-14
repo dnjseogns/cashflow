@@ -32,7 +32,7 @@ export const MenuProvider = ({ children }) => {
         YOUR_INCOME : "4-2. 배우자 수입",
         MY_SPENDING : "5. 부부 지출",
         ADD : "추가 정보",
-        ADD_MARRY : "6. 결혼",
+        ADD_MARRY : "6. 결혼(생략)",
         ADD_BABY : "7. 아기",
         ADD_HOUSE : "8. 집",
         ADD_CAR : "9. 자동차",

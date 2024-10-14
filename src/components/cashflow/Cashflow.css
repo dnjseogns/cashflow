@@ -90,6 +90,8 @@
 .cf-right .survey-area .survey-content .survey-table tr td img{ cursor: pointer;}
 .cf-right .survey-area .survey-content .survey-table tr td input{ background: white; border: 0px; width:100%;}
 .cf-right .survey-area .survey-content .survey-table tr td input.readonly{ background: #F1F1F1; border: 0px; width:100%;}
+.cf-right .survey-area .survey-content table .combo{ background-color: white; width: 100%; border: 0px;}
+.cf-right .survey-area .survey-content table .combo.readonly{ background: #F1F1F1; border: 0px; width:100%;}
 /* survey guide area */
 .cf-right .survey-area.guide{min-width: 800px;}
 .cf-right .survey-area .guideSubTitleTxt{position:absolute; top:0px; left: 0px; font-weight: 600;}

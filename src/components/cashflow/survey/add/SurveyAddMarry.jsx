@@ -9,7 +9,6 @@ import { isValueExist, expCheckInt, expCheckDouble, toKoreanMoneyUnit } from '@/
 const SurveyAddMarry = ({completeBtnClickCnt, commonCompleteLogic}) => {
     const dispatch = useDispatch();
     const surveyData = useSelector((store) => store.Survey).data;
-    const timeline = useSelector((store) => store.Cashflow)?.data?.timeline;
 
     const marryYn = surveyData?.add?.marryYn ?? "N";
     const marryAge = surveyData?.add?.marryAge ?? surveyData.my?.age;
@@ -18,19 +17,10 @@ const SurveyAddMarry = ({completeBtnClickCnt, commonCompleteLogic}) => {
     const furniturePrice = surveyData?.add?.furniturePrice ?? 0;
     const parentSupportPrice = surveyData?.add?.parentSupportPrice ?? 0;
     
-
-    const marryAgeTimeline = timeline?.find((item)=>item.age === marryAge);
-    // console.log("marryAgeTimeline",marryAgeTimeline);
-    
-    const partnerAge = surveyData?.add?.partnerAge ?? 20;
+    const partnerAge = surveyData?.add?.partnerAge ?? surveyData.my?.age;
     const partnerAsset = surveyData?.add?.partnerAsset ?? 0;
     const partnerIncomePercent = surveyData?.add?.partnerIncomePercent ?? 100;
     const partnerSpendingPercent = surveyData?.add?.partnerSpendingPercent ?? 100;
-    
-    const myIncome = marryAgeTimeline?.totalIncome??0;
-    const mySpending = ((marryAgeTimeline?.totalConsumption??0) - (marryAgeTimeline?.houseCost??0)) * -1;
-    const partnerIncome = Math.round(myIncome * partnerIncomePercent/100);
-    const partnerSpending = Math.round(mySpending * partnerSpendingPercent/100);
 
     const dispatchValue = (div, value) => {
         if(value === null){return;}
@@ -39,9 +29,13 @@ const SurveyAddMarry = ({completeBtnClickCnt, commonCompleteLogic}) => {
     const surveyOnChange = (e, div) => {
         if(div==="marryYn"){
             surveyData.add.marryYn = e.target.value;
-        } else if(div === "marryAge" || div === "partnerIncomePercent" || div === "partnerSpendingPercent"){
+        } else if(div === "marryAge" || div === "partnerAge"){
             dispatchValue(div, expCheckInt(e.target.value, 0, 100));
-        } else {
+        } else if(div === "partnerIncomePercent" || div === "partnerSpendingPercent"){
+            dispatchValue(div, expCheckInt(e.target.value, 0, 1000));
+        } else if(div === "partnerAsset"){
+            dispatchValue(div, expCheckInt(e.target.value, -10000000000, 10000000000));
+        }else {
             dispatchValue(div, expCheckInt(e.target.value, 0, 10000000000));
         } 
         
@@ -64,13 +58,21 @@ const SurveyAddMarry = ({completeBtnClickCnt, commonCompleteLogic}) => {
             surveyData.add.furniturePrice = furniturePrice;
             surveyData.add.parentSupportPrice = parentSupportPrice;
 
+            surveyData.add.partnerAge = partnerAge;
+            surveyData.add.partnerAsset = partnerAsset;
+            surveyData.add.partnerIncomePercent = partnerIncomePercent;
+            surveyData.add.partnerSpendingPercent = partnerSpendingPercent;
         }else{
             surveyData.add.marryYn = marryYn;
             surveyData.add.marryAge = undefined;
-            surveyData.add.marryPrice = 0;
-            surveyData.add.marryTripPrice = 0;
-            surveyData.add.furniturePrice = 0;
-            surveyData.add.parentSupportPrice = 0;
+            surveyData.add.marryPrice = undefined;
+            surveyData.add.marryTripPrice = undefined;
+            surveyData.add.furniturePrice = undefined;
+            surveyData.add.parentSupportPrice = undefined;
+            surveyData.add.partnerAge = undefined;
+            surveyData.add.partnerAsset = undefined;
+            surveyData.add.partnerIncomePercent = undefined;
+            surveyData.add.partnerSpendingPercent = undefined;
         }
         dispatch(SvSave(surveyData));
         commonCompleteLogic();
@@ -102,11 +104,11 @@ const SurveyAddMarry = ({completeBtnClickCnt, commonCompleteLogic}) => {
             <p className='note'>※ 집/자동차는 8번 9번 메뉴에서 작성해주세요.</p>
         </div>
         <div>
-            <p className="question">(3) 배우자 정보를 입력해주세요.</p>
+            <p className="question">(3) 결혼 시점 배우자 정보를 입력해주세요.</p>
             <p>- 나이 : <input className='btn1' value={partnerAge.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"partnerAge")}}/>세</p>
             <p>- 자산 : <input className='btn1' value={partnerAsset.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"partnerAsset")}}/>원<i> ({toKoreanMoneyUnit(partnerAsset)})</i></p>
-            <p>- 소득 : 내 ({marryAge}세)소득(<i>{toKoreanMoneyUnit(myIncome)}</i>)의 <input className='btn1' value={partnerIncomePercent.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"partnerIncomePercent")}}/>% → <i> 연 {toKoreanMoneyUnit(partnerIncome)}</i></p>
-            <p>- 지출 : 내 ({marryAge}세)지출(<i>{toKoreanMoneyUnit(mySpending)}</i>)의 <input className='btn1' value={partnerSpendingPercent.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"partnerSpendingPercent")}}/>% → <i> 연 {toKoreanMoneyUnit(partnerSpending)}</i></p>
+            <p>- 소득 : 내 소득의 <input className='btn1' value={partnerIncomePercent.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"partnerIncomePercent")}}/>%</p>
+            <p>- 지출 : 내 지출의 <input className='btn1' value={partnerSpendingPercent.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"partnerSpendingPercent")}}/>%</p>
         </div>
         </Fragment>
         : null}

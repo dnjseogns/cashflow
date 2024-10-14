@@ -47,26 +47,20 @@ function SurveyBaseIndex({completeBtnClickCnt, commonCompleteLogic}){
         </div>
         <div>
             <p className="question">(2) 예금금리 / 대출금리를 입력해주세요.</p>
-            <p>- <Mapping txt="ⓑ"/> 예금금리 : <input className='btn1' value={bankInterest} onChange={(e)=>{surveyOnChange(e,"bankInterest")}}/> %</p>
+            <p>- 예금금리 : <input className='btn1' value={bankInterest} onChange={(e)=>{surveyOnChange(e,"bankInterest")}}/> %</p>
             <p className='note'>※ 2000년 ~ 2023년 평균 기준금리(약 2.5%) 고려할 때, 예금금리는 2.5 ~ 3.0% 사이의 값을 추천합니다.</p>
-            <p>- <Mapping txt="ⓒ"/> 대출금리 : <input className='btn1' value={loanInterest} onChange={(e)=>{surveyOnChange(e,"loanInterest")}}/> %</p>
+            <p>- 대출금리 : <input className='btn1' value={loanInterest} onChange={(e)=>{surveyOnChange(e,"loanInterest")}}/> %</p>
             <p className='note'>※ 2000년 ~ 2023년 평균 기준금리(약 2.5%) 고려할 때, 대출금리는 4.0 ~ 6.0% 사이의 값을 추천합니다.</p>
         </div>
         <div>
             <p className="question">(3) 부동산 상승률을 입력해주세요.</p>
-            <p>- <Mapping txt="ⓓ"/> : <input className='btn1' value={realEstateGrouthRate} onChange={(e)=>{surveyOnChange(e,"realEstateGrouthRate")}}/> %</p>
+            <p>- <input className='btn1' value={realEstateGrouthRate} onChange={(e)=>{surveyOnChange(e,"realEstateGrouthRate")}}/> %</p>
             <p className='note'>※ 2012년 ~ 2024년 전국 주택가격 상승률은 약 4.0%입니다.(한국부동산원 통계 참고)</p>
             <p className='note'>※ 실거주 주택값 상승률 계산에 사용됩니다.</p>
         </div>
-        {/* <div>
-            <p className="question">(4) 자동차 감가상각을 입력해주세요.</p>
-            <p>- <Mapping txt="ⓔ"/> : <input className='btn1' value={carDepreciationRate} onChange={(e)=>{surveyOnChange(e,"carDepreciationRate")}}/> %</p>
-            <p className='note'>※ 10 ~ 20% 사이의 값을 추천합니다.</p>
-            <p className='note'>※ 자동차 판매 계산에 사용됩니다.</p>
-        </div> */}
         <div>
             <p className="question">(4) 개인 투자수익률을 입력해주세요.</p>
-            <p>- <Mapping txt="ⓕ"/> : <input className='btn1' value={investIncomeRate} onChange={(e)=>{surveyOnChange(e,"investIncomeRate")}}/> %</p>
+            <p>- <input className='btn1' value={investIncomeRate} onChange={(e)=>{surveyOnChange(e,"investIncomeRate")}}/> %</p>
             <p className='note'>※ 투자대상 : 주식, 금, 코인, 실거주 외 주택</p>
             <p className='note'>※ 아래 내용을 참고하여 작성해주세요.</p>
             <p className='note'>- 저축만 할 경우 : {bankInterest}%</p>

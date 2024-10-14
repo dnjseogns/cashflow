@@ -6,13 +6,7 @@ import {CfSave, CfClean} from '@/redux/action/CashflowAction';
 import useEffectNoMount from '@/hooks/useEffectNoMount.jsx';
 //
 import GuideSurvey from './survey/GuideSurvey';
-//
-import BaseCarSurvey from './survey/BaseCarSurvey';
-import BaseHouseSurvey from './survey/BaseHouseSurvey';
-//
-import BaseSalarySurvey from './survey/BaseSalarySurvey';
-import BaseConsumptionSurvey from './survey/BaseConsumptionSurvey';
-import BaseAssetSurvey from './survey/BaseAssetSurvey';
+
 import { useMenuContext } from '@/components/cashflow/MenuContext.jsx';
 import SurveyBaseMode from './survey/base/SurveyBaseMode';
 import SurveyBaseIndex from './survey/base/SurveyBaseIndex';
@@ -21,6 +15,8 @@ import SurveyMySpending from './survey/my/SurveyMySpending';
 import SurveyMyIncome from './survey/my/SurveyMyIncome';
 import SurveyYourIncome from './survey/your/SurveyYourIncome';
 import SurveyAddMarry from './survey/add/SurveyAddMarry';
+import SurveyAddBaby from './survey/add/SurveyAddBaby';
+import SurveyAddHouse from './survey/add/SurveyAddHouse';
 
 /* 입력해주신 자료는 이번 계산에만 활용합니다. 이 사이트는 어떤 개인 정보도 저장하지 않습니다. */
 
@@ -137,8 +133,8 @@ function CashflowSurvey(){
                     // : surveyDiv===menuEnum.YOUR_SPENDING? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     // 추가 정보
                     : surveyDiv===menuEnum.ADD_MARRY? <SurveyAddMarry completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                    : surveyDiv===menuEnum.ADD_BABY? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
-                    : surveyDiv===menuEnum.ADD_HOUSE? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.ADD_BABY? <SurveyAddBaby completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    : surveyDiv===menuEnum.ADD_HOUSE? <SurveyAddHouse completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.ADD_CAR? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.ADD_PARENT? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.ADD_RETIRE? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>

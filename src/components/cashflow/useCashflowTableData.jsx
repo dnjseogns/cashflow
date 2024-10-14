@@ -85,13 +85,13 @@ export const useCashflowTableData = () => {
             let newLoan = [...my.loan].filter((item)=>{return item.loanId != "carLoan" && item.loanId != "houseLoan"});
             if(my?.housePriceLoan > 0){
                 if(my?.livingType == "rent"){
-                    newLoan.unshift({loanId:"houseLoan", loanName:"전·월세자금대출금(사전입력 : 2-ⓐ)", loanAmount:my?.housePriceLoan ?? 0, loanInterest:my?.housePriceLoanRate ?? base.loanInterest, isReadOnly:true});
+                    newLoan.unshift({loanId:"houseLoan", loanName:"전·월세자금대출금(사전입력 : 3-ⓐ)", loanAmount:my?.housePriceLoan ?? 0, loanInterest:my?.housePriceLoanRate ?? base.loanInterest, isReadOnly:true});
                 }else if(my?.livingType == "own"){
-                    newLoan.unshift({loanId:"houseLoan", loanName:"주택담보대출(사전입력 : 2-ⓐ)", loanAmount:my?.housePriceLoan ?? 0, loanInterest:my?.housePriceLoanRate ?? base.loanInterest, isReadOnly:true});
+                    newLoan.unshift({loanId:"houseLoan", loanName:"주택담보대출(사전입력 : 3-ⓐ)", loanAmount:my?.housePriceLoan ?? 0, loanInterest:my?.housePriceLoanRate ?? base.loanInterest, isReadOnly:true});
                 }
             }
             if(my?.carYn === "Y" && my?.carLoan > 0){
-                newLoan.unshift({loanId:"carLoan", loanName:"자동차 대출(사전입력 : 3-ⓐ)", loanAmount:my?.carLoan ?? 0, loanInterest:my?.carLoanRate ?? base.loanInterest, isReadOnly:true});
+                newLoan.unshift({loanId:"carLoan", loanName:"자동차 대출(사전입력 : 3-ⓓ)", loanAmount:my?.carLoan ?? 0, loanInterest:my?.carLoanRate ?? base.loanInterest, isReadOnly:true});
             }
 
             my.loan = newLoan;
@@ -99,10 +99,12 @@ export const useCashflowTableData = () => {
         {
             //집list
             let newHouse = [...add.house].filter((item)=>{return item.age != -1});
-            if(my?.livingType == "rent"){
-                newHouse.push({age:-1, price:my?.housePriceOwn, rate:0});
+            if(my?.livingType == "parent"){
+                newHouse.unshift({age:-1, type:"본가", price:0, rate:0, isReadOnly:true});
+            }else if(my?.livingType == "rent"){
+                newHouse.unshift({age:-1, type:"전세", price:my?.housePriceTotal, rate:0, isReadOnly:true});
             }else if(my?.livingType == "own"){
-                newHouse.push({age:-1, price:my?.housePriceTotal, rate:base?.realEstateGrouthRate});
+                newHouse.unshift({age:-1, type:"매매", price:my?.housePriceTotal, rate:base?.realEstateGrouthRate, isReadOnly:true});
             }
             add.house = newHouse;
         }
@@ -110,7 +112,7 @@ export const useCashflowTableData = () => {
             //차list
             let newCar = [...add.car].filter((item)=>{return item.age != -1});
             if(my?.carYn == "Y"){
-                newCar.push({age:-1, price:my?.carPrice, sellPrice:0});
+                newCar.unshift({age:-1, price:my?.carPrice, sellPrice:0});
             }
             add.car = newCar;
         }
@@ -135,6 +137,19 @@ export const useCashflowTableData = () => {
             const tmpPensionYear = 65 - (your?.age - workYear) - 20;
             const pensionMonthly = Math.round((1.2 * ((salaryMonthly*over40) + 2989237) * (1 + (tmpPensionYear < 0 ? 0 : tmpPensionYear)*0.05))/12);
             your.pensionMonthly = pensionMonthly;
+        }
+        if(isCompleted?.[menuEnum.BASE_INDEX] === true && isCompleted?.[menuEnum.ADD_MARRY] === true){
+            if(add.marryYn === "Y"){
+                //나 -> 국민연금 관련 40세 연봉
+                const powCnt = 0 <= 40 - my.age ? 40 - my.age : 0;
+                const over40 = Math.pow(1.045, powCnt); //1.045 수치 : 급여상승률 평균
+                const salaryMonthly = (my?.salaryMonthly ?? 2000000)*(add.partnerIncomePercent/100);
+                const workYear = my?.workYear ?? 1;
+    
+                const tmpPensionYear = 65 - (my?.age - workYear) - 20;
+                const pensionMonthly = Math.round((1.2 * ((salaryMonthly*over40) + 2989237) * (1 + (tmpPensionYear < 0 ? 0 : tmpPensionYear)*0.05))/12);
+                add.partnerPensionMonthly = pensionMonthly;
+            }
         }
 
         dispatch(SvSave(surveyData));
@@ -233,7 +248,7 @@ export const useCashflowTableData = () => {
                 }
             }
             if(isCompleted?.[menuEnum.YOUR_INCOME] === true){
-                //배우자 수입 -> 연봉상승률(누적)
+                //수입 -> 배우자(your) 수입
                 const yourSalaryRiseRateGap = (your?.salaryRiseRate1 - your?.salaryRiseRate25) / 25;
                 let yourSalaryRiseRate = your?.salaryRiseRate1 - yourSalaryRiseRateGap * (your?.workYear + loopCnt - 3) // 1년차 + loop (1) - 3
                 yourSalaryRiseRate = yourSalaryRiseRate < your?.salaryRiseRate25 ? your?.salaryRiseRate25 : yourSalaryRiseRate;
@@ -244,30 +259,47 @@ export const useCashflowTableData = () => {
                 }
                 row.yourSalaryRiseRateStack = yourSalaryRiseRateStack;
                 
-                //배우자 수입 -> 연봉
+                //배우자(your) 연봉
                 if(row.yourAge > your?.retireAge){ //은퇴 체크
                     row.yourSalary = 0;
                 }else{
                     row.yourSalary = Math.round((your?.salaryMonthly * 12) * row.yourSalaryRiseRateStack);
                 }
 
-                //배우자  국민연금
+                //배우자(your) 국민연금
                 row.yourPension = 0;
                 if(row.yourAge >= 65){
                     row.yourPension = your?.pensionMonthly*12 * Math.pow((1 + base.indexInflation/100), row?.yourAge - 65);
                 }
 
-                //배우자 국민연금
-                row.yourPension = 0;
-                if(row.yourAge >= 65){
-                    row.yourPension = your?.pensionMonthly*12 * Math.pow((1 + base.indexInflation/100), row?.yourAge - 65);
-                }
-
+                //배우자(your) 총 수입
                 row.yourTotalIncome = (row?.yourSalary??0) + (row?.yourSideJob??0) + (row?.yourPension??0);
+            }else if(isCompleted?.[menuEnum.ADD_MARRY] === true){
+                // 수입 -> 배우자(partner) 수입
+                if(add.marryYn === "Y" && add.marryAge <= row.age){
+                    //배우자(partner) 급여
+                    const mySalary = Math.round((my?.salaryMonthly * 12) * row.salaryRiseRateStack);
+                    const partnerAge = add.partnerAge + loopCnt - (add.marryAge - my.age) - 1;
+                    if(partnerAge <= 55){
+                        row.partnerSalary = Math.round(mySalary * (add?.partnerIncomePercent ?? 100) / 100);
+                    }else{
+                        row.partnerSalary = 0;
+                    }
+
+                    //배우자(partner) 국민연금
+                    row.partnerPension = 0;
+                    if(partnerAge >= 65){
+                        row.partnerPension = add?.partnerPensionMonthly*12 * Math.pow((1 + base.indexInflation/100), partnerAge - 65);
+                    }
+
+                    //배우자(partner) 총 수입
+                    row.partnerTotalIncome = row?.partnerSalary + row?.partnerPension;
+                }
             }
             if(isCompleted?.[menuEnum.MY_INCOME] === true){
                 //수입 -> 합계
-                row.totalIncome = (row?.salary??0) + (row?.sideJob??0) + (row?.pension??0) + (row.yourTotalIncome??0);
+                row.totalIncome = (row?.salary??0) + (row?.sideJob??0) + (row?.pension??0) 
+                                    + (row.yourTotalIncome??0) + (row?.partnerTotalIncome??0);
             }
 
 
@@ -296,10 +328,51 @@ export const useCashflowTableData = () => {
                 //지출 -> 기타소비
                 row.etcExpense = Math.round((my?.etcExpenseMonthly ?? 0) * 12 * row.inflationStack) * -1;
             }
+            if(isCompleted?.[menuEnum.ADD_MARRY] === true){
+                //지출 -> 배우자(partner) 지출
+                if(add.marryYn === "Y" && add.marryAge <= row.age){
+                    row.partnerTotalSpending = Math.round(((row?.carCost??0) + (row?.loanCost??0) + (row?.etcExpense??0)) * (add?.partnerSpendingPercent??100)/100)
+                }
+            }
+            if(isCompleted?.[menuEnum.ADD_BABY] === true 
+                && ((add.curBabyYn === "Y" && add.curBabyList.length >= 1) || (add.willBabyYn === "Y" && add.willBabyList.length >= 1))
+            ){
+                let babyCost = 0;
+                add.curBabyList.forEach((curBabyItem)=>{
+                    const babyAge = curBabyItem.age + loopCnt - 1;
+                    if(0 <= babyAge && babyAge < 8){
+                        babyCost = babyCost - add.preSchool * row.inflationStack;
+                    } else if(8 <= babyAge && babyAge < 13){
+                        babyCost = babyCost - add.elementarySchool * row.inflationStack;
+                    } else if(13 <= babyAge && babyAge < 16){
+                        babyCost = babyCost - add.middleSchool * row.inflationStack;
+                    } else if(16 <= babyAge && babyAge < 19){
+                        babyCost = babyCost - add.highSchool * row.inflationStack;
+                    } else if(19 <= babyAge && babyAge < 23){
+                        babyCost = babyCost - add.university * row.inflationStack;
+                    }
+                });
+                add.willBabyList.forEach((willBabyItem)=>{
+                    const babyAge = loopCnt - 1 - (willBabyItem.age - my.age)
+                    if(0 <= babyAge && babyAge < 8){
+                        babyCost = babyCost - add.preSchool * row.inflationStack;
+                    } else if(8 <= babyAge && babyAge < 13){
+                        babyCost = babyCost - add.elementarySchool * row.inflationStack;
+                    } else if(13 <= babyAge && babyAge < 16){
+                        babyCost = babyCost - add.middleSchool * row.inflationStack;
+                    } else if(16 <= babyAge && babyAge < 19){
+                        babyCost = babyCost - add.highSchool * row.inflationStack;
+                    } else if(19 <= babyAge && babyAge < 23){
+                        babyCost = babyCost - add.university * row.inflationStack;
+                    }
+                });
+                row.babyCost = babyCost;
+            }
 
             if(isCompleted?.[menuEnum.MY_ASSET] === true){
                 //지출 -> 합계
-                row.totalConsumption = (row?.houseCost??0) + (row?.carCost??0) + (row?.loanCost??0) + (row?.etcExpense??0);
+                row.totalConsumption = (row?.houseCost??0) + (row?.carCost??0) + (row?.loanCost??0) + (row?.etcExpense??0)
+                                        + (row?.partnerTotalSpending??0) + (row?.babyCost??0);
             }
 
 
@@ -316,34 +389,55 @@ export const useCashflowTableData = () => {
                 }
             }
             if(isCompleted?.[menuEnum.YOUR_INCOME] === true){
-                //이벤트 -> 퇴직금
+                //이벤트 -> 배우자 퇴직금(듀오모드)
                 if(row.yourAge == your?.retireAge){
                     const totalWorkYear = loopCnt + (your?.workYear ?? 1);
                     row.eventYourRetirementPay = your?.salaryMonthly * row.yourSalaryRiseRateStack * totalWorkYear;
                     row.eventYourRetirementMemo = "배우자 퇴직금,";
                 }
+            }else if(isCompleted?.[menuEnum.ADD_MARRY] === true){
+                //이벤트 -> 퇴직금(추가)
+                if(add.marryYn === "Y"){
+                    const partnerAge = add.partnerAge + loopCnt - (add.marryAge - my.age) - 1;
+                    if(partnerAge == 55){
+                        const totalWorkYear = 30;
+                        row.eventYourRetirementPay = Math.round((row?.partnerSalary/12) * totalWorkYear);
+                        row.eventYourRetirementMemo = "배우자 퇴직금,";
+                    }
+                }
             }
             if(isCompleted?.[menuEnum.ADD_MARRY] === true){
-                //이벤트 -> 결혼비용
                 if(add.marryYn === "Y"){
+                    //이벤트 -> 결혼비용
                     if(row.age == add.marryAge){
                         row.eventMarryPay = (add.marryPrice + add.marryTripPrice + add.furniturePrice) * -1
                                                 + (add.parentSupportPrice);
                         row.eventMarryMemo = "결혼,";
                     }
+                    //이벤트 -> 배우자 자산
+                    if(row.age == add.marryAge){
+                        row.eventPartnerAsset = add.partnerAsset;
+                        row.eventPartnerAssetMemo = "배우자자산,";
+                    }
                 }
             }
-
             if(isCompleted?.[menuEnum.MY_INCOME] === true)
             {
                 //이벤트 합계
                 if(row?.eventRetirementPay === undefined 
                     && row?.eventYourRetirementPay === undefined 
-                    && (row.eventMarryPay === undefined)){
+                    && row?.eventMarryPay === undefined
+                    && row?.eventPartnerAsset === undefined){
                     //
                 }else{
-                    row.totalEventPrice = (row?.eventRetirementPay??0)+(row?.eventYourRetirementPay??0)+(row.eventMarryPay??0);
-                    row.totalEventMemo = (row?.eventRetirementMemo??"")+(row?.eventYourRetirementMemo??"")+(row.eventMarryMemo??"");
+                    row.totalEventPrice = (row?.eventRetirementPay??0)
+                                        +(row?.eventYourRetirementPay??0)
+                                        +(row?.eventMarryPay??0)
+                                        +(row?.eventPartnerAsset??0);
+                    row.totalEventMemo = (row?.eventRetirementMemo??"")
+                                        +(row?.eventYourRetirementMemo??"")
+                                        +(row?.eventMarryMemo??"")
+                                        +(row?.eventPartnerAssetMemo??"");
                     row.totalEventMemo = row.totalEventMemo.substring(0, row.totalEventMemo.length-1);
                 }
             }

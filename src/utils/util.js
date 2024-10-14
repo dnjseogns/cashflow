@@ -64,12 +64,14 @@ export const expCheckDouble = (number, minVal, maxVal, maxLength=1) => {
 }
 export const expCheckInt = (value, minVal, maxVal) => {
     let number = value.replaceAll(",",""); //쉼표제거
+    if(minVal < 0 && (number==="-" || number==="-0")){return "-0";}
     if(isNaN(number)){return null;} //문자 체크
     number = Math.floor(number); //정수변환
 
     if(minVal <= number && number <= maxVal){
         return number;
     }else if(maxVal < number){
+        // number < minVal ||
         return null;
     }else{
         return 0;

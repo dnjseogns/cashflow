@@ -62,7 +62,7 @@ function SurveyBaseMode({completeBtnClickCnt, commonCompleteLogic}){
         {marryYn === "Y"
         ? <div>
             <p className="question">(3) 배우자 나이를 입력해주세요.</p>
-            <p>- <Mapping txt="ⓐ"/> : <input className='btn1' value={yourAge} onChange={(e)=>{surveyOnChange(e,"yourAge")}}/> 세</p>
+            <p>- <Mapping txt="ⓑ"/> : <input className='btn1' value={yourAge} onChange={(e)=>{surveyOnChange(e,"yourAge")}}/> 세</p>
         </div>
         : null}
         

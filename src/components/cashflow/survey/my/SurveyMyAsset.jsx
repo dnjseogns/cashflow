@@ -214,13 +214,13 @@ function SurveyMyAsset({completeBtnClickCnt, commonCompleteLogic}){
         {carYn === "Y"
         ? <Fragment>
             <p className="question-add">① 자동차 대출 정보를 입력해주세요.</p>
-            <p>- <Mapping txt="ⓐ"/>잔여 대출금 : <input className='btn1' value={carLoan.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"carLoan")}}/>({toKoreanMoneyUnit(carLoan)}),
+            <p>- <Mapping txt="ⓓ"/>잔여 대출금 : <input className='btn1' value={carLoan.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"carLoan")}}/>({toKoreanMoneyUnit(carLoan)}),
             대출금리 : <input className='btn1' value={carLoanRate.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"carLoanRate")}}/> %
             <span> (월 대출이자 : {toKoreanMoneyUnit(Math.round(carLoan*(carLoanRate/100)/12))})</span>
             
             </p>
             <p className="question-add">② 월 평균 차량 유지비 입력해주세요.(주유비 + 보험료 + 유지보수비 등...)</p>
-            <p>- <Mapping txt="ⓑ"/> : <input className='btn1' value={carCostMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"carCostMonthly")}}/>({toKoreanMoneyUnit(carCostMonthly)})</p>
+            <p>- <Mapping txt="ⓔ"/> : <input className='btn1' value={carCostMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"carCostMonthly")}}/>({toKoreanMoneyUnit(carCostMonthly)})</p>
             <p className='note'>※ 차량 가격의 1.5% 이상의 월 유지비가 나옵니다. ex) 3000만원 자동차의 유지비 → 45만원</p>
         </Fragment>
         : null}
@@ -231,9 +231,9 @@ function SurveyMyAsset({completeBtnClickCnt, commonCompleteLogic}){
 
         <div>
             <p className="question">(3) 현재 자산 현황을 입력해주세요.</p>
-            <p>- <Mapping txt="ⓐ"/>예·적금 : <input className='btn1' value={currAssetSaving.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"currAssetSaving")}}/>({toKoreanMoneyUnit(currAssetSaving)})</p>
-            <p>- <Mapping txt="ⓑ"/>투자금 : <input className='btn1' value={currAssetInvest.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"currAssetInvest")}}/>({toKoreanMoneyUnit(currAssetInvest)})</p>
-            <p>- <Mapping txt="ⓒ"/>대출금</p>
+            <p>- <Mapping txt="ⓕ"/>예·적금 : <input className='btn1' value={currAssetSaving.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"currAssetSaving")}}/>({toKoreanMoneyUnit(currAssetSaving)})</p>
+            <p>- <Mapping txt="ⓖ"/>투자금 : <input className='btn1' value={currAssetInvest.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"currAssetInvest")}}/>({toKoreanMoneyUnit(currAssetInvest)})</p>
+            <p>- <Mapping txt="ⓗ"/>대출금</p>
             <table className='survey-table'>
                 <colgroup>
                     <col width={"7%"}/>
