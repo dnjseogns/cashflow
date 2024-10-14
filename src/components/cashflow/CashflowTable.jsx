@@ -96,7 +96,7 @@ function CashflowTable(){
                         <th>국민연금<br/><Mapping txt="(4-1.ⓑ)"/></th>
                         {isSideJobVisible ? <th>부업<br/><Mapping txt="(4-1.ⓒ)"/></th> : null}
                         {isYourIncomeVisible ? <th>배우자 수입<br/><Mapping txt="(4-2.)"/></th> : null}
-                        {isPartnerIncomeVisible ? <th>배우자 수입<br/><Mapping txt="(??-??)"/></th> : null}
+                        {isPartnerIncomeVisible ? <th>배우자 수입<br/><Mapping txt="(6.)"/></th> : null}
                         <th>합계</th>
 
                         <th>주거비<br/><Mapping txt="(3.ⓒ)"/></th>

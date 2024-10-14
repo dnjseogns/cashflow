@@ -13,9 +13,9 @@ const SurveyAddBaby = ({completeBtnClickCnt, commonCompleteLogic}) => {
     const surveyData = useSelector((store) => store.Survey).data;
 
     const curBabyYn = surveyData?.add?.curBabyYn ?? "N";
-    const curBabyList = surveyData?.add?.curBabyList ?? [];
+    const curBabyList = surveyData?.add?.curBabyList ?? [{seq:1, age:0}];
     const willBabyYn = surveyData?.add?.willBabyYn ?? "N";
-    const willBabyList = surveyData?.add?.willBabyList ?? [];
+    const willBabyList = surveyData?.add?.willBabyList ?? [{seq:1, age:surveyData.my.age}];
 
     const yearGap = (new Date().getFullYear() - 2017);
     const preSchool = surveyData?.add?.preSchool ?? Math.round(53780000/6 * Math.pow(1.03, yearGap));
@@ -139,7 +139,7 @@ const SurveyAddBaby = ({completeBtnClickCnt, commonCompleteLogic}) => {
     return (
         <Fragment>
         <div>
-            <p className="question">(1) 현재 아기가 있습니까?</p>
+            <p className="question">(1) 현재 아이가 있습니까?</p>
             <p className="radio-wrap">
                 <input type="radio" name="curBabyYn" id="curBabyYn_N" value="N" checked={curBabyYn==="N"?true:false} onChange={(e)=>{surveyOnChange(e,"curBabyYn")}}/><label htmlFor="curBabyYn_N">아니오</label>
                 <input type="radio" name="curBabyYn" id="curBabyYn_Y" value="Y" checked={curBabyYn==="Y"?true:false} onChange={(e)=>{surveyOnChange(e,"curBabyYn")}}/><label htmlFor="curBabyYn_Y">예</label>
@@ -176,7 +176,7 @@ const SurveyAddBaby = ({completeBtnClickCnt, commonCompleteLogic}) => {
 
 
         <div>
-            <p className="question">(2) 아기를 낳으시겠습니까?</p>
+            <p className="question">(2) 향후 아이를 낳으시겠습니까?</p>
             <p className="radio-wrap">
                 <input type="radio" name="willBabyYn" id="willBabyYn_N" value="N" checked={willBabyYn==="N"?true:false} onChange={(e)=>{surveyOnChange(e,"willBabyYn")}}/><label htmlFor="willBabyYn_N">아니오</label>
                 <input type="radio" name="willBabyYn" id="willBabyYn_Y" value="Y" checked={willBabyYn==="Y"?true:false} onChange={(e)=>{surveyOnChange(e,"willBabyYn")}}/><label htmlFor="willBabyYn_Y">예</label>

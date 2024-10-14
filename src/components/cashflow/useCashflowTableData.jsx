@@ -76,6 +76,15 @@ export const useCashflowTableData = () => {
         let your = surveyData.your;
         let add = surveyData.add;
 
+        if(base?.marryYn === "N"){
+            surveyData.your.salaryMonthly = undefined;
+            surveyData.your.workYear = undefined;
+            surveyData.your.salaryRiseRate1 = undefined;
+            surveyData.your.salaryRiseRate25 = undefined;
+            surveyData.your.retireAge = undefined;
+            surveyData.your.pensionMonthly = undefined;
+            surveyData.your.sideJobMonthly = undefined;
+        }
         {
             //주택 중 자기자본금
             my.housePriceOwn = my?.housePriceTotal - my?.housePriceLoan;
@@ -287,7 +296,7 @@ export const useCashflowTableData = () => {
                 if(add.marryYn === "Y" && add.marryAge <= row.age){
                     //배우자(partner) 급여
                     const mySalary = Math.round((my?.salaryMonthly * 12) * row.salaryRiseRateStack);
-                    const partnerAge = add.partnerAge + loopCnt - (add.marryAge - my.age) - 1;
+                    const partnerAge = Number(add.partnerAge) + loopCnt - (add.marryAge - my.age) - 1;
                     if(partnerAge <= 55){
                         row.partnerSalary = Math.round(mySalary * (add?.partnerIncomePercent ?? 100) / 100);
                     }else{
@@ -347,7 +356,7 @@ export const useCashflowTableData = () => {
             ){
                 let babyCost = 0;
                 add.curBabyList.forEach((curBabyItem)=>{
-                    const babyAge = curBabyItem.age + loopCnt - 1;
+                    const babyAge = Number(curBabyItem.age) + loopCnt - 1;
                     if(0 <= babyAge && babyAge < 8){
                         babyCost = babyCost - add.preSchool * row.inflationStack;
                     } else if(8 <= babyAge && babyAge < 13){
@@ -379,7 +388,7 @@ export const useCashflowTableData = () => {
             if(isCompleted?.[menuEnum.ADD_PARENT] === true){
                 if(add.parentCareYn === "Y"){
                     let parentCost = 0;
-                    const parentAge = add.parentCurrentAge + loopCnt - 1;
+                    const parentAge = Number(add.parentCurrentAge) + loopCnt - 1;
                     if(add.parentNursingHomeAge <= parentAge && parentAge < add.parentNursingHomeAge + add.parentNursingHomePeriod){
                         parentCost = Math.round((add.parentNursingHomePriceMonthly * 12) * row.inflationStack);
                     }
@@ -417,7 +426,7 @@ export const useCashflowTableData = () => {
             }else if(isCompleted?.[menuEnum.ADD_MARRY] === true){
                 //이벤트 -> 퇴직금(추가)
                 if(add.marryYn === "Y"){
-                    const partnerAge = add.partnerAge + loopCnt - (add.marryAge - my.age) - 1;
+                    const partnerAge = Number(add.partnerAge) + loopCnt - (add.marryAge - my.age) - 1;
                     if(partnerAge == 55){
                         const totalWorkYear = 30;
                         row.eventYourRetirementPay = Math.round((row?.partnerSalary/12) * totalWorkYear);

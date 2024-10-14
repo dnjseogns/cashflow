@@ -18,7 +18,7 @@ function SurveyYourIncome({completeBtnClickCnt, commonCompleteLogic}){
 
     const salaryMonthly = surveyData.your?.salaryMonthly ?? 2000000;
     const workYear = surveyData.your?.workYear ?? 1;
-    const salaryRiseRate1 = surveyData.your?.salaryRiseRate1 ?? 7;
+    const salaryRiseRate1 = surveyData.your?.salaryRiseRate1 ?? 6;
     const salaryRiseRate25 = surveyData.your?.salaryRiseRate25 ?? 2;
     const retireAge = surveyData.your?.retireAge ?? 55;
     const sideJobMonthly = surveyData.your?.sideJobMonthly ?? 0;
