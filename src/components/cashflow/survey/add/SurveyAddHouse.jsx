@@ -42,7 +42,7 @@ const SurveyAddHouse = ({completeBtnClickCnt, commonCompleteLogic}) => {
     return (
         <Fragment>
         <div>
-            <p className="question">(1) 주거형태를 입력해주세요.</p>
+            <p className="question">(1) 주거정보를 입력해주세요.</p>
             <table className='survey-table'>
                 <colgroup>
                     <col width={"10%"}/>
@@ -55,8 +55,8 @@ const SurveyAddHouse = ({completeBtnClickCnt, commonCompleteLogic}) => {
                     <tr>
                         <th>나이</th>
                         <th>주거 형태</th>
-                        <th>주택가(원)</th>
-                        <th>주택가 상승률(%)</th>
+                        <th>주택가/보증금(원)</th>
+                        <th>월 주거비</th>
                         <th><button className='btnAdd' onClick={(e)=>{houseListOnChange(e, "ADD")}}>추가(+)</button></th>
                     </tr>
                 </thead>
