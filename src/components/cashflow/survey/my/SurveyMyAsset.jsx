@@ -13,20 +13,18 @@ function SurveyMyAsset({completeBtnClickCnt, commonCompleteLogic}){
     const dispatch = useDispatch();
     const surveyData = useSelector((store) => store.Survey).data;
 
+    //house
+    const houseYn = surveyData.my?.houseYn ?? "N";
     const house = surveyData.my?.house ?? [{
+        seq:1,
         age:-1,
         livingType:"본가",
         housePriceTotal:0,
         houseCostMonthly:0,
         isReadOnly:true
     }];
-
-    // //house
-    // const livingType = surveyData.my?.livingType ?? "parent";
-    // const housePriceTotal = surveyData.my?.housePriceTotal ?? 0;
-    // const housePriceLoan = surveyData.my?.housePriceLoan ?? 0;
-    // const housePriceLoanRate = surveyData.my?.housePriceLoanRate ?? surveyData.base.loanInterest;
-    // const houseCostMonthly = surveyData.my?.houseCostMonthly ?? 0;
+    const houseLoanPrice = surveyData.my?.houseLoanPrice ?? 0;
+    const houseLoanRate = surveyData.my?.houseLoanRate ?? surveyData.base.loanInterest;
 
     //car
     const carYn = surveyData.my?.carYn ?? "N";
@@ -38,9 +36,10 @@ function SurveyMyAsset({completeBtnClickCnt, commonCompleteLogic}){
     const loan = (Array.isArray(surveyData.my?.loan) && surveyData.my?.loan?.length >= 1) ? JSON.parse(JSON.stringify(surveyData.my?.loan)) : [];
     const currAssetSaving = surveyData.my?.currAssetSaving ?? 0;
     const currAssetInvest = surveyData.my?.currAssetInvest ?? 0;
-    // const currAssetHousePrice = surveyData.my?.livingType=="rent" ? surveyData.my?.housePriceOwn
-    //                             : surveyData.my?.livingType=="own" ? surveyData.my?.housePriceTotal
-    //                             : 0;
+
+
+
+
 
     const dispatchValue = (div, value) => {
         if(value === null){return;}
@@ -48,16 +47,13 @@ function SurveyMyAsset({completeBtnClickCnt, commonCompleteLogic}){
     }
     const surveyOnChange = (e, div) => {
         // 집
-        if(div === "livingType"){
-            surveyData.my.livingType = e.target.value;
-        }else if(div === "housePriceTotal"){
-            dispatchValue(div, expCheckInt(e.target.value, 0, 10000000000));
-        }else if(div === "housePriceLoanRate"){
+        if(div === "houseYn"){
+            surveyData.my.houseYn = e.target.value;
+        }
+        if(div === "houseLoanPrice"){
+            dispatchValue(div, expCheckInt(e.target.value, 0, house[0].housePriceTotal));
+        }else if(div === "houseLoanRate"){
             dispatchValue(div, expCheckDouble(e.target.value, 0, 100, 5));
-        }else if(div === "housePriceLoan"){
-            dispatchValue(div, expCheckInt(e.target.value, 0, housePriceTotal));
-        }else if(div === "houseCostMonthly"){
-            dispatchValue(div, expCheckInt(e.target.value, 0, 1000000000));
         }
 
         // 차
@@ -114,7 +110,6 @@ function SurveyMyAsset({completeBtnClickCnt, commonCompleteLogic}){
             }
         }
 
-        // console.log("e.target.value",e.target.value);
         let newLoan = JSON.parse(JSON.stringify(loan));
         newLoan = newLoan.map((item, i)=>{
             if(item.loanId == clickedItem?.loanId){
@@ -132,19 +127,24 @@ function SurveyMyAsset({completeBtnClickCnt, commonCompleteLogic}){
 
     useEffectNoMount(()=>{
         // 집
-        // if(livingType === "parent"){
-        //     surveyData.my.housePriceTotal = 0;
-        //     surveyData.my.housePriceLoan = 0;
-        //     surveyData.my.housePriceLoanRate = housePriceLoanRate;
-        //     surveyData.my.housePriceOwn = 0;
-        //     surveyData.my.houseCostMonthly = 0;
-        // }else{
-        //     surveyData.my.housePriceTotal = housePriceTotal;
-        //     surveyData.my.housePriceLoan = housePriceLoan;
-        //     surveyData.my.housePriceLoanRate = housePriceLoanRate;
-        //     surveyData.my.housePriceOwn = housePriceTotal - housePriceLoan;
-        //     surveyData.my.houseCostMonthly = houseCostMonthly;
-        // }
+        if(surveyData.my?.houseYn === "N"){
+            surveyData.my.houseYn = houseYn;
+            surveyData.my.house = [{
+                seq:1,
+                age:-1,
+                livingType:"본가",
+                housePriceTotal:0,
+                houseCostMonthly:0,
+                isReadOnly:true
+            }];
+            surveyData.my.houseLoanPrice = 0;
+            surveyData.my.houseLoanRate = houseLoanRate;
+        }else{
+            surveyData.my.houseYn = houseYn;
+            surveyData.my.house = house;
+            surveyData.my.houseLoanPrice = houseLoanPrice;
+            surveyData.my.houseLoanRate = houseLoanRate;
+        }
 
         // 차
         if(carYn === "Y"){
@@ -168,99 +168,103 @@ function SurveyMyAsset({completeBtnClickCnt, commonCompleteLogic}){
 
     const houseListOnChange = (e, div, _item, keyName) => {
         if(div==="EDIT"){
-            console.log(e);
-            console.log(e.target.value);
-        }
+            let newValue = e.target.value;
 
+            if(keyName === "livingType"){
+                if(newValue === "본가"){
+                    _item.housePriceTotal = 0;
+                    _item.houseCostMonthly = 0;
+                }
+            } else if(keyName === "housePriceTotal" || keyName === "houseCostMonthly"){
+                const ret = expCheckInt(e.target.value, 0, 10000000000);
+                if(ret === null){return;}
+                else{newValue = ret;}
+            }
+
+            let newHouse = JSON.parse(JSON.stringify(house));
+            newHouse = newHouse.map((item, i)=>{
+                if(item.seq == _item?.seq){
+                    return {..._item, [keyName] : newValue};
+                }else{
+                    return item;
+                }
+            });
+
+            surveyData.my.house = newHouse;
+            dispatch(SvSave(surveyData));
+        }
     }
 
     return(
     <Fragment>
         <div>
-            <p className="question">(1) 현재 거주 정보를 입력해주세요.</p>
-            <table className='survey-table'>
-                <colgroup>
-                    <col width={"10%"}/>
-                    <col width={"20%"}/>
-                    <col width={"40%"}/>
-                    <col width={"30%"}/>
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th>나이</th>
-                        <th>주거 형태</th>
-                        <th>(전/월세)보증금 또는 (매매)주택가</th>
-                        <th>월 주거비(월세+ 관리비+ 공과금 등...)</th>
-                        {/* <th><button className='btnAdd' onClick={(e)=>{houseListOnChange(e, "ADD")}}>추가(+)</button></th> */}
-                    </tr>
-                </thead>
-                <tbody>
-                    {house.map((item, i)=>{
-                        return (
-                        <tr key={i}>
-                            <td>
-                                <input readOnly={true} className={'readonly'} style={{textAlign:"right"}} value={item?.age}/> {/* onChange={(e)=>{houseListOnChange(e, "EDIT", item, "age")}} */}
-                            </td>
-                            <td>
-                                <select name="color" value={item?.livingType} className='combo' onChange={(e)=>{houseListOnChange(e, "EDIT", item, "livingType")}}>
-                                    <option value="전세">본가</option>
-                                    <option value="전세">월/전세</option>
-                                    <option value="매매">매매</option>
-                                </select>
-                            </td>
-                            <td>
-                                <input style={{textAlign:"right"}} value={item?.housePriceTotal?.toLocaleString('ko-KR')} onChange={(e)=>{houseListOnChange(e, "EDIT", item, "housePrice")}}/>
-                            </td>
-                            <td>
-                                <input style={{textAlign:"right"}} value={item?.houseCostMonthly?.toLocaleString('ko-KR')} onChange={(e)=>{houseListOnChange(e, "EDIT", item, "houseCostMonthly")}}/>
-                            </td>
-                            {/* 
-                            <td style={{textAlign:"right"}}> {item?.rate} </td>
-                            <td><img src={minusIcon} alt="(-)" style={{width:"20px"}} onClick={(e)=>{houseListOnChange(e, "DELETE", item)}}></img></td> */}
-                        </tr>
-                        )
-                    })}
-                </tbody>
-            </table>
-            {/* <p className="radio-wrap">
-                <input type="radio" name="livingType" id="livingType_parent" value="parent" checked={livingType==="parent"?true:false} onChange={(e)=>{surveyOnChange(e,"livingType")}}/><label htmlFor="livingType_parent">본가</label>
-                <input type="radio" name="livingType" id="livingType_rent" value="rent" checked={livingType==="rent"?true:false} onChange={(e)=>{surveyOnChange(e,"livingType")}}/><label htmlFor="livingType_rent">월세·반전세·전세</label>
-                <input type="radio" name="livingType" id="livingType_jeonse" value="own" checked={livingType==="own"?true:false} onChange={(e)=>{surveyOnChange(e,"livingType")}}/><label htmlFor="livingType_jeonse">자가</label>
+            <p className="question">(1) 독립하여 거주 중이신가요?</p>
+            <p className="radio-wrap">
+                <input type="radio" name="houseYn" id="houseYn_N" value="N" checked={houseYn==="N"?true:false} onChange={(e)=>{surveyOnChange(e,"houseYn")}}/><label htmlFor="houseYn_N">아니오</label>
+                <input type="radio" name="houseYn" id="houseYn_Y" value="Y" checked={houseYn==="Y"?true:false} onChange={(e)=>{surveyOnChange(e,"houseYn")}}/><label htmlFor="houseYn_Y">예</label>
             </p>
-            {livingType==="rent"
-            ? <Fragment>
-                    <p className="question-add">① 보증금 정보를 입력해주세요.</p>
-                    <p>- 보증금 : <input className='btn1' value={housePriceTotal.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"housePriceTotal")}}/>({toKoreanMoneyUnit(housePriceTotal)})</p>
-                    <p>
-                        <span>- <Mapping txt="ⓐ"/>전·월세자금대출금 : </span>
-                        <input className='btn1' value={housePriceLoan.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"housePriceLoan")}}/>({toKoreanMoneyUnit(housePriceLoan)}),
-                        <span style={{marginLeft:"20px"}}>대출금리 : </span>
-                        <input className='btn1' value={housePriceLoanRate.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"housePriceLoanRate")}}/> %
-                        <span> (월 대출이자 : {toKoreanMoneyUnit(Math.round(housePriceLoan*(housePriceLoanRate/100)/12))})</span>
-                    </p>
-                    <p>- <Mapping txt="ⓑ"/>보증금 중 자기자본(자동계산) : <input className='btn1 readonly' value={(housePriceTotal - housePriceLoan).toLocaleString('ko-KR')} readOnly={true}/>({toKoreanMoneyUnit(housePriceTotal - housePriceLoan)})</p>
-                
-                    <p className="question-add">② 월 주거비(월세 + 관리비 + 공과금 등...)를 입력해주세요.</p>
-                    <p>- <Mapping txt="ⓒ"/> : <input className='btn1' value={houseCostMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"houseCostMonthly")}}/>({toKoreanMoneyUnit(houseCostMonthly)})</p>
-                
+            {houseYn === "Y"
+            ?<Fragment>
+                <p className="question-add">※ 거주 정보를 입력해주세요.</p>
+                <table className='survey-table'>
+                    <colgroup>
+                        <col width={"10%"}/>
+                        <col width={"10%"}/>
+                        <col width={"20%"}/>
+                        <col width={"30%"}/>
+                        <col width={"30%"}/>
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>순번</th>
+                            <th>나이</th>
+                            <th>주거 형태</th>
+                            <th>보증금<i style={{fontSize:"14px"}}>(전/월세)</i> 또는 주택가<i style={{fontSize:"14px"}}>(매매)</i></th>
+                            <th>월 주거비<i style={{fontSize:"14px"}}>(월세+ 관리비+ 공과금 등)</i></th>
+                            {/* <th><button className='btnAdd' onClick={(e)=>{houseListOnChange(e, "ADD")}}>추가(+)</button></th> */}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {house.map((item, i)=>{
+                            return (
+                            <Fragment key={i}>
+                            <tr>
+                                <td>{item?.seq}</td>
+                                <td>
+                                    <input readOnly={true} className={'readonly'} style={{textAlign:"right"}} value={item?.age}/> {/* onChange={(e)=>{houseListOnChange(e, "EDIT", item, "age")}} */}
+                                </td>
+                                <td>
+                                    <select name="color" value={item?.livingType} className='combo' onChange={(e)=>{houseListOnChange(e, "EDIT", item, "livingType")}}>
+                                        <option value="본가">본가</option>
+                                        <option value="월/전세">월/전세</option>
+                                        <option value="매매">매매</option>
+                                    </select>
+                                </td>
+                                <td style={{textAlign:"left"}}> 
+                                    <input readOnly={item?.livingType === "본가" ? true : false} className={item?.livingType === "본가" ? "readonly" : ""} style={{textAlign:"right", width:"150px"}} value={item?.housePriceTotal?.toLocaleString('ko-KR')} onChange={(e)=>{houseListOnChange(e, "EDIT", item, "housePriceTotal")}}/>
+                                    <span>원({toKoreanMoneyUnit(item?.housePriceTotal)})</span>
+                                </td>
+                                <td style={{textAlign:"left"}}> 
+                                    <input style={{textAlign:"right", width:"150px"}} value={item?.houseCostMonthly?.toLocaleString('ko-KR')} onChange={(e)=>{houseListOnChange(e, "EDIT", item, "houseCostMonthly")}}/>
+                                    <span>원({toKoreanMoneyUnit(item?.houseCostMonthly)})</span>
+                                </td>
+                            </tr>
+                            </Fragment>
+                            )
+                        })}
+                    </tbody>
+                </table>
+
             </Fragment>
             : null}
-
-            {livingType==="own"
+            
+            {house[0].livingType==="월/전세" || house[0].livingType==="매매"
             ? <Fragment>
-                <p className="question-add">① 주택 매매 가격을 입력해주세요.</p>
-                <p>- <Mapping txt="ⓑ"/>매매가격 : <input className='btn1' value={housePriceTotal.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"housePriceTotal")}}/>({toKoreanMoneyUnit(housePriceTotal)})</p>
-                <p>
-                    <span>- <Mapping txt="ⓐ"/>주택담보대출 잔여 대출금 : </span>
-                    <input className='btn1' value={housePriceLoan.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"housePriceLoan")}}/>({toKoreanMoneyUnit(housePriceLoan)}),
-                    <span style={{marginLeft:"20px"}}><Mapping txt="ⓓ"/>대출금리 : </span>
-                    <input className='btn1' value={housePriceLoanRate.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"housePriceLoanRate")}}/> %
-                    <span> (월 대출이자 : {toKoreanMoneyUnit(Math.round(housePriceLoan*(housePriceLoanRate/100)/12))})</span>
-                </p>
-                <p className="question-add">② 월 주거비(관리비 + 공과금 등...)를 입력해주세요.</p>
-                <p>- <Mapping txt="ⓒ"/> : <input className='btn1' value={houseCostMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"houseCostMonthly")}}/>({toKoreanMoneyUnit(houseCostMonthly)})</p>
+            <p className="question-add">※ {house[0].livingType==="월/전세" ? "보증금" : "주택가"}<i>({toKoreanMoneyUnit(house[0].housePriceTotal)})</i>의 중 대출 정보를 입력해주세요.</p>
+            <p>- 잔여 대출금 : <input className='btn1' value={houseLoanPrice.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"houseLoanPrice")}}/>({toKoreanMoneyUnit(houseLoanPrice)})</p>
+            <p>- 대출 금리 : <input className='btn1' value={houseLoanRate} onChange={(e)=>{surveyOnChange(e,"houseLoanRate")}}/>%</p>
             </Fragment>
-            : null} */}
+            : null}
         </div>
 
 

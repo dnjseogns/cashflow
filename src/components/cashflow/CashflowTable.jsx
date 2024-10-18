@@ -27,8 +27,7 @@ function CashflowTable(){
     const isSalaryRiseRateStackVisible = false;
     const isSideJobVisible = !!(cashflowData?.timeline ?? [])[0]?.sideJob;
 
-    const isAssetHouseVisible = (my?.livingType == "rent" &&  my?.housePriceOwn > 0) 
-                                || (my?.livingType == "own" &&  my?.housePriceTotal > 0);
+    const isAssetHouseVisible = true;
     const isYourIncomeVisible = (base.marryYn === "Y");
     const isPartnerIncomeVisible = (base.marryYn === "N" && add.marryYn === "Y");
     const isPartnerSpendingVisible = (base.marryYn === "N" && add.marryYn === "Y");

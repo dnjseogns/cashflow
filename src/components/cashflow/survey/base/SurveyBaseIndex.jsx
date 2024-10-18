@@ -61,7 +61,7 @@ function SurveyBaseIndex({completeBtnClickCnt, commonCompleteLogic}){
         <div>
             <p className="question">(4) 개인 투자수익률을 입력해주세요.</p>
             <p>- <input className='btn1' value={investIncomeRate} onChange={(e)=>{surveyOnChange(e,"investIncomeRate")}}/> %</p>
-            <p className='note'>※ 투자대상 : 주식, 금, 코인, 실거주 외 주택</p>
+            <p className='note'>※ 투자대상 : 주식, 금, 연금, 코인, 실거주 외 주택</p>
             <p className='note'>※ 아래 내용을 참고하여 작성해주세요.</p>
             <p className='note'>- 저축만 할 경우 : {bankInterest}%</p>
             <p className='note'>- 주식 배당,금 등을 소극적으로 투자하고 있는 경우 : {bankInterest}% ~ {loanInterest}%</p>

@@ -86,17 +86,13 @@ export const useCashflowTableData = () => {
             surveyData.your.sideJobMonthly = undefined;
         }
         {
-            //주택 중 자기자본금
-            my.housePriceOwn = my?.housePriceTotal - my?.housePriceLoan;
-        }
-        {
             //대출list
             let newLoan = [...my.loan].filter((item)=>{return item.loanId != "carLoan" && item.loanId != "houseLoan"});
-            if(my?.housePriceLoan > 0){
-                if(my?.livingType == "rent"){
-                    newLoan.unshift({loanId:"houseLoan", loanName:"전·월세자금대출금(사전입력 : 3-ⓐ)", loanAmount:my?.housePriceLoan ?? 0, loanInterest:my?.housePriceLoanRate ?? base.loanInterest, isReadOnly:true});
-                }else if(my?.livingType == "own"){
-                    newLoan.unshift({loanId:"houseLoan", loanName:"주택담보대출(사전입력 : 3-ⓐ)", loanAmount:my?.housePriceLoan ?? 0, loanInterest:my?.housePriceLoanRate ?? base.loanInterest, isReadOnly:true});
+            if(my.houseLoanPrice > 0){
+                if(my.house[0]?.livingType == "월/전세"){
+                    newLoan.unshift({loanId:"houseLoan", loanName:"전·월세 대출(사전입력 : 3-ⓐ)", loanAmount:my?.houseLoanPrice ?? 0, loanInterest:my?.houseLoanRate ?? base.loanInterest, isReadOnly:true});
+                }else if(my.house[0]?.livingType == "매매"){
+                    newLoan.unshift({loanId:"houseLoan", loanName:"주택담보 대출(사전입력 : 3-ⓐ)", loanAmount:my?.houseLoanPrice ?? 0, loanInterest:my?.houseLoanRate ?? base.loanInterest, isReadOnly:true});
                 }
             }
             if(my?.carYn === "Y" && my?.carLoan > 0){
@@ -105,19 +101,13 @@ export const useCashflowTableData = () => {
 
             my.loan = newLoan;
         }
-        {
+        if(isCompleted?.[menuEnum.MY_ASSET] === true){
             //집list
             let newHouse = [...add.house].filter((item)=>{return item.age != -1});
-            if(my?.livingType == "parent"){
-                newHouse.unshift({age:-1, type:"본가", price:0, rate:0, isReadOnly:true});
-            }else if(my?.livingType == "rent"){
-                newHouse.unshift({age:-1, type:"전세", price:my?.housePriceTotal, rate:0, isReadOnly:true});
-            }else if(my?.livingType == "own"){
-                newHouse.unshift({age:-1, type:"매매", price:my?.housePriceTotal, rate:base?.realEstateGrouthRate, isReadOnly:true});
-            }
+            newHouse.push(my.house[0]);
             add.house = newHouse;
         }
-        {
+        if(isCompleted?.[menuEnum.MY_ASSET] === true){
             //차list
             let newCar = [...add.car].filter((item)=>{return item.age != -1});
             if(my?.carYn == "Y"){
@@ -191,7 +181,7 @@ export const useCashflowTableData = () => {
         let salaryRiseRateStack = 1.0;
         let assetSavingStack = my?.currAssetSaving ?? 0;
         let assetInvestStack = my?.currAssetInvest ?? 0;
-        let assetHousePriceStack = add.house?.find((item)=>item.age == -1)?.price ?? 0;
+        let assetHousePriceStack = 0;
         // 배우자
         let yourSalaryRiseRateStack = 1.0;
 
@@ -327,7 +317,7 @@ export const useCashflowTableData = () => {
 
             if(isCompleted?.[menuEnum.MY_ASSET] === true){
                 //지출 -> 주거비
-                row.houseCost = Math.round((my?.houseCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
+                row.houseCost = Math.round((my.house[0]?.houseCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
             }
             if(isCompleted?.[menuEnum.MY_ASSET] === true){
                 //지출 -> 차량비
@@ -579,14 +569,15 @@ export const useCashflowTableData = () => {
                 if(Array.isArray(add.house) && add.house.length >= 1){
                     const newHouse = add.house.find((houseItem)=>(houseItem.age == i));
                     if(newHouse){
-                        assetHousePriceStack = newHouse.price;
+                        assetHousePriceStack = newHouse.housePriceTotal;
                     }else{
                         if(loopCnt == 1){
+                            assetHousePriceStack = add.house?.find((item)=>item.age == -1)?.housePriceTotal ?? 0;
                             // assetHousePriceStack = assetHousePriceStack;
                         }else{
-                            const tmpCurHouseArr = add.house.filter((houseItem)=>houseItem.age < i);
-                            const tmpGrouthRate = tmpCurHouseArr[tmpCurHouseArr.length-1].rate;
-                            assetHousePriceStack = assetHousePriceStack * (1 + tmpGrouthRate/100);
+                            // const tmpCurHouseArr = add.house.filter((houseItem)=>houseItem.age < i);
+                            // const tmpGrouthRate = tmpCurHouseArr[tmpCurHouseArr.length-1].rate;
+                            assetHousePriceStack = assetHousePriceStack * (1 + base.realEstateGrouthRate/100);
                         }
                     }
                 }
