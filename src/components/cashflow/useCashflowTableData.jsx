@@ -95,23 +95,27 @@ export const useCashflowTableData = () => {
                     newLoan.unshift({loanId:"houseLoan", loanName:"주택담보 대출(사전입력 : 3-ⓐ)", loanAmount:my?.houseLoanPrice ?? 0, loanInterest:my?.houseLoanRate ?? base.loanInterest, isReadOnly:true});
                 }
             }
-            if(my?.carYn === "Y" && my?.carLoan > 0){
-                newLoan.unshift({loanId:"carLoan", loanName:"자동차 대출(사전입력 : 3-ⓓ)", loanAmount:my?.carLoan ?? 0, loanInterest:my?.carLoanRate ?? base.loanInterest, isReadOnly:true});
+            if(my?.carYn === "Y" && my?.carLoanPrice > 0){
+                newLoan.unshift({loanId:"carLoan", loanName:"자동차 대출(사전입력 : 3-ⓓ)", loanAmount:my?.carLoanPrice ?? 0, loanInterest:my?.carLoanRate ?? base.loanInterest, isReadOnly:true});
             }
 
             my.loan = newLoan;
         }
-        if(isCompleted?.[menuEnum.MY_ASSET] === true){
+        if(isCompleted?.[menuEnum.MY_FIXED_ASSET] === true){
             //집list
             let newHouse = [...add.house].filter((item)=>{return item.age != -1});
-            newHouse.push(my.house[0]);
+            if(my.houseYn === "N"){
+                newHouse.push({ seq:1, age:-1, livingType:"본가", housePriceTotal:0, houseCostMonthly:0, isReadOnly:true });
+            }else{
+                newHouse.push(my.house[0]);
+            }
             add.house = newHouse;
         }
         if(isCompleted?.[menuEnum.MY_ASSET] === true){
             //차list
             let newCar = [...add.car].filter((item)=>{return item.age != -1});
             if(my?.carYn == "Y"){
-                newCar.unshift({age:-1, price:my?.carPrice, sellPrice:0});
+                // newCar.unshift({age:-1, price:my?.carPrice, sellPrice:0});??
             }
             add.car = newCar;
         }
@@ -315,11 +319,11 @@ export const useCashflowTableData = () => {
 
 
 
-            if(isCompleted?.[menuEnum.MY_ASSET] === true){
+            if(isCompleted?.[menuEnum.MY_FIXED_ASSET] === true){
                 //지출 -> 주거비
                 row.houseCost = Math.round((my.house[0]?.houseCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
             }
-            if(isCompleted?.[menuEnum.MY_ASSET] === true){
+            if(isCompleted?.[menuEnum.MY_FIXED_ASSET] === true){
                 //지출 -> 차량비
                 row.carCost = Math.round((my?.carCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
             }
@@ -564,7 +568,7 @@ export const useCashflowTableData = () => {
 
             }
 
-            if(isCompleted?.[menuEnum.MY_ASSET] === true){
+            if(isCompleted?.[menuEnum.MY_FIXED_ASSET] === true){
                 //누적자산 -> 주택
                 if(Array.isArray(add.house) && add.house.length >= 1){
                     const newHouse = add.house.find((houseItem)=>(houseItem.age == i));
@@ -573,11 +577,16 @@ export const useCashflowTableData = () => {
                     }else{
                         if(loopCnt == 1){
                             assetHousePriceStack = add.house?.find((item)=>item.age == -1)?.housePriceTotal ?? 0;
-                            // assetHousePriceStack = assetHousePriceStack;
+                            // do nothing // assetHousePriceStack = assetHousePriceStack;
                         }else{
-                            // const tmpCurHouseArr = add.house.filter((houseItem)=>houseItem.age < i);
-                            // const tmpGrouthRate = tmpCurHouseArr[tmpCurHouseArr.length-1].rate;
-                            assetHousePriceStack = assetHousePriceStack * (1 + base.realEstateGrouthRate/100);
+                            const tmpCurHouseArr = add.house.filter((houseItem)=>houseItem.age < i);
+                            const tmpCurHouse = tmpCurHouseArr[tmpCurHouseArr.length-1];
+                            // console.log("tmpCurHouse",tmpCurHouse);
+                            if(tmpCurHouse.livingType === "매매"){
+                                assetHousePriceStack = assetHousePriceStack * (1 + base.realEstateGrouthRate/100);
+                            }else{
+                                // do nothing //assetHousePriceStack = assetHousePriceStack;
+                            }
                         }
                     }
                 }

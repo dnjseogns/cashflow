@@ -98,10 +98,10 @@ function CashflowTable(){
                         {isPartnerIncomeVisible ? <th>배우자 수입<br/><Mapping txt="(6.)"/></th> : null}
                         <th>합계</th>
 
-                        <th>주거비<br/><Mapping txt="(3.ⓒ)"/></th>
-                        <th>차량비<br/><Mapping txt="(3.ⓔ)"/></th>
-                        <th>대출이자<br/><Mapping txt="(3.ⓗ)"/></th>
-                        <th>기타소비<br/><Mapping txt="(5.)"/></th>
+                        <th>주거비<br/><Mapping txt="(5.ⓐ)"/></th>
+                        <th>차량비<br/><Mapping txt="(5.ⓑ)"/></th>
+                        <th>대출이자<br/><Mapping txt="(5.ⓒ)"/></th>
+                        <th>기타소비<br/><Mapping txt="(5.ⓓ)"/></th>
                         {isPartnerSpendingVisible ? <th>배우자 지출<br/><Mapping txt="(6.)"/></th> : null}
                         {isBabyCostVisible ? <th>양육비<br/><Mapping txt="(7.)"/></th> : null}
                         {isParentCostVisible ? <th>요양비<br/><Mapping txt="(10.)"/></th> : null}
@@ -114,10 +114,10 @@ function CashflowTable(){
 
                         <th className='gap'></th>
 
-                        <th>대출<br/><Mapping txt="(3.ⓗ)"/></th>
-                        <th>예금({base?.bankInterest}%)<br/><Mapping txt="(3.ⓕ)"/></th>
-                        <th>투자({base?.investIncomeRate}%)<br/><Mapping txt="(3.ⓖ)"/></th>
-                        {isAssetHouseVisible ? <th>주택({base?.realEstateGrouthRate}%)<br/><Mapping txt="(3.ⓑ)"/></th> : null}
+                        <th>대출<br/><Mapping txt="(3-2.ⓗ)"/></th>
+                        <th>예금({base?.bankInterest}%)<br/><Mapping txt="(3-2.ⓕ)"/></th>
+                        <th>투자({base?.investIncomeRate}%)<br/><Mapping txt="(3-2.ⓖ)"/></th>
+                        {isAssetHouseVisible ? <th>주택({base?.realEstateGrouthRate}%)<br/><Mapping txt="(3-1.ⓔ)"/></th> : null}
                         <th>합계</th>
                     </tr>
                 </thead>

@@ -41,6 +41,15 @@ function CashflowSide(){
         </ul>
 
         <ul className='base '>{menuEnum.MY}
+        
+            {/*  */}
+            {isSurveyCompleted?.[menuEnum.MY_FIXED_ASSET] === false
+            ? <li className={(surveyDiv===menuEnum.MY_FIXED_ASSET?"on ":"") + (isSurveyCompleted?.[menuEnum.MY_FIXED_ASSET]===true?"ok ":"")} onClick={()=>{setSurveyDivition(menuEnum.MY_FIXED_ASSET)}}>
+                <span>{menuEnum.MY_FIXED_ASSET}</span> {surveyDiv===menuEnum.MY_FIXED_ASSET?<span>〉</span>:null}
+            </li>
+            : <li className={'disable '+(isSurveyCompleted?.[menuEnum.MY_FIXED_ASSET]===true?"ok ":"")}>
+                <span>{menuEnum.MY_FIXED_ASSET}</span>
+            </li>}
             {/*  */}
             {isSurveyCompleted?.[menuEnum.MY_ASSET] === false
             ? <li className={(surveyDiv===menuEnum.MY_ASSET?"on ":"") + (isSurveyCompleted?.[menuEnum.MY_ASSET]===true?"ok ":"")} onClick={()=>{setSurveyDivition(menuEnum.MY_ASSET)}}>

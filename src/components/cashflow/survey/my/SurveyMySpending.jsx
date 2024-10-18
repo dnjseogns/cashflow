@@ -16,7 +16,7 @@ function SurveyMySpending({completeBtnClickCnt, commonCompleteLogic}){
     
     const totIncomeMonthly = (surveyData.my?.salaryMonthly??0) + (surveyData.my?.sideJobMonthly??0)+
                             (surveyData.your?.salaryMonthly??0) + (surveyData.your?.sideJobMonthly??0);
-    const houseCostMonthly = surveyData.my?.houseCostMonthly ?? 0;
+    const houseCostMonthly = surveyData.my?.house[0]?.houseCostMonthly ?? 0;
     const carCostMonthly = surveyData.my?.carCostMonthly ?? 0;
     const [loanCostMonthly, setLoanCostMonthly] = useState(0);//저장하지 않음
 
@@ -94,11 +94,11 @@ function SurveyMySpending({completeBtnClickCnt, commonCompleteLogic}){
         <div>
             <p className="question">(2) 총 지출금액(수입 - 저축) {toKoreanMoneyUnit(totIncomeMonthly - savingMonthly)}이 자동계산됩니다.</p>
             {/* <p>- 총 소비금액 : <input className='btn1 readonly' value={(totIncomeMonthly - savingMonthly).toLocaleString('ko-KR')} readOnly={true}/>원()</p> */}
-            <p>- <Mapping txt="ⓐ"/>주거비<Mapping txt="(사전입력:2-ⓒ)"/> : <input className='btn1 readonly' value={houseCostMonthly.toLocaleString('ko-KR')} readOnly={true}/>원({toKoreanMoneyUnit(houseCostMonthly)})</p>
-            <p>- <Mapping txt="ⓑ"/>차량비<Mapping txt="(사전입력:3-ⓑ)"/> : <input className='btn1 readonly' value={carCostMonthly.toLocaleString('ko-KR')} readOnly={true}/>원({toKoreanMoneyUnit(carCostMonthly)})</p>
-            <p>- <Mapping txt="ⓒ"/>대출이자<Mapping txt="(사전입력:4-ⓐ)"/> : <input className='btn1 readonly' value={loanCostMonthly.toLocaleString('ko-KR')} readOnly={true}/>원({toKoreanMoneyUnit(loanCostMonthly)})</p>
+            <p>- <Mapping txt="ⓐ"/>주거비<Mapping txt="(사전입력:3-1.ⓒ)"/> : <input className='btn1 readonly' value={houseCostMonthly.toLocaleString('ko-KR')} readOnly={true}/>원({toKoreanMoneyUnit(houseCostMonthly)})</p>
+            <p>- <Mapping txt="ⓑ"/>차량비<Mapping txt="(사전입력:3-1.ⓓ)"/> : <input className='btn1 readonly' value={carCostMonthly.toLocaleString('ko-KR')} readOnly={true}/>원({toKoreanMoneyUnit(carCostMonthly)})</p>
+            <p>- <Mapping txt="ⓒ"/>대출이자<Mapping txt="(사전입력:3-2.ⓗ)"/> : <input className='btn1 readonly' value={loanCostMonthly.toLocaleString('ko-KR')} readOnly={true}/>원({toKoreanMoneyUnit(loanCostMonthly)})</p>
             <p>- <Mapping txt="ⓓ"/>기타소비(자동계산) : <input className='btn1 readonly' value={etcExpenseMonthly.toLocaleString('ko-KR')} readOnly={true}/>원({toKoreanMoneyUnit(etcExpenseMonthly)})</p>
-            <p className='note'>※ 소비 계산방법 = 물가상승률<Mapping txt="(1-ⓐ)"/> x <i>총 소비금액({toKoreanMoneyUnit(totIncomeMonthly - savingMonthly)})</i></p>
+            <p className='note'>※ 소비 계산방법 = 물가상승률<Mapping txt="(1.ⓐ)"/> x <i>총 소비금액({toKoreanMoneyUnit(totIncomeMonthly - savingMonthly)})</i></p>
         </div>
         <div>
             <p className="question">(3) 저축(잔액)의 예금 / 투자 비율을 입력해주세요.</p>

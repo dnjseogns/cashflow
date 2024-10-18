@@ -27,7 +27,8 @@ export const MenuProvider = ({ children }) => {
         BASE_MODE : "1. 싱글/듀오",
         BASE_INDEX : "2. 지수",
         MY : "합산 정보",
-        MY_ASSET : "3. 부부 자산",
+        MY_FIXED_ASSET : "3-1. 부부 부동자산",
+        MY_ASSET : "3-2. 부부 유동자산",
         MY_INCOME : "4-1. 내 수입",
         YOUR_INCOME : "4-2. 배우자 수입",
         MY_SPENDING : "5. 부부 지출",
@@ -47,7 +48,8 @@ export const MenuProvider = ({ children }) => {
         BASE_MODE : "1. 싱글/듀오",
         BASE_INDEX : "2. 지수",
         MY : "내 정보",
-        MY_ASSET : "3. 자산",
+        MY_FIXED_ASSET : "3-1. 부동자산",
+        MY_ASSET : "3-2. 유동자산",
         MY_INCOME : "4. 수입",
         MY_SPENDING : "5. 지출",
         // YOUR_INCOME : "6. 배우자 수입",
@@ -81,6 +83,7 @@ export const MenuProvider = ({ children }) => {
             : div===menuEnum.BASE_MODE? menuEnum.BASE + " 〉 " + menuEnum.BASE_MODE
             : div===menuEnum.BASE_INDEX? menuEnum.BASE + " 〉 " + menuEnum.BASE_INDEX
             
+            : div===menuEnum.MY_FIXED_ASSET? menuEnum.MY + " 〉 " + menuEnum.MY_FIXED_ASSET
             : div===menuEnum.MY_ASSET? menuEnum.MY + " 〉 " + menuEnum.MY_ASSET
             : div===menuEnum.MY_INCOME? menuEnum.MY + " 〉 " + menuEnum.MY_INCOME
             : div===menuEnum.YOUR_INCOME? menuEnum.MY + " 〉 " + menuEnum.YOUR_INCOME

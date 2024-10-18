@@ -22,6 +22,7 @@ import SurveyAddParent from './survey/add/SurveyAddParent';
 import SurveyAddReemployment from './survey/add/SurveyAddReemployment';
 import SurveyAddCustomEvent from './survey/add/SurveyAddCustomEvent';
 import SurveySave from './survey/SurveySave';
+import SurveyMyFixedAsset from './survey/my/SurveyMyFixedAsset';
 
 /* 입력해주신 자료는 이번 계산에만 활용합니다. 이 사이트는 어떤 개인 정보도 저장하지 않습니다. */
 
@@ -130,6 +131,7 @@ function CashflowSurvey(){
                     : surveyDiv===menuEnum.BASE_MODE? <SurveyBaseMode completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.BASE_INDEX? <SurveyBaseIndex completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     // 내 정보
+                    : surveyDiv===menuEnum.MY_FIXED_ASSET? <SurveyMyFixedAsset completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.MY_ASSET? <SurveyMyAsset completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.MY_INCOME? <SurveyMyIncome completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.YOUR_INCOME? <SurveyYourIncome completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
