@@ -105,19 +105,19 @@ export const useCashflowTableData = () => {
             //집list
             let newHouse = [...add.house].filter((item)=>{return item.age != -1});
             if(my.houseYn === "N"){
-                newHouse.push({ seq:1, age:-1, livingType:"본가", housePriceTotal:0, houseCostMonthly:0, isReadOnly:true });
+                newHouse.unshift({ seq:1, age:-1, livingType:"본가", housePriceTotal:0, houseCostMonthly:0, isReadOnly:true });
             }else{
-                newHouse.push(my.house[0]);
+                newHouse.unshift(my.house[0]);
             }
             add.house = newHouse;
         }
-        if(isCompleted?.[menuEnum.MY_ASSET] === true){
-            //차list
-            let newCar = [...add.car].filter((item)=>{return item.age != -1});
-            if(my?.carYn == "Y"){
-                // newCar.unshift({age:-1, price:my?.carPrice, sellPrice:0});??
-            }
-            add.car = newCar;
+        if(isCompleted?.[menuEnum.MY_FIXED_ASSET] === true){
+            // //차list
+            // let newCar = [...add.car].filter((item)=>{return item.age != -1});
+            // if(my?.carYn == "Y"){
+            //     newCar.unshift({seq:1, age:-1, sellPrice:0, buyPrice:0, carCostMonthly:(my?.carCostMonthly??0), isReadOnly:true});
+            // }
+            // add.car = newCar;
         }
         if(isCompleted?.[menuEnum.BASE_INDEX] === true){
             //나 -> 국민연금 관련 40세 연봉
@@ -321,11 +321,20 @@ export const useCashflowTableData = () => {
 
             if(isCompleted?.[menuEnum.MY_FIXED_ASSET] === true){
                 //지출 -> 주거비
-                row.houseCost = Math.round((my.house[0]?.houseCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
+                const tmpCurHouseArr = add.house.filter((houseItem)=>houseItem.age <= i);
+                const tmpCurHouse = tmpCurHouseArr[tmpCurHouseArr.length-1];
+                row.houseCost = Math.round((tmpCurHouse?.houseCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
             }
             if(isCompleted?.[menuEnum.MY_FIXED_ASSET] === true){
                 //지출 -> 차량비
                 row.carCost = Math.round((my?.carCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
+
+                //add 쪽있다면, 교체
+                const tmpCurCarArr = add.car.filter((carItem)=>carItem.age <= i);
+                if(tmpCurCarArr.length >= 1){
+                    const tmpCurCar = tmpCurCarArr[tmpCurCarArr.length-1];
+                    row.carCost = Math.round((tmpCurCar?.carCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
+                }
             }
             if(isCompleted?.[menuEnum.MY_ASSET] === true){
                 // 지출 -> 대출이자
@@ -443,6 +452,29 @@ export const useCashflowTableData = () => {
                     }
                 }
             }
+            if(isCompleted?.[menuEnum.ADD_HOUSE] === true){
+                //이벤트 -> 집
+                const newHouse = add.house.find((houseItem)=>(houseItem.age == i));
+                if(newHouse){
+                    const tmpHouseArr = add.house.filter((houseItem)=>houseItem.age <= i);
+                    const tmpBeforeHouse = tmpHouseArr[tmpHouseArr.length-2];
+                    const tmpCurHouse = tmpHouseArr[tmpHouseArr.length-1];
+                    
+                    row.eventHouseMovingAmount = tmpBeforeHouse.housePriceTotal - tmpCurHouse.housePriceTotal;
+                    row.eventHouseMovingMemo = "집이사,";
+                    // console.log("tmpBeforeHouse",tmpBeforeHouse);
+                    // console.log("tmpCurHouse",tmpCurHouse);
+                }
+            }
+            if(isCompleted?.[menuEnum.ADD_CAR] === true){
+                //이벤트 -> 차
+                const tmpCarBuySell = add.car.find((carItem)=>carItem.age == i);
+                if(tmpCarBuySell){
+                    row.eventCarBuyAmount = tmpCarBuySell.sellPrice - tmpCarBuySell.buyPrice;
+                    row.eventCarBuyMemo = "차구매,";
+                }
+            }
+
             if(isCompleted?.[menuEnum.ADD_ETC] === true){
                 if(Array.isArray(add.eventList) && add.eventList.length >= 1){
                     row.eventEtcAmount = 0;
@@ -463,19 +495,25 @@ export const useCashflowTableData = () => {
                     && row?.eventYourRetirementPay === undefined 
                     && row?.eventMarryPay === undefined
                     && row?.eventPartnerAsset === undefined
-                    && row?.eventEtcAmount === undefined){
+                    && row?.eventEtcAmount === undefined
+                    && row?.eventHouseMovingAmount === undefined
+                    && row?.eventCarBuyAmount === undefined){
                     //
                 }else{
                     row.totalEventPrice = (row?.eventRetirementPay??0)
                                         +(row?.eventYourRetirementPay??0)
                                         +(row?.eventMarryPay??0)
                                         +(row?.eventPartnerAsset??0)
-                                        +(row?.eventEtcAmount??0);
+                                        +(row?.eventEtcAmount??0)
+                                        +(row?.eventHouseMovingAmount??0)
+                                        +(row?.eventCarBuyAmount??0);
                     row.totalEventMemo = (row?.eventRetirementMemo??"")
                                         +(row?.eventYourRetirementMemo??"")
                                         +(row?.eventMarryMemo??"")
                                         +(row?.eventPartnerAssetMemo??"")
-                                        +(row?.eventEtcMemo??"");
+                                        +(row?.eventEtcMemo??"")
+                                        +(row?.eventHouseMovingMemo??"")
+                                        +(row?.eventCarBuyMemo??"");
                     row.totalEventMemo = row.totalEventMemo.substring(0, row.totalEventMemo.length-1);
                 }
             }
