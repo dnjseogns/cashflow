@@ -5,7 +5,7 @@ const initialize = {
     data : 
     {
         isCompleted:{
-            "시작하기":true
+            "가이드":true
         },
         base:{
         },

@@ -25,6 +25,12 @@ function Cashflow(){
                 </article>
             </div>
         </section>
+        <section className='cf-btn'>
+            <div className='cf-btn-wrap'>
+                <button>aaa</button>
+                <button>bbb</button>
+            </div>
+        </section>
     </div>
     <footer className='footer'></footer>
     </Fragment>);

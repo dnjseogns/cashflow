@@ -116,7 +116,7 @@ const SurveyAddCar = ({completeBtnClickCnt, commonCompleteLogic}) => {
                         <th>나이</th>
                         <th>기존 차 판매가</th>
                         <th>신규 차 구매가</th>
-                        <th>차량유지비<br/><i style={{fontSize:"14px"}}>(주유비 + 보험료 + 유지보수비 등)</i></th>
+                        <th>매월 차량유지비<br/><i style={{fontSize:"14px"}}>(주유비 + 보험료 + 유지보수비 등)</i></th>
                         <th><button className='btnAdd' onClick={(e)=>{carListOnChange(e, "ADD")}}>구매(+)</button></th>
                     </tr>
                 </thead>

@@ -90,6 +90,7 @@ function SurveyMySpending({completeBtnClickCnt, commonCompleteLogic}){
         <div>
             <p className="question">(1) 현재 월 수입(<i>{toKoreanMoneyUnit(totIncomeMonthly)}</i>) 중 얼마나 저축하고 있나요?</p>
             <p>- 저축 : <input className='btn1' value={savingMonthly.toLocaleString('ko-KR')}  onChange={(e)=>{surveyOnChange(e,"savingMonthly")}}/>원({toKoreanMoneyUnit(savingMonthly)})</p>
+            <p className='note'>※ 저축액 -20만원 정도로 입력하면 조정하여 입력하면 더욱 현실적인 시뮬레이션이 가능합니다.(예상치 못한 급전 사용 반영)</p>
         </div>
         <div>
             <p className="question">(2) 총 지출금액(수입 - 저축) {toKoreanMoneyUnit(totIncomeMonthly - savingMonthly)}이 자동계산됩니다.</p>

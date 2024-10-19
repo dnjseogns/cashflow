@@ -36,84 +36,70 @@ function CashflowSurvey(){
 
     const [prevNextDiv, setPrevNextDiv] = useState("NEXT");
     
-    const editSurveyDivNext = (isSurveyCompleted, nextMenu, showMenu) => {
-        isSurveyCompleted[nextMenu] = false;
+    const editSurveyDiv = (isSurveyCompleted, validMenu, showMenu) => {
+        isSurveyCompleted[validMenu] = false;
         setSurveyDivition(showMenu);
     }
-    const editSurveyDivPrev = (isSurveyCompleted, curMenu, prevMenu, showMenu) => {
-        isSurveyCompleted[curMenu] = undefined;
-        isSurveyCompleted[prevMenu] = false;
-        setSurveyDivition(showMenu);
+    const openAllAddSurvey = (isSurveyCompleted) => {
+        if(surveyData.base.marryYn != "Y"){
+            isSurveyCompleted[menuEnum.ADD_MARRY] = false;
+        }
+        isSurveyCompleted[menuEnum.ADD_BABY] = false;
+        isSurveyCompleted[menuEnum.ADD_HOUSE] = false;
+        isSurveyCompleted[menuEnum.ADD_CAR] = false;
+        isSurveyCompleted[menuEnum.ADD_PARENT] = false;
+        isSurveyCompleted[menuEnum.ADD_RETIRE] = false;
+        isSurveyCompleted[menuEnum.ADD_ETC] = false;
     }
-
     const commonCompleteLogic = () => {
         const isSurveyCompleted = JSON.parse(JSON.stringify(surveyData.isCompleted));
         isSurveyCompleted[surveyDiv] = true;
 
         console.log("surveyDiv",surveyDiv);
         
+        if(prevNextDiv === "COMPLETE"){
+            setSurveyDivition("");
+        }
         if(prevNextDiv === "NEXT"){
-            if(surveyDiv === menuEnum.GUIDE){editSurveyDivNext(isSurveyCompleted, menuEnum.BASE_MODE,menuEnum.BASE_MODE);}
+            if(surveyDiv === menuEnum.GUIDE){editSurveyDiv(isSurveyCompleted, menuEnum.BASE_MODE,menuEnum.BASE_MODE);}
 
-            else if(surveyDiv === menuEnum.BASE_MODE){editSurveyDivNext(isSurveyCompleted, menuEnum.BASE_INDEX,menuEnum.BASE_INDEX);}
-            else if(surveyDiv === menuEnum.BASE_INDEX){editSurveyDivNext(isSurveyCompleted, menuEnum.MY_FIXED_ASSET,menuEnum.MY_FIXED_ASSET);}
+            else if(surveyDiv === menuEnum.BASE_MODE){editSurveyDiv(isSurveyCompleted, menuEnum.BASE_INDEX,menuEnum.BASE_INDEX);}
+            else if(surveyDiv === menuEnum.BASE_INDEX){editSurveyDiv(isSurveyCompleted, menuEnum.MY_FIXED_ASSET,menuEnum.MY_FIXED_ASSET);}
             
-            else if(surveyDiv === menuEnum.MY_FIXED_ASSET){editSurveyDivNext(isSurveyCompleted, menuEnum.MY_ASSET,menuEnum.MY_ASSET);}
-            else if(surveyDiv === menuEnum.MY_ASSET){editSurveyDivNext(isSurveyCompleted, menuEnum.MY_INCOME,menuEnum.MY_INCOME);}
+            else if(surveyDiv === menuEnum.MY_FIXED_ASSET){editSurveyDiv(isSurveyCompleted, menuEnum.MY_ASSET,menuEnum.MY_ASSET);}
+            else if(surveyDiv === menuEnum.MY_ASSET){editSurveyDiv(isSurveyCompleted, menuEnum.MY_INCOME,menuEnum.MY_INCOME);}
             else if(surveyDiv === menuEnum.MY_INCOME){
                 if(surveyData.base.marryYn == "Y"){
-                    editSurveyDivNext(isSurveyCompleted, menuEnum.YOUR_INCOME,menuEnum.YOUR_INCOME);
+                    editSurveyDiv(isSurveyCompleted, menuEnum.YOUR_INCOME,menuEnum.YOUR_INCOME);
                 }else{
-                    editSurveyDivNext(isSurveyCompleted, menuEnum.MY_SPENDING,menuEnum.MY_SPENDING);
+                    editSurveyDiv(isSurveyCompleted, menuEnum.MY_SPENDING,menuEnum.MY_SPENDING);
                 }
             }
-            else if(surveyDiv === menuEnum.YOUR_INCOME){editSurveyDivNext(isSurveyCompleted, menuEnum.MY_SPENDING,menuEnum.MY_SPENDING);}
-
-            else if(surveyDiv === menuEnum.MY_SPENDING){
-                if(surveyData.base.marryYn == "Y"){
-                    editSurveyDivNext(isSurveyCompleted, menuEnum.ADD_BABY,menuEnum.ADD_BABY);
-                }else{
-                    editSurveyDivNext(isSurveyCompleted, menuEnum.ADD_MARRY,menuEnum.ADD_MARRY);
-                }
-            }
-            else if(surveyDiv === menuEnum.ADD_MARRY){editSurveyDivNext(isSurveyCompleted, menuEnum.ADD_BABY,menuEnum.ADD_BABY);}
-            else if(surveyDiv === menuEnum.ADD_BABY){editSurveyDivNext(isSurveyCompleted, menuEnum.ADD_HOUSE,menuEnum.ADD_HOUSE);}
-            else if(surveyDiv === menuEnum.ADD_HOUSE){editSurveyDivNext(isSurveyCompleted, menuEnum.ADD_CAR,menuEnum.ADD_CAR);}
-            else if(surveyDiv === menuEnum.ADD_CAR){editSurveyDivNext(isSurveyCompleted, menuEnum.ADD_PARENT,menuEnum.ADD_PARENT);}
-            else if(surveyDiv === menuEnum.ADD_PARENT){editSurveyDivNext(isSurveyCompleted, menuEnum.ADD_RETIRE,menuEnum.ADD_RETIRE);}
-            else if(surveyDiv === menuEnum.ADD_RETIRE){editSurveyDivNext(isSurveyCompleted, menuEnum.ADD_ETC,menuEnum.ADD_ETC);}
-            else if(surveyDiv === menuEnum.ADD_ETC){setSurveyDivition("");}
+            else if(surveyDiv === menuEnum.YOUR_INCOME){editSurveyDiv(isSurveyCompleted, menuEnum.MY_SPENDING,menuEnum.MY_SPENDING);}
+            else if(surveyDiv === menuEnum.MY_SPENDING){openAllAddSurvey(isSurveyCompleted); setSurveyDivition("");}
+            else{setSurveyDivition("");}
         }
 
         if(prevNextDiv === "PREV"){
             if(surveyDiv === menuEnum.GUIDE){}
 
-            else if(surveyDiv === menuEnum.BASE_MODE){editSurveyDivPrev(isSurveyCompleted, menuEnum.BASE_MODE,menuEnum.GUIDE,menuEnum.GUIDE);}
-            else if(surveyDiv === menuEnum.BASE_INDEX){editSurveyDivPrev(isSurveyCompleted, menuEnum.BASE_INDEX,menuEnum.BASE_MODE,menuEnum.BASE_MODE);}
+            else if(surveyDiv === menuEnum.BASE_MODE){editSurveyDiv(isSurveyCompleted, menuEnum.GUIDE,menuEnum.GUIDE);}
+            else if(surveyDiv === menuEnum.BASE_INDEX){editSurveyDiv(isSurveyCompleted, menuEnum.BASE_MODE,menuEnum.BASE_MODE);}
             
-            else if(surveyDiv === menuEnum.MY_FIXED_ASSET){editSurveyDivPrev(isSurveyCompleted, menuEnum.MY_FIXED_ASSET,menuEnum.BASE_INDEX,menuEnum.BASE_INDEX);}
-            else if(surveyDiv === menuEnum.MY_ASSET){editSurveyDivPrev(isSurveyCompleted, menuEnum.MY_ASSET,menuEnum.MY_FIXED_ASSET,menuEnum.MY_FIXED_ASSET);}
-            else if(surveyDiv === menuEnum.MY_INCOME){editSurveyDivPrev(isSurveyCompleted, menuEnum.MY_INCOME,menuEnum.MY_ASSET,menuEnum.MY_ASSET);}
-            else if(surveyDiv === menuEnum.YOUR_INCOME){editSurveyDivPrev(isSurveyCompleted, menuEnum.YOUR_INCOME,menuEnum.MY_INCOME,menuEnum.MY_INCOME);}
+            else if(surveyDiv === menuEnum.MY_FIXED_ASSET){editSurveyDiv(isSurveyCompleted, menuEnum.BASE_INDEX,menuEnum.BASE_INDEX);}
+            else if(surveyDiv === menuEnum.MY_ASSET){editSurveyDiv(isSurveyCompleted, menuEnum.MY_FIXED_ASSET,menuEnum.MY_FIXED_ASSET);}
+            else if(surveyDiv === menuEnum.MY_INCOME){
+                editSurveyDiv(isSurveyCompleted, menuEnum.MY_ASSET,menuEnum.MY_ASSET);
+            }
+            else if(surveyDiv === menuEnum.YOUR_INCOME){editSurveyDiv(isSurveyCompleted, menuEnum.MY_INCOME,menuEnum.MY_INCOME);}
             else if(surveyDiv === menuEnum.MY_SPENDING){
                 if(surveyData.base.marryYn == "Y"){
-                    editSurveyDivPrev(isSurveyCompleted, menuEnum.MY_SPENDING,menuEnum.YOUR_INCOME,menuEnum.YOUR_INCOME);
+                    editSurveyDiv(isSurveyCompleted, menuEnum.YOUR_INCOME,menuEnum.YOUR_INCOME);
                 }else{
-                    editSurveyDivPrev(isSurveyCompleted, menuEnum.MY_SPENDING,menuEnum.MY_INCOME,menuEnum.MY_INCOME);
+                    editSurveyDiv(isSurveyCompleted, menuEnum.MY_INCOME,menuEnum.MY_INCOME);
                 }
-            }else if(surveyDiv === menuEnum.ADD_MARRY){editSurveyDivPrev(isSurveyCompleted, menuEnum.ADD_MARRY,menuEnum.MY_SPENDING,menuEnum.MY_SPENDING);}
-            else if(surveyDiv === menuEnum.ADD_BABY){
-                if(surveyData.base.marryYn == "Y"){
-                    editSurveyDivPrev(isSurveyCompleted, menuEnum.ADD_BABY,menuEnum.MY_SPENDING,menuEnum.MY_SPENDING);
-                }else{
-                    editSurveyDivPrev(isSurveyCompleted, menuEnum.ADD_BABY,menuEnum.ADD_MARRY,menuEnum.ADD_MARRY);
-                }
-            }
-            else if(surveyDiv === menuEnum.ADD_HOUSE){editSurveyDivPrev(isSurveyCompleted, menuEnum.ADD_HOUSE,menuEnum.ADD_BABY,menuEnum.ADD_BABY);}
-            else if(surveyDiv === menuEnum.ADD_CAR){editSurveyDivPrev(isSurveyCompleted, menuEnum.ADD_CAR,menuEnum.ADD_HOUSE,menuEnum.ADD_HOUSE);}
-            else if(surveyDiv === menuEnum.ADD_PARENT){editSurveyDivPrev(isSurveyCompleted, menuEnum.ADD_PARENT,menuEnum.ADD_CAR,menuEnum.ADD_CAR);}
-            else if(surveyDiv === menuEnum.ADD_RETIRE){editSurveyDivPrev(isSurveyCompleted, menuEnum.ADD_RETIRE,menuEnum.ADD_PARENT,menuEnum.ADD_PARENT);}
-            else if(surveyDiv === menuEnum.ADD_ETC){editSurveyDivPrev(isSurveyCompleted, menuEnum.ADD_ETC,menuEnum.ADD_RETIRE,menuEnum.ADD_RETIRE);}
+            }else if(surveyDiv === menuEnum.ADD_MARRY){editSurveyDiv(isSurveyCompleted, menuEnum.MY_SPENDING,menuEnum.MY_SPENDING);}
+            else{setSurveyDivition("");}
         }
 
 
@@ -187,10 +173,10 @@ function CashflowSurvey(){
     }
 
 
-    // const tmpSurveyTitle = 
-    // Object.keys(surveyData.isCompleted).length >= 2 && surveyDiv===menuEnum.GUIDE
-    // ? "다시하기"
-    // : surveyTitle;
+    const tmpSurveyTitle = 
+    Object.keys(surveyData.isCompleted).length >= 2 && surveyDiv===menuEnum.GUIDE
+    ? "다시하기"
+    : surveyTitle;
 
     return (
     <Fragment>
@@ -198,7 +184,7 @@ function CashflowSurvey(){
         ? null
         : <Fragment>
             <article className={'survey-area '+surveyDiv}>
-                <div className='survey-title'><span>{surveyTitle}</span><a onClick={()=>{setSurveyDiv("");}}>⨉</a></div>
+                <div className='survey-title'><span>{tmpSurveyTitle}</span><a onClick={()=>{setSurveyDiv("");}}>⨉</a></div>
                 <div className='survey-content'>
                 {
                     // 가이드
@@ -212,6 +198,9 @@ function CashflowSurvey(){
                     : surveyDiv===menuEnum.MY_INCOME? <SurveyMyIncome completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.YOUR_INCOME? <SurveyYourIncome completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.MY_SPENDING? <SurveyMySpending completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    // // 배우자 정보
+                    // : surveyDiv===menuEnum.YOUR_ASSET? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
+                    // : surveyDiv===menuEnum.YOUR_SPENDING? <GuideSurvey completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     // 추가 정보
                     : surveyDiv===menuEnum.ADD_MARRY? <SurveyAddMarry completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
                     : surveyDiv===menuEnum.ADD_BABY? <SurveyAddBaby completeBtnClickCnt={completeBtnClickCnt} commonCompleteLogic={commonCompleteLogic}/>
@@ -234,6 +223,13 @@ function CashflowSurvey(){
                 ?(<Fragment>
                     <button className='complete' style={{visibility:"hidden"}}>감춤</button>
                     <button className='complete' onClick={()=>{setPrevNextDiv("NEXT"); setCompleteBtnClickCnt(completeBtnClickCnt+1);}}>다음</button>
+                </Fragment>)
+                :(surveyDiv === menuEnum.ADD_MARRY || surveyDiv === menuEnum.ADD_BABY || surveyDiv === menuEnum.ADD_HOUSE || 
+                surveyDiv === menuEnum.ADD_CAR || surveyDiv === menuEnum.ADD_PARENT || surveyDiv === menuEnum.ADD_RETIRE || 
+                surveyDiv === menuEnum.ADD_ETC)
+                ?(<Fragment>
+                    <button className='complete' onClick={()=>{setPrevNextDiv("PREV"); setCompleteBtnClickCnt(completeBtnClickCnt+1);}}>이전</button>
+                    <button className='complete' onClick={()=>{setPrevNextDiv("COMPLETE"); setCompleteBtnClickCnt(completeBtnClickCnt+1);}}>완료</button>
                 </Fragment>)
                 :(<Fragment>
                     <button className='complete' onClick={()=>{setPrevNextDiv("PREV"); setCompleteBtnClickCnt(completeBtnClickCnt+1);}}>이전</button>

@@ -136,7 +136,7 @@ function CashflowSide(){
                 <span>{menuEnum.ADD_RETIRE}</span>
             </li>}
             {/*  */}
-            {isSurveyCompleted?.[menuEnum.ADD_ETC] === false
+            {isSurveyCompleted?.[menuEnum.ADD_ETC] === false || isSurveyCompleted?.[menuEnum.ADD_ETC] === true
             ? <li className={(surveyDiv===menuEnum.ADD_ETC?"on ":"") + (isSurveyCompleted?.[menuEnum.ADD_ETC]===true?"ok ":"")} onClick={()=>{setSurveyDivition(menuEnum.ADD_ETC)}}>
                 <span>{menuEnum.ADD_ETC}</span> {surveyDiv===menuEnum.ADD_ETC?<span>〉</span>:null}
             </li>
@@ -144,7 +144,7 @@ function CashflowSide(){
                 <span>{menuEnum.ADD_ETC}</span>
             </li>}
         </ul>
-        <ul className={'guide ' + (surveyDiv===menuEnum.DONE?"on":"")} onClick={()=>{setSurveyDivition(menuEnum.DONE)}}>{menuEnum.DONE} {surveyDiv===menuEnum.DONE?<span>〉</span>:null}</ul>
+        {/* <ul className={'guide ' + (surveyDiv===menuEnum.DONE?"on":"")} onClick={()=>{setSurveyDivition(menuEnum.DONE)}}>{menuEnum.DONE} {surveyDiv===menuEnum.DONE?<span>〉</span>:null}</ul> */}
     </Fragment>
     );
 }

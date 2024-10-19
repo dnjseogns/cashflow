@@ -13,7 +13,7 @@ export const useMenuContext = () => {
 };
 
 export const MenuProvider = ({ children }) => {
-    const [surveyDiv,setSurveyDiv] = useState("시작하기");
+    const [surveyDiv,setSurveyDiv] = useState("가이드");
     const [surveyTitle,setSurveyTitle] = useState("");
     const surveyData = useSelector((store) => store.Survey).data;
 
@@ -22,7 +22,7 @@ export const MenuProvider = ({ children }) => {
     const menuEnum = 
     surveyData.base?.marryYn==="Y"
     ? {
-        GUIDE : "시작하기",
+        GUIDE : "가이드",
         BASE : "기본 정보",
         BASE_MODE : "1. 싱글/듀오",
         BASE_INDEX : "2. 지수",
@@ -39,11 +39,10 @@ export const MenuProvider = ({ children }) => {
         ADD_CAR : "9. 자동차",
         ADD_PARENT : "10. 부모님 부양",
         ADD_RETIRE : "11. 재취업",
-        ADD_ETC : "12. 기타 이벤트 추가",
-        DONE : "13. 저장하기"
+        ADD_ETC : "12. 기타 이벤트 추가"
     }
     : {
-        GUIDE : "시작하기",
+        GUIDE : "가이드",
         BASE : "기본 정보",
         BASE_MODE : "1. 싱글/듀오",
         BASE_INDEX : "2. 지수",
@@ -52,7 +51,6 @@ export const MenuProvider = ({ children }) => {
         MY_ASSET : "3-2. 유동자산",
         MY_INCOME : "4. 수입",
         MY_SPENDING : "5. 지출",
-        // YOUR_INCOME : "6. 배우자 수입",
         ADD : "추가 정보",
         ADD_MARRY : "6. 결혼",
         ADD_BABY : "7. 아기",
@@ -60,8 +58,7 @@ export const MenuProvider = ({ children }) => {
         ADD_CAR : "9. 자동차",
         ADD_PARENT : "10. 부모님 부양",
         ADD_RETIRE : "11. 재취업",
-        ADD_ETC : "12. 기타 이벤트 추가",
-        DONE : "13. 저장하기"
+        ADD_ETC : "12. 기타 이벤트 추가"
     };
     
     
@@ -98,7 +95,6 @@ export const MenuProvider = ({ children }) => {
             : div===menuEnum.ADD_PARENT? menuEnum.ADD + " 〉 " + menuEnum.ADD_PARENT
             : div===menuEnum.ADD_RETIRE? menuEnum.ADD + " 〉 " + menuEnum.ADD_RETIRE
             : div===menuEnum.ADD_ETC? menuEnum.ADD + " 〉 " + menuEnum.ADD_ETC
-            : div===menuEnum.DONE? menuEnum.DONE
             : "";
         setSurveyTitle(surveyTitle);
     }
