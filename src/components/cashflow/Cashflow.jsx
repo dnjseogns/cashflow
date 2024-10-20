@@ -6,6 +6,7 @@ import {CfSave, CfClean} from '@/redux/action/CashflowAction';
 import CashflowSide from './CashflowSide';
 import CashflowSurvey from './CashflowSurvey';
 import CashflowTable from './CashflowTable';
+import CashflowBtn from './CashflowBtn';
 
 function Cashflow(){
     return (
@@ -23,12 +24,10 @@ function Cashflow(){
                 <article className='data-area'>
                     <CashflowTable />
                 </article>
-            </div>
-        </section>
-        <section className='cf-btn'>
-            <div className='cf-btn-wrap'>
-                <button>aaa</button>
-                <button>bbb</button>
+
+                <div className='cf-btn-area'>
+                    <CashflowBtn />
+                </div>
             </div>
         </section>
     </div>

@@ -17,7 +17,7 @@ const SurveyAddCustomEvent = ({completeBtnClickCnt, commonCompleteLogic}) => {
         if(div === "ADD"){
             const newData = [...eventList];
             const seq = (newData.length + 1).toString();
-            const newObj = {seq:seq, age:surveyData.my.age, name:"이벤트"+seq, price:0};
+            const newObj = {seq:seq, age:surveyData.my.age, name:"이벤트"+seq, div:"수입", price:0};
             newData.push(newObj);
     
             surveyData.add.eventList = newData;
@@ -35,8 +35,10 @@ const SurveyAddCustomEvent = ({completeBtnClickCnt, commonCompleteLogic}) => {
                 else{newValue = ret;}
             }else if(keyName === "name"){
                 if(newValue.length >=9){ return; }
+            }else if(keyName === "div"){
+                //
             }else if(keyName === "price"){
-                const ret = expCheckInt(e.target.value, -100000000000, 100000000000);
+                const ret = expCheckInt(e.target.value, 0, 100000000000);
                 if(ret === null){return;}
                 else{newValue = ret;}
             }
@@ -80,7 +82,8 @@ const SurveyAddCustomEvent = ({completeBtnClickCnt, commonCompleteLogic}) => {
                 <colgroup>
                     <col width={"10%"}/>
                     <col width={"20%"}/>
-                    <col width={"30%"}/>
+                    <col width={"20%"}/>
+                    <col width={"10%"}/>
                     <col width={"20%"}/>
                     <col width={"10%"}/>
                 </colgroup>
@@ -89,6 +92,7 @@ const SurveyAddCustomEvent = ({completeBtnClickCnt, commonCompleteLogic}) => {
                         <th>순번</th>
                         <th>나이</th>
                         <th>이벤트 명</th>
+                        <th>구분</th>
                         <th>금액</th>
                         <th><button className='btnAdd' onClick={(e)=>{eventListOnChange(e, "ADD")}}>추가(+)</button></th>
                     </tr>
@@ -102,6 +106,13 @@ const SurveyAddCustomEvent = ({completeBtnClickCnt, commonCompleteLogic}) => {
                         </td>
                         <td>
                             <input style={{textAlign:"right"}} value={item?.name} onChange={(e)=>{eventListOnChange(e, "EDIT", item, "name")}}/>
+                        </td>
+                        <td>
+                            <select className={"combo "}
+                                name="divi" value={item?.div} onChange={(e)=>{eventListOnChange(e, "EDIT", item, "div")}}>
+                                <option value="수입">수입</option>
+                                <option value="지출">지출</option>
+                            </select>
                         </td>
                         <td>
                             <input style={{textAlign:"right"}} value={item?.price.toLocaleString('ko-KR')} onChange={(e)=>{eventListOnChange(e, "EDIT", item, "price")}}/>

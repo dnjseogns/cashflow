@@ -1,10 +1,5 @@
 /* #164863  #427D9D  #9BBEC8  #DDF2FD */
 
-.cf-btn-wrap{
-    position:sticky;
-    bottom:0px;
-}
-
 /* global 비율*/
 .header{height: 2%;}
 .cf-wrap{display: flex; width: 100%; height: 98%; }
@@ -51,9 +46,38 @@
 .cf-right{ position: relative; }
 .cf-right .cf-content .survey-area{position: fixed;}
 .cf-right .cf-content .data-area{position: absolute;}
+.cf-right .cf-content .cf-btn-area{position:fixed;}
 
 /* right 공통 */
 .cf-right i.mapping{ color:green; font-size:16px; font-weight:600}
+
+
+/*******************************************/
+/* button area */
+.cf-right .cf-content .cf-btn-area{z-index: 9; top: 0px; right: 0px; margin-top: 1%; margin-right: 2%; }
+.cf-right .cf-content .cf-btn-area{background-color: rgba(0,0,0 ,0.5); border-radius: 10px;}
+.cf-right .cf-content .cf-btn-area div{display: inline-block; position: relative;}
+.cf-right .cf-content .cf-btn-area .graph-btn::before{
+    content: attr(data-hover); position: absolute; z-index: 1;
+    bottom: -25px; left: -7px; font-size: 14px; font-weight: 600;
+    width: max-content; text-align: center; padding: 5px 5px;
+    visibility: hidden; opacity: 0; transition: opacity 0.5s ease-in-out;
+}
+.cf-right .cf-content .cf-btn-area .graph-btn:hover::before{
+    visibility: visible; opacity: 1;
+}
+.cf-right .cf-content .cf-btn-area .exchange-btn::before{
+    content: attr(data-hover); position: absolute; z-index: 1;
+    bottom: -25px; left: -10px; font-size: 14px; font-weight: 600;
+    width: max-content; text-align: center; padding: 5px 5px;
+    visibility: hidden; opacity: 0; transition: opacity 0.5s ease-in-out;
+}
+.cf-right .cf-content .cf-btn-area .exchange-btn:hover::before{
+    visibility: visible; opacity: 1;
+}
+.cf-right .cf-content .cf-btn-area img{margin: 7px; background-color: rgba(255, 255, 255, 0.5); border-radius: 10px; cursor: pointer; border: none;}
+.cf-right .cf-content .cf-btn-area img.on{border: 1px solid white; background-color: white;}
+.cf-right .cf-content .cf-btn-area img:hover{border: 2px solid rgba(0, 0, 0, 0.5);}
 
 /*******************************************/
 /* survey */

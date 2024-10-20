@@ -276,6 +276,14 @@ export const useCashflowTableData = () => {
                 }else{
                     row.yourSalary = Math.round((your?.salaryMonthly * 12) * row.yourSalaryRiseRateStack);
                 }
+                //배우자(your) 연봉 -> 재취업
+                if(isCompleted?.[menuEnum.ADD_RETIRE] === true){
+                    if(add.reemploymentYn === "Y"){
+                        if(your?.retireAge < row.yourAge && row.yourAge <= add.reemploymentAge){ //은퇴 체크
+                            row.yourSalary = Math.round((your?.salaryMonthly * 12) * row.yourSalaryRiseRateStack) * 0.6;
+                        }
+                    }
+                }
 
                 //배우자(your) 국민연금
                 row.yourPension = 0;
@@ -291,10 +299,18 @@ export const useCashflowTableData = () => {
                     //배우자(partner) 급여
                     const mySalary = Math.round((my?.salaryMonthly * 12) * row.salaryRiseRateStack);
                     const partnerAge = Number(add.partnerAge) + loopCnt - (add.marryAge - my.age) - 1;
-                    if(partnerAge <= 55){
+                    if(partnerAge <= my?.retireAge){
                         row.partnerSalary = Math.round(mySalary * (add?.partnerIncomePercent ?? 100) / 100);
                     }else{
                         row.partnerSalary = 0;
+                    }
+                    //배우자(partner) 연봉 -> 재취업
+                    if(isCompleted?.[menuEnum.ADD_RETIRE] === true){
+                        if(add.reemploymentYn === "Y"){
+                            if(my?.retireAge < partnerAge && partnerAge <= add.reemploymentAge){ //은퇴 체크
+                                row.partnerSalary = Math.round((my?.salaryMonthly * 12) * row.salaryRiseRateStack * 0.6 * (add?.partnerIncomePercent ?? 100) / 100);
+                            }
+                        }
                     }
 
                     //배우자(partner) 국민연금
@@ -481,7 +497,7 @@ export const useCashflowTableData = () => {
                     row.eventEtcMemo = "";
                     add.eventList.forEach((eventItem)=>{
                         if(row.age == eventItem.age){
-                            row.eventEtcAmount = row.eventEtcAmount + eventItem.price;
+                            row.eventEtcAmount = row.eventEtcAmount + (eventItem.price * (eventItem.div=="지출"?-1:1));
                             row.eventEtcMemo = row.eventEtcMemo + eventItem.name + ",";
                         }
                     })
@@ -652,6 +668,47 @@ export const useCashflowTableData = () => {
 
         console.log("surveyData",surveyData);
         console.log("cashflowData",cashflowData);
+
+        const exchangedCashflowDataTimeline = JSON.parse(JSON.stringify(cashflowData)).timeline.map((row)=>{
+            const infla = row.inflationStack;
+            let rowResult = {}
+            if(row?.age){rowResult={...rowResult, age:row.age}}
+            if(row?.inflationStack){rowResult={...rowResult, inflationStack:Math.round(row.inflationStack / infla)}}
+
+            if(row?.salaryRiseRateStack){rowResult={...rowResult, salaryRiseRateStack:Math.round(row.salaryRiseRateStack / infla)}}
+            if(row?.salary){rowResult={...rowResult, salary:Math.round(row.salary / infla)}}
+            if(row?.pension){rowResult={...rowResult, pension:Math.round(row.pension / infla)}}
+            if(row?.sideJob){rowResult={...rowResult, sideJob:Math.round(row.sideJob / infla)}}
+            if(row?.yourTotalIncome){rowResult={...rowResult, yourTotalIncome:Math.round(row.yourTotalIncome / infla)}}
+
+            if(row?.partnerTotalIncome){rowResult={...rowResult, partnerTotalIncome:Math.round(row.partnerTotalIncome / infla)}}
+            if(row?.totalIncome){rowResult={...rowResult, totalIncome:Math.round(row.totalIncome / infla)}}
+            if(row?.houseCost){rowResult={...rowResult, houseCost:Math.round(row.houseCost / infla)}}
+            if(row?.carCost){rowResult={...rowResult, carCost:Math.round(row.carCost / infla)}}
+            if(row?.loanCost){rowResult={...rowResult, loanCost:Math.round(row.loanCost / infla)}}
+
+            if(row?.etcExpense){rowResult={...rowResult, etcExpense:Math.round(row.etcExpense / infla)}}
+            if(row?.partnerTotalSpending){rowResult={...rowResult, partnerTotalSpending:Math.round(row.partnerTotalSpending / infla)}}
+            if(row?.babyCost){rowResult={...rowResult, babyCost:Math.round(row.babyCost / infla)}}
+            if(row?.parentCost){rowResult={...rowResult, parentCost:Math.round(row.parentCost / infla)}}
+            if(row?.totalConsumption){rowResult={...rowResult, totalConsumption:Math.round(row.totalConsumption / infla)}}
+
+            if(row?.totalEventMemo){rowResult={...rowResult, totalEventMemo:row.totalEventMemo}}
+            if(row?.totalEventPrice){rowResult={...rowResult, totalEventPrice:Math.round(row.totalEventPrice / infla)}}
+            if(row?.totalBalance){rowResult={...rowResult, totalBalance:Math.round(row.totalBalance / infla)}}
+            if(row?.assetLoanStack){rowResult={...rowResult, assetLoanStack:Math.round(row.assetLoanStack / infla)}}
+            if(row?.assetSavingStack){rowResult={...rowResult, assetSavingStack:Math.round(row.assetSavingStack / infla)}}
+
+            if(row?.assetInvestStack){rowResult={...rowResult, assetInvestStack:Math.round(row.assetInvestStack / infla)}}
+            if(row?.assetHousePriceStack){rowResult={...rowResult, assetHousePriceStack:Math.round(row.assetHousePriceStack / infla)}}
+
+            return rowResult;
+        });
+
+        console.log("exchangedCashflowDataTimeline",exchangedCashflowDataTimeline);
+        cashflowData.timeline = exchangedCashflowDataTimeline;
+        dispatch(CfSave(cashflowData));
+
     };
 
 }
