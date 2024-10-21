@@ -1,14 +1,13 @@
 import './Cashflow.css';
 import { Fragment, useEffect, useState } from 'react';
 import {useSelector, useDispatch} from "react-redux";
-import { useCashflowTableData } from './useCashflowTableData.jsx';
 import Mapping from '@/components/common/Mapping.jsx';
 import { toKoreanMoneySimpleUnit } from "@/utils/util.js";
 import { useMenuContext } from './MenuContext.jsx';
 
 /* 입력해주신 자료는 이번 계산에만 활용합니다. 이 사이트는 어떤 개인 정보도 저장하지 않습니다. */
 
-function CashflowTable(){
+function CashflowTable({isExchanged}){
     //redux
     const dispatch = useDispatch(); 
     const surveyData = useSelector((store) => store.Survey).data;
@@ -22,8 +21,6 @@ function CashflowTable(){
     const my = surveyData?.my;
     const add = surveyData?.add;
 
-    useCashflowTableData();
-
     const isSalaryRiseRateStackVisible = false;
     const isSideJobVisible = !!(cashflowData?.timeline ?? [])[0]?.sideJob;
 
@@ -35,6 +32,8 @@ function CashflowTable(){
         && ((add.curBabyYn === "Y" && add.curBabyList.length >= 1) || (add.willBabyYn === "Y" && add.willBabyList.length >= 1))
     );
     const isParentCostVisible = isCompleted?.[menuEnum.ADD_PARENT] === true && add.parentCareYn === "Y";
+
+    const timeline = isExchanged ? cashflowData?.exchangedTimeline : cashflowData?.timeline;
 
     return (
         <Fragment>
@@ -122,7 +121,7 @@ function CashflowTable(){
                     </tr>
                 </thead>
                 <tbody>
-                    {cashflowData?.timeline.map((row, i) => {
+                    {timeline.map((row, i) => {
                     return(
                         <tr key={i}>
                             <td>{row?.age}</td>

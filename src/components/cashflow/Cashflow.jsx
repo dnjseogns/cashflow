@@ -7,8 +7,15 @@ import CashflowSide from './CashflowSide';
 import CashflowSurvey from './CashflowSurvey';
 import CashflowTable from './CashflowTable';
 import CashflowBtn from './CashflowBtn';
+import CashflowGraph from './CashflowGraph';
+import { useCashflowTableData } from './useCashflowTableData.jsx';
 
 function Cashflow(){
+    useCashflowTableData();
+
+    const [isGraph, setIsGraph] = useState(false);
+    const [isExchanged, setIsExchanged] = useState(false);
+
     return (
     <Fragment>
     <header className='header'></header>
@@ -22,11 +29,13 @@ function Cashflow(){
                 <CashflowSurvey />
                 
                 <article className='data-area'>
-                    <CashflowTable />
+                    {isGraph === false
+                    ? <CashflowTable isExchanged={isExchanged}/>
+                    : <CashflowGraph />}
                 </article>
 
                 <div className='cf-btn-area'>
-                    <CashflowBtn />
+                    <CashflowBtn isGraph={isGraph} setIsGraph={setIsGraph} isExchanged={isExchanged} setIsExchanged={setIsExchanged}/>
                 </div>
             </div>
         </section>

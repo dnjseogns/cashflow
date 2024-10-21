@@ -5,7 +5,7 @@ const initialize = {
     data : 
     {
         btn:{
-            isGraph:false,
+            // isGraph:false,
             isExchanged:false
         },
         isCompleted:{
@@ -18,8 +18,6 @@ const initialize = {
         },
         your:{
             loan:[]
-            // car:[],
-            // house:[]
         },
         add:{
             house:[],
@@ -36,10 +34,7 @@ function SurveyReducer(state = initialize, action){
                 data : {...action.payload}
             };
         case SV_CLEAN:
-            return {
-                isSaved : false,
-                data : initialize
-            };
+            return initialize;
         default:
             return state;
     }

@@ -59,7 +59,7 @@ function SurveyBaseIndex({completeBtnClickCnt, commonCompleteLogic}){
             <p className='note'>※ 실거주 주택값 상승률 계산에 사용됩니다.</p>
         </div>
         <div>
-            <p className="question">(4) 개인 투자수익률을 입력해주세요.</p>
+            <p className="question" style={{color:"red"}}>(4) 개인 투자수익률을 입력해주세요.(중요)</p>
             <p>- <input className='btn1' value={investIncomeRate} onChange={(e)=>{surveyOnChange(e,"investIncomeRate")}}/> %</p>
             <p className='note'>※ 투자대상 : 주식, 금, 연금, 코인, 실거주 외 주택</p>
             <p className='note'>※ 아래 내용을 참고하여 작성해주세요.</p>

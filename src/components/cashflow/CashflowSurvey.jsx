@@ -49,8 +49,6 @@ function CashflowSurvey(){
     const commonCompleteLogic = () => {
         const isSurveyCompleted = JSON.parse(JSON.stringify(surveyData.isCompleted));
         isSurveyCompleted[surveyDiv] = true;
-
-        console.log("surveyDiv",surveyDiv);
         
         if(prevNextDiv === "NEXT"){
             if(surveyDiv === menuEnum.GUIDE){editSurveyDivNext(isSurveyCompleted, menuEnum.BASE_MODE,menuEnum.BASE_MODE);}
@@ -116,81 +114,26 @@ function CashflowSurvey(){
             else if(surveyDiv === menuEnum.ADD_ETC){editSurveyDivPrev(isSurveyCompleted, menuEnum.ADD_ETC,menuEnum.ADD_RETIRE,menuEnum.ADD_RETIRE);}
         }
 
-
-        // const menuEnumKeyArr = Object.keys(menuEnum);
-        // let menuEnumValueArr = [];
-        // menuEnumKeyArr.forEach((item)=>{
-        //     if(menuEnum[item].includes('.') || menuEnum[item].includes('가이드') || menuEnum[item].includes('다시하기')){
-        //         menuEnumValueArr.push(menuEnum[item]);
-        //     }
-        // });
-
-        // const indexOfValue = menuEnumValueArr.indexOf(surveyDiv);
-
-        // if(prevNextDiv === "NEXT"){
-        //     if(indexOfValue === 0 && Object.keys(isSurveyCompleted).filter((key)=>isSurveyCompleted[key] !== undefined).length >= 2){ //처음
-        //         Object.keys(isSurveyCompleted).map((key)=>{
-        //             if(key === menuEnum.BASE_MODE){
-        //                 isSurveyCompleted[key] = false;
-        //                 setSurveyDivition(key);
-        //             }else{
-        //                 isSurveyCompleted[key] = undefined;
-        //             }
-        //         });
-        //     }
-        //     else if(indexOfValue === menuEnumValueArr.length -1){ //마지막
-        //         alert("저장 클릭 시 저장 그래프에 반영 예정");
-        //         // Object.keys(isSurveyCompleted).map((key)=>{
-        //         //     if(key === menuEnum.BASE_MODE){
-        //         //         isSurveyCompleted[key] = false;
-        //         //         setSurveyDivition(key);
-        //         //     }else{
-        //         //         isSurveyCompleted[key] = undefined;
-        //         //     }
-        //         // });
-        //     } else if(surveyData.base.marryYn == "Y" && menuEnumValueArr[indexOfValue + 1] == menuEnum.ADD_MARRY){
-        //         const curValue = menuEnumValueArr[indexOfValue];
-        //         isSurveyCompleted[curValue] = true;
-        //         const nextValue = menuEnumValueArr[indexOfValue + 2];
-        //         isSurveyCompleted[nextValue] = false;
-        //         setSurveyDivition(nextValue);
-        //     }
-        //     else{
-        //         const curValue = menuEnumValueArr[indexOfValue];
-        //         isSurveyCompleted[curValue] = true;
-        //         const nextValue = menuEnumValueArr[indexOfValue + 1];
-        //         isSurveyCompleted[nextValue] = false;
-        //         setSurveyDivition(nextValue);
-        //     }
-        // }else if(prevNextDiv === "PREV"){
-        //     if(indexOfValue === 0){
-        //         setSurveyDivition(""); //처음이라면
-        //     }
-        //     else if(surveyData.base.marryYn == "Y" && menuEnumValueArr[indexOfValue - 1] == menuEnum.ADD_MARRY){
-        //         const curValue = menuEnumValueArr[indexOfValue];
-        //         isSurveyCompleted[curValue] = undefined;
-        //         const nextValue = menuEnumValueArr[indexOfValue - 2];
-        //         isSurveyCompleted[nextValue] = false;
-        //         setSurveyDivition(nextValue);
-        //     }
-        //     else{
-        //         const curValue = menuEnumValueArr[indexOfValue];
-        //         isSurveyCompleted[curValue] = undefined;
-        //         const nextValue = menuEnumValueArr[indexOfValue - 1];
-        //         isSurveyCompleted[nextValue] = false;
-        //         setSurveyDivition(nextValue);
-        //     }
-        // }
+        if(prevNextDiv === "RETRY_RESET_X"){
+            Object.keys(isSurveyCompleted).map((key)=>{
+                if(key === menuEnum.BASE_MODE){
+                    isSurveyCompleted[key] = false;
+                    setSurveyDivition(key);
+                }else{
+                    isSurveyCompleted[key] = undefined;
+                }
+            });
+        }
 
         surveyData.isCompleted = isSurveyCompleted;
-        dispatch(SvSave(surveyData));
+
+        if(prevNextDiv === "RESET_O"){
+            dispatch(CfClean());
+            dispatch(SvClean());
+        }else{
+            dispatch(SvSave(surveyData));
+        }
     }
-
-
-    // const tmpSurveyTitle = 
-    // Object.keys(surveyData.isCompleted).length >= 2 && surveyDiv===menuEnum.GUIDE
-    // ? "다시하기"
-    // : surveyTitle;
 
     return (
     <Fragment>
@@ -225,30 +168,20 @@ function CashflowSurvey(){
                 }
                 </div>
                 <div className='survey-tail'>
-                {surveyDiv === menuEnum.GUIDE
+                {surveyDiv === menuEnum.GUIDE && Object.keys(surveyData.isCompleted).length < 2
                 ?(<Fragment>
                     <button className='complete' style={{visibility:"hidden"}}>감춤</button>
-                    <button className='complete' onClick={()=>{setPrevNextDiv("NEXT"); setCompleteBtnClickCnt(completeBtnClickCnt+1);}}>다음</button>
+                    <button className='complete' onClick={()=>{setPrevNextDiv("NEXT"); setCompleteBtnClickCnt(completeBtnClickCnt+1);}}>시작하기</button>
                 </Fragment>)
-                :surveyDiv === menuEnum.BASE_MODE
+                : surveyDiv === menuEnum.GUIDE && Object.keys(surveyData.isCompleted).length >= 2
                 ?(<Fragment>
-                    <button className='complete' style={{visibility:"hidden"}}>감춤</button>
-                    <button className='complete' onClick={()=>{setPrevNextDiv("NEXT"); setCompleteBtnClickCnt(completeBtnClickCnt+1);}}>다음</button>
+                    <button className='complete' onClick={()=>{setPrevNextDiv("RESET_O"); setCompleteBtnClickCnt(completeBtnClickCnt+1);}}>전체 초기화</button>
+                    <button className='complete' onClick={()=>{setPrevNextDiv("RETRY_RESET_X"); setCompleteBtnClickCnt(completeBtnClickCnt+1);}}>다시하기(초기화X)</button>
                 </Fragment>)
                 :(<Fragment>
                     <button className='complete' onClick={()=>{setPrevNextDiv("PREV"); setCompleteBtnClickCnt(completeBtnClickCnt+1);}}>이전</button>
                     <button className='complete' onClick={()=>{setPrevNextDiv("NEXT"); setCompleteBtnClickCnt(completeBtnClickCnt+1);}}>다음</button>
                 </Fragment>)}
-                {/* {surveyDiv === menuEnum.GUIDE || surveyDiv === menuEnum.BASE_MODE
-                ? <button className='complete' style={{visibility:"hidden"}}>이전</button>
-                : <button className='complete' onClick={()=>{setPrevNextDiv("PREV"); setCompleteBtnClickCnt(completeBtnClickCnt+1);}}>
-                    이전
-                </button>}
-                    <button className='complete' onClick={()=>{setPrevNextDiv("NEXT"); setCompleteBtnClickCnt(completeBtnClickCnt+1); }}>
-                        {surveyDiv === menuEnum.GUIDE && Object.keys(surveyData.isCompleted).length <= 1 ? "시작하기" 
-                        : surveyDiv === menuEnum.GUIDE && Object.keys(surveyData.isCompleted).length > 1 ? "다시하기"
-                        : "다음"}
-                    </button> */}
                 </div>
             </article>
             </Fragment>

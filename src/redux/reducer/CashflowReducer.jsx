@@ -4,7 +4,10 @@ const initialize = {
     isSaved : false,
     data : 
     {
-        timeline:[]
+        timeline:[],
+        exchangedTimeline:[],
+        chart:{CUR:[],A:[],B:[],C:[],D:[],E:[]},
+        exchangedChart:{CUR:[],A:[],B:[],C:[],D:[],E:[]}
     }
 };
 
