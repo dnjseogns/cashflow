@@ -4,6 +4,10 @@ const initialize = {
     isSaved : false,
     data : 
     {
+        btn:{
+            isGraph:false,
+            isExchanged:false
+        },
         isCompleted:{
             "가이드":true
         },
