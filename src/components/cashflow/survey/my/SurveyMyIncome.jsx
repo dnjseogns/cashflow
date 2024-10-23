@@ -18,8 +18,8 @@ function SurveyMyIncome({completeBtnClickCnt, commonCompleteLogic}){
 
     const salaryMonthly = surveyData.my?.salaryMonthly ?? 2000000;
     const workYear = surveyData.my?.workYear ?? 1;
-    const salaryRiseRate1 = surveyData.my?.salaryRiseRate1 ?? 6;
-    const salaryRiseRate25 = surveyData.my?.salaryRiseRate25 ?? 2;
+    const salaryRiseRate1 = surveyData.my?.salaryRiseRate1 ?? 6.5;
+    const salaryRiseRate25 = surveyData.my?.salaryRiseRate25 ?? 2.0;
     const retireAge = surveyData.my?.retireAge ?? 55;
     const sideJobMonthly = surveyData.my?.sideJobMonthly ?? 0;
 
@@ -92,7 +92,7 @@ function SurveyMyIncome({completeBtnClickCnt, commonCompleteLogic}){
             <p className="question">(3) 연차수별 시뮬레이션 연봉상승률을 입력해주세요.</p>
             <p>- 1년차 : <input className='btn1' value={salaryRiseRate1} onChange={(e)=>{surveyOnChange(e,"salaryRiseRate1")}}/>%
             → 25년차 이상 : <input className='btn1' value={salaryRiseRate25} onChange={(e)=>{surveyOnChange(e,"salaryRiseRate25")}}/>%</p>
-            <p className='note'>※ 평균 연봉 상승률은 약 7% → 2%으로 25년에 걸쳐 점차 감소합니다.</p>
+            <p className='note'>※ 평균 연봉 상승률은 약 6.5% → 2%으로 25년에 걸쳐 점차 감소합니다.</p>
             <p className='note'>※ 참고사이트 : 임금직무정보시스템(https://www.wage.go.kr/whome/index.do)</p>
         </div>
         <div>
