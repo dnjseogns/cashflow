@@ -31,7 +31,7 @@ function Cashflow(){
                 <article className='data-area'>
                     {isGraph === false
                     ? <CashflowTable isExchanged={isExchanged}/>
-                    : <CashflowGraph />}
+                    : <CashflowGraph isExchanged={isExchanged}/>}
                 </article>
 
                 <div className='cf-btn-area'>

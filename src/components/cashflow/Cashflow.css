@@ -79,6 +79,7 @@
 .cf-right .cf-content .cf-btn-area img.on{border: 1px solid white; background-color: white;}
 .cf-right .cf-content .cf-btn-area img:hover{border: 2px solid rgba(0, 0, 0, 0.5);}
 
+
 /*******************************************/
 /* survey */
 .cf-right .survey-area{ background: #F1F1F1; border: 1px solid #9BBEC8; border-left: 0px solid #9BBEC8; 
@@ -189,3 +190,11 @@
 
 /* table tbody minus */
 .cf-right .data-area table tbody tr td.minus{color:red;}
+
+/***************************************************************************************/
+/* chart */
+.cf-right .data-area .chart-btn{display: flex; justify-content: center; margin-top: 10px;}
+.cf-right .data-area .chart-btn button{
+    margin:0px 4%;padding: 6px 30px 6px 30px; font-weight: 600; background-color: #427D9D; color: white;
+    border: none; border-radius: 10px;
+}

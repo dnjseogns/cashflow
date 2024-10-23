@@ -6,8 +6,13 @@ const initialize = {
     {
         timeline:[],
         exchangedTimeline:[],
-        chart:{CUR:[],A:[],B:[],C:[],D:[],E:[]},
-        exchangedChart:{CUR:[],A:[],B:[],C:[],D:[],E:[]}
+        
+        timelineSaveA:[],
+        timelineSaveB:[],
+        timelineSaveC:[],
+
+        chart:[],
+        exchangedChart:[]
     }
 };
 

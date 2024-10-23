@@ -658,6 +658,29 @@ export const useCashflowTableData = () => {
         }
 
         cashflowData.timeline = rows;
+
+
+
+        //그래프 데이터 만들기
+        const newChart = rows.map((row)=>{
+            const totalAssetSaveA = cashflowData.timelineSaveA.find((itemA)=>itemA.age == row.age)?.totalAsset;
+            const totalAssetSaveB = cashflowData.timelineSaveB.find((itemB)=>itemB.age == row.age)?.totalAsset;
+            const totalAssetSaveC = cashflowData.timelineSaveC.find((itemC)=>itemC.age == row.age)?.totalAsset;
+
+            return {
+                age:row.age,
+                inflationStack:row.inflationStack,
+                totalAssetCurrent: row.totalAsset? Math.round(row.totalAsset/1000000): 0,
+                totalAssetSaveA: totalAssetSaveA? Math.round(totalAssetSaveA/1000000): 0,
+                totalAssetSaveB: totalAssetSaveB? Math.round(totalAssetSaveB/1000000): 0,
+                totalAssetSaveC: totalAssetSaveC? Math.round(totalAssetSaveC/1000000): 0
+            };
+        });
+        cashflowData.chart = newChart;
+
+
+
+        //결과
         dispatch(CfSave(cashflowData));
     };
 
@@ -706,8 +729,26 @@ export const useCashflowTableData = () => {
             
             return rowResult;
         });
-        
         cashflowData.exchangedTimeline = exchangedTimeline;
+
+
+
+        const exchangedChart = JSON.parse(JSON.stringify(cashflowData)).chart.map((row)=>{
+            const infla = row.inflationStack;
+            let rowResult = {}
+            if(isValueExist(row?.age)){rowResult={...rowResult, age:row.age}}
+            if(isValueExist(row?.totalAssetCurrent)){rowResult={...rowResult, totalAssetCurrent:Math.round(row.totalAssetCurrent / infla)}}
+            if(isValueExist(row?.totalAssetSaveA)){rowResult={...rowResult, totalAssetSaveA:Math.round(row.totalAssetSaveA / infla)}}
+            if(isValueExist(row?.totalAssetSaveB)){rowResult={...rowResult, totalAssetSaveB:Math.round(row.totalAssetSaveB / infla)}}
+            if(isValueExist(row?.totalAssetSaveC)){rowResult={...rowResult, totalAssetSaveC:Math.round(row.totalAssetSaveC / infla)}}
+            
+            return rowResult;
+        });
+        cashflowData.exchangedChart = exchangedChart;
+
+
+
+
 
         dispatch(CfSave(cashflowData));
 
