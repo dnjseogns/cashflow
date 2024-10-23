@@ -10,6 +10,9 @@ const initialize = {
         timelineSaveA:[],
         timelineSaveB:[],
         timelineSaveC:[],
+        legendChartA:"범례A",
+        legendChartB:"범례B",
+        legendChartC:"범례C",
 
         chart:[],
         exchangedChart:[]

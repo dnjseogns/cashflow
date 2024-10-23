@@ -15,9 +15,9 @@ const CashflowGraph = ({isExchanged}) => {
     const data = isExchanged ? cashflowData?.exchangedChart : cashflowData.chart;
     const dispatch = useDispatch();
 
-    const [graphAName, setGraphAName] = useState("그래프A");
-    const [graphBName, setGraphBName] = useState("그래프B");
-    const [graphCName, setGraphCName] = useState("그래프C");
+    const legendChartA = cashflowData.legendChartA;
+    const legendChartB = cashflowData.legendChartB;
+    const legendChartC = cashflowData.legendChartC;
 
     const saveChartData = (div) => {
         if(div === "A"){
@@ -26,6 +26,20 @@ const CashflowGraph = ({isExchanged}) => {
             cashflowData.timelineSaveB = cashflowData.timeline;
         }else if(div === "C"){
             cashflowData.timelineSaveC = cashflowData.timeline;
+        }
+        dispatch(CfSave(cashflowData));
+
+        //재조회용
+        dispatch(SvSave(JSON.parse(JSON.stringify(surveyData))));
+    }
+
+    const saveLegendChart = (e, div) => {
+        if(div === "A"){
+            cashflowData.legendChartA = e.target.value;
+        }else if(div === "B"){
+            cashflowData.legendChartB = e.target.value;
+        }else if(div === "C"){
+            cashflowData.legendChartC = e.target.value;
         }
         dispatch(CfSave(cashflowData));
 
@@ -44,9 +58,9 @@ const CashflowGraph = ({isExchanged}) => {
             <Tooltip />
             <Legend 
                 payload={[{ value: '현재', type: 'line', id: 'v1',color:"#8884d8" },
-                    { value: graphAName, type: 'line', id: 'v2',color:"#FFC658" },
-                    { value: graphBName, type: 'line', id: 'v3',color:"#8DD1E1" },
-                    { value: graphCName, type: 'line', id: 'v4',color:"#D0ED57" }
+                    { value: legendChartA, type: 'line', id: 'v2',color:"#FFC658" },
+                    { value: legendChartB, type: 'line', id: 'v3',color:"#8DD1E1" },
+                    { value: legendChartC, type: 'line', id: 'v4',color:"#D0ED57" }
                 ]}
             />
             <Line type="monotone" dataKey="totalAssetCurrent" stroke="#8884d8" />
@@ -61,15 +75,18 @@ const CashflowGraph = ({isExchanged}) => {
         </LineChart>
         <div className='chart-btn'>
             <div>
-                <label>범례A : </label><input />
+                <label>범례A : </label><input value={legendChartA} onChange={(e)=>saveLegendChart(e, "A")}/>
+                <br/>
                 <button onClick={()=>{saveChartData("A")}}>현재 데이터 → A에 저장하기</button>
             </div>
             <div>
-                <label>범례B : </label><input />
+                <label>범례B : </label><input value={legendChartB} onChange={(e)=>saveLegendChart(e, "B")}/>
+                <br/>
                 <button onClick={()=>{saveChartData("B")}}>현재 데이터 → B에 저장하기</button>
             </div>
             <div>
-                <label>범례C : </label><input />
+                <label>범례C : </label><input value={legendChartC} onChange={(e)=>saveLegendChart(e, "C")}/>
+                <br/>
                 <button onClick={()=>{saveChartData("C")}}>현재 데이터 → C에 저장하기</button>
             </div>
         </div>
