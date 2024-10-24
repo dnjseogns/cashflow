@@ -130,9 +130,11 @@ const SurveyAddHouse = ({completeBtnClickCnt, commonCompleteLogic}) => {
                         return (
                         <tr key={i}>
                             <td>{item?.seq}</td>
-                            <td>
-                                <input readOnly={item?.isReadOnly ?? false} className={item?.isReadOnly ? "readonly":""} style={{textAlign:"right"}} value={item?.age}
-                                onChange={(e)=>{houseListOnChange(e, "EDIT", item, "age")}}/>
+
+                            <td>{item?.age == -1
+                                ? "현재"
+                                : <input readOnly={item?.isReadOnly ?? false} className={item?.isReadOnly ? "readonly":""} style={{textAlign:"right"}} value={item?.age}
+                                onChange={(e)=>{houseListOnChange(e, "EDIT", item, "age")}}/>}
                             </td>
                             <td>
                                 <select disabled={item?.isReadOnly ?? false} className={"combo " + (item?.isReadOnly ? "readonly":"")}

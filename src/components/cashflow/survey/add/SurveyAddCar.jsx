@@ -121,15 +121,26 @@ const SurveyAddCar = ({completeBtnClickCnt, commonCompleteLogic}) => {
                     </tr>
                 </thead>
                 <tbody>
+                {surveyData.my.carYn == "Y"
+                ? <tr>
+                    <td>0</td>
+                    <td>현재</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>{surveyData.my.carCostMonthly.toLocaleString('ko-KR')}원</td>
+                    <td></td>
+                </tr>
+                : null}
                 {car.map((item, i)=>{
-                    console.log("car",car);
                     return (
                         <tr key={i}>
                             <td>{item.seq}</td>
                             <td>
-                                <input style={{textAlign:"right"}} 
-                                        value={item?.age}
-                                        onChange={(e)=>{carListOnChange(e, "EDIT", item, "age")}}/>
+                                {item?.age == -1
+                                ? "현재"
+                                : <input style={{textAlign:"right"}} 
+                                value={item?.age}
+                                onChange={(e)=>{carListOnChange(e, "EDIT", item, "age")}}/>}
                             </td>
                             <td>
                                 <input readOnly={(item.seq == 1 && surveyData.my.carYn == "N") ? true : false} 
