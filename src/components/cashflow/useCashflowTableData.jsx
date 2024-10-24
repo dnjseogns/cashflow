@@ -670,10 +670,10 @@ export const useCashflowTableData = () => {
             return {
                 age:row.age,
                 inflationStack:row.inflationStack,
-                totalAssetCurrent: row.totalAsset? Math.round(row.totalAsset/1000000): 0,
-                totalAssetSaveA: totalAssetSaveA? Math.round(totalAssetSaveA/1000000): 0,
-                totalAssetSaveB: totalAssetSaveB? Math.round(totalAssetSaveB/1000000): 0,
-                totalAssetSaveC: totalAssetSaveC? Math.round(totalAssetSaveC/1000000): 0
+                totalAssetCurrent: row.totalAsset? Math.round(row.totalAsset): 0,
+                totalAssetSaveA: totalAssetSaveA? Math.round(totalAssetSaveA): 0,
+                totalAssetSaveB: totalAssetSaveB? Math.round(totalAssetSaveB): 0,
+                totalAssetSaveC: totalAssetSaveC? Math.round(totalAssetSaveC): 0
             };
         });
         cashflowData.chart = newChart;

@@ -1,18 +1,25 @@
 .welcome{
     position:absolute; 
-    left:10%; top:20%; 
-    font-size: 1.2em; 
-    /* transform:translate(-50%,-50%); */
+    left:30%; top:27%; 
+    font-size: 1.2em;
 }
-.welcome p{line-height: 500%;}
+.welcome .welcome-content-wrap{
+    position: relative; display: flex; justify-content: center; flex-direction: column;
+}
+.welcome .welcome-content-wrap p{line-height: 500%; margin: auto;}
 /* .welcome Button{background-color: #22577a; padding:1.5em; padding-left: 3em; padding-right: 3em;
 position:relative; left:50%; transform:translate(-50%,0%);  border: #22577a;} */
 /* .welcome Button:hover{background-color: #38a3a5;} */
 /*
 #164863  #427D9D  #9BBEC8  #DDF2FD
 */
-.welcome button{color:#ffffff; background:#164863; border:#164863;
-    padding:1.0em; padding-left: 4em; padding-right: 4em;
-    position:relative; left:50%; transform:translate(-50%,0%);
-    border-radius:10px;
+.welcome .welcome-btn-wrap {
+    margin-top:30px;
+}
+.welcome .welcome-content-wrap button{color:#ffffff; background:#164863; border:#164863;
+    padding:1.0em; padding-left: 2em; padding-right: 2em; border-radius:10px;
+    width:350px
+}
+.welcome .welcome-content-wrap button:nth-child(1){
+    margin-right:30px
 }

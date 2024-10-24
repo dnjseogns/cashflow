@@ -10,6 +10,5 @@ import store from '@/redux/store/Store';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <App />
-    {/* <Test /> */}
   </Provider>
 )

@@ -5,15 +5,20 @@ import Cashflow from "@/components/cashflow/Cashflow";
 import { MenuProvider } from '@/components/cashflow/MenuContext';
 
 function App() {
-  const [isWelcome,setIsWelcome] = useState(true);
+  const [isCalcCashflow,setIsCalcCashflow] = useState(false);
+  const [isCaseStudy,setIsCaseStudy] = useState(false);
   
   return (
     <Fragment>
-      {isWelcome
-      ?<Welcome setIsWelcome={setIsWelcome}></Welcome>
-      :<MenuProvider>
+      {isCalcCashflow
+      ?<MenuProvider>
         <Cashflow />
       </MenuProvider>
+      : isCaseStudy
+      ? <MenuProvider>
+        <Cashflow />
+      </MenuProvider>
+      :<Welcome setIsCalcCashflow={setIsCalcCashflow} setIsCaseStudy={setIsCaseStudy}></Welcome>
       }
     </Fragment>
   )
