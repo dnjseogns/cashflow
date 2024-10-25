@@ -338,19 +338,27 @@ export const useCashflowTableData = () => {
 
             if(isCompleted?.[menuEnum.MY_FIXED_ASSET] === true){
                 //지출 -> 주거비
-                const tmpCurHouseArr = add.house.filter((houseItem)=>houseItem.age <= i);
+                const tmpCurHouseArr = add.house.filter((houseItem)=>houseItem.age == -1);
                 const tmpCurHouse = tmpCurHouseArr[tmpCurHouseArr.length-1];
                 row.houseCost = Math.round((tmpCurHouse?.houseCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
+
+                if(isCompleted?.[menuEnum.ADD_HOUSE] === true){
+                    const tmpCurHouseArr = add.house.filter((houseItem)=>houseItem.age <= i);
+                    const tmpCurHouse = tmpCurHouseArr[tmpCurHouseArr.length-1];
+                    row.houseCost = Math.round((tmpCurHouse?.houseCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
+                }
             }
             if(isCompleted?.[menuEnum.MY_FIXED_ASSET] === true){
                 //지출 -> 차량비
                 row.carCost = Math.round((my?.carCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
 
                 //add 쪽있다면, 교체
-                const tmpCurCarArr = add.car.filter((carItem)=>carItem.age <= i);
-                if(tmpCurCarArr.length >= 1){
-                    const tmpCurCar = tmpCurCarArr[tmpCurCarArr.length-1];
-                    row.carCost = Math.round((tmpCurCar?.carCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
+                if(isCompleted?.[menuEnum.ADD_CAR] === true){
+                    const tmpCurCarArr = add.car.filter((carItem)=>carItem.age <= i);
+                    if(tmpCurCarArr.length >= 1){
+                        const tmpCurCar = tmpCurCarArr[tmpCurCarArr.length-1];
+                        row.carCost = Math.round((tmpCurCar?.carCostMonthly ?? 0) * 12 * row.inflationStack) * -1;
+                    }
                 }
             }
             if(isCompleted?.[menuEnum.MY_ASSET] === true){
@@ -625,18 +633,12 @@ export const useCashflowTableData = () => {
 
             if(isCompleted?.[menuEnum.MY_FIXED_ASSET] === true){
                 //누적자산 -> 주택
-                if(Array.isArray(add.house) && add.house.length >= 1){
-                    const newHouse = add.house.find((houseItem)=>(houseItem.age == i));
-                    if(newHouse){
-                        assetHousePriceStack = newHouse.housePriceTotal;
-                    }else{
+                if(isCompleted?.[menuEnum.ADD_HOUSE] !== true){
+                    if(Array.isArray(add.house) && add.house.length >= 1){
                         if(loopCnt == 1){
                             assetHousePriceStack = add.house?.find((item)=>item.age == -1)?.housePriceTotal ?? 0;
-                            // do nothing // assetHousePriceStack = assetHousePriceStack;
                         }else{
-                            const tmpCurHouseArr = add.house.filter((houseItem)=>houseItem.age < i);
-                            const tmpCurHouse = tmpCurHouseArr[tmpCurHouseArr.length-1];
-                            // console.log("tmpCurHouse",tmpCurHouse);
+                            const tmpCurHouse = add.house?.find((item)=>item.age == -1);
                             if(tmpCurHouse.livingType === "매매"){
                                 assetHousePriceStack = assetHousePriceStack * (1 + base.realEstateGrouthRate/100);
                             }else{
@@ -644,8 +646,30 @@ export const useCashflowTableData = () => {
                             }
                         }
                     }
+                    row.assetHousePriceStack = assetHousePriceStack;
+                }else{
+                    //누적자산 -> 주택 (추가정보 - 집 완료시)
+                    if(Array.isArray(add.house) && add.house.length >= 1){
+                        const newHouse = add.house.find((houseItem)=>(houseItem.age == i));
+                        if(newHouse){
+                            assetHousePriceStack = newHouse.housePriceTotal;
+                        }else{
+                            if(loopCnt == 1){
+                                assetHousePriceStack = add.house?.find((item)=>item.age == -1)?.housePriceTotal ?? 0;
+                            }else{
+                                const tmpCurHouseArr = add.house.filter((houseItem)=>houseItem.age < i);
+                                const tmpCurHouse = tmpCurHouseArr[tmpCurHouseArr.length-1];
+                                // console.log("tmpCurHouse",tmpCurHouse);
+                                if(tmpCurHouse.livingType === "매매"){
+                                    assetHousePriceStack = assetHousePriceStack * (1 + base.realEstateGrouthRate/100);
+                                }else{
+                                    // do nothing //assetHousePriceStack = assetHousePriceStack;
+                                }
+                            }
+                        }
+                    }
+                    row.assetHousePriceStack = assetHousePriceStack;
                 }
-                row.assetHousePriceStack = assetHousePriceStack;
             }
 
             if(isCompleted?.[menuEnum.MY_ASSET] === true){
