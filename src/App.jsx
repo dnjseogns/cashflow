@@ -3,6 +3,7 @@ import { Fragment, useState } from 'react';
 import Welcome from "@/components/welcome/Welcome";
 import Cashflow from "@/components/cashflow/Cashflow";
 import { MenuProvider } from '@/components/cashflow/MenuContext';
+import CaseStudy from './components/caseStudy/CaseStudy';
 
 function App() {
   const [isCalcCashflow,setIsCalcCashflow] = useState(false);
@@ -16,7 +17,7 @@ function App() {
       </MenuProvider>
       : isCaseStudy
       ? <MenuProvider>
-        <Cashflow />
+        <CaseStudy />
       </MenuProvider>
       :<Welcome setIsCalcCashflow={setIsCalcCashflow} setIsCaseStudy={setIsCaseStudy}></Welcome>
       }
