@@ -1,15 +1,11 @@
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
-import './Cashflow.css';
 import { Fragment, useEffect, useState } from 'react';
 import {useSelector, useDispatch} from "react-redux";
-import { useCashflowTableData } from './useCashflowTableData.jsx';
-import Mapping from '@/components/common/Mapping.jsx';
 import { toKoreanMoneySimpleUnit } from "@/utils/util.js";
-import { useMenuContext } from './MenuContext.jsx';
 import {SvSave, SvClean} from '@/redux/action/SurveyAction';
 import {CfSave, CfClean} from '@/redux/action/CashflowAction';
 
-const CashflowGraph = ({isExchanged}) => {
+const CaseStudyGraph = ({isExchanged}) => {
     const surveyData = useSelector((store) => store.Survey).data;
     const cashflowData = useSelector((store) => store.Cashflow).data;
     const data = isExchanged ? cashflowData?.exchangedChart : cashflowData.chart;
@@ -133,4 +129,43 @@ const CashflowGraph = ({isExchanged}) => {
         </Fragment>
     )
 }
-export default CashflowGraph;
+export default CaseStudyGraph;
+
+
+// import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+// // import './Cashflow.css';
+// import { toKoreanMoneySimpleUnit } from "@/utils/util.js";
+
+// const CaseStudyGraph = () => {
+//     const [data, setData] = useState([]);
+
+//     return (<LineChart width={1580} height={750} 
+//         margin={{ top: 50, right: 10, left: 70, bottom: 5 }}
+//         data={data}>
+//         <XAxis dataKey="age" />
+//         {/* <YAxis label={{ value: '단위(원)', angle: 0, position: {x:80,y:-20}}} tickFormatter={toKoreanMoneySimpleUnit}/> */}
+//         <YAxis tickFormatter={toKoreanMoneySimpleUnit}/>
+//         {isChartAVisible ? <Line type="monotone" dataKey="totalAssetCurrent" stroke="#8884d8" /> : null}
+//         {isChartBVisible ? <Line type="monotone" dataKey="totalAssetSaveA" stroke="#FFC658" /> : null}
+//         {isChartCVisible ? <Line type="monotone" dataKey="totalAssetSaveB" stroke="#8DD1E1" /> : null}
+//         {isChartDVisible ? <Line type="monotone" dataKey="totalAssetSaveC" stroke="#D0ED57" /> : null}
+//         <Legend 
+//             payload={[{ value: '현재', type: 'line', id: 'v1',color:"#8884d8" },
+//                 { value: legendChartA, type: 'line', id: 'v2',color:"#FFC658" },
+//                 { value: legendChartB, type: 'line', id: 'v3',color:"#8DD1E1" },
+//                 { value: legendChartC, type: 'line', id: 'v4',color:"#D0ED57" }
+//             ]}
+//         />
+//         <Tooltip 
+//             labelFormatter={(label) => `나이: ${label}`}
+//             formatter={(value, name) => {
+//                 if (name === "totalAssetSaveA") return [toKoreanMoneySimpleUnit(value), "A:"+legendChartA];
+//                 if (name === "totalAssetSaveB") return [toKoreanMoneySimpleUnit(value), "B:"+legendChartB];
+//                 if (name === "totalAssetSaveC") return [toKoreanMoneySimpleUnit(value), "C:"+legendChartC];
+//                 return [toKoreanMoneySimpleUnit(value), "현재"];
+//             }}
+//         />
+//         <CartesianGrid stroke="#ccc" />
+//     </LineChart>)
+// }
+// export default CaseStudyGraph;
