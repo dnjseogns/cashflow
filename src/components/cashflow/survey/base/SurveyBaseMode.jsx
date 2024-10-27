@@ -12,8 +12,8 @@ function SurveyBaseMode({completeBtnClickCnt, commonCompleteLogic}){
     const surveyData = useSelector((store) => store.Survey).data;
 
     const marryYn = surveyData?.base?.marryYn ?? "N";
-    const myAge = surveyData?.my?.age ?? "26";
-    const yourAge = surveyData?.your?.age ?? "26";
+    const myAge = surveyData?.my?.age ?? "28";
+    const yourAge = surveyData?.your?.age ?? "28";
 
     const surveyOnChange = (e, div) => {
         if(div==="marryYn"){

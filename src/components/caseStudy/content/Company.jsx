@@ -2,7 +2,7 @@ import '@/components/caseStudy/caseStudy.css';
 import { Fragment, useEffect, useState } from 'react';
 import {useSelector, useDispatch} from "react-redux";
 import {CfSave, CfClean} from '@/redux/action/CashflowAction';
-import newCashflowData from "@/components/caseStudy/chartData/NoData.json";
+import newCashflowData from "@/components/caseStudy/chartData/Company.json";
 
 const Company = ({children}) => {
     const dispatch = useDispatch();
@@ -14,7 +14,7 @@ const Company = ({children}) => {
     return (
         <Fragment>
         <div className="case-study-conten-top">
-            <h4 className='title'>CaseX. XXX</h4>
+            <h4 className='title'>Case8. 대기업 vs 중소기업</h4>
             <p></p>
         </div>
         <div className="case-study-conten-top">

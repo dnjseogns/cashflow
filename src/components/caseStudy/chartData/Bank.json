@@ -1,0 +1,11 @@
+{
+    "timeline":[],
+    "exchangedTimeline":[],
+    "timelineSaveA":[],
+    "timelineSaveB":[],
+    "timelineSaveC":[],
+    "timelineSaveD":[],
+    "chart":[],
+    "chartLegent":{"nameA":"Case1", "nameB":"Case2", "nameC":"Case3"},
+    "exchangedChart":[]
+}

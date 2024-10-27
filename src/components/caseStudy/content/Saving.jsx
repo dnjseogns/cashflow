@@ -2,7 +2,7 @@ import '@/components/caseStudy/caseStudy.css';
 import { Fragment, useEffect, useState } from 'react';
 import {useSelector, useDispatch} from "react-redux";
 import {CfSave, CfClean} from '@/redux/action/CashflowAction';
-import newCashflowData from "@/components/caseStudy/chartData/NoData.json";
+import newCashflowData from "@/components/caseStudy/chartData/Saving.json";
 
 const Saving = ({children}) => {
     const dispatch = useDispatch();
@@ -14,7 +14,7 @@ const Saving = ({children}) => {
     return (
         <Fragment>
         <div className="case-study-conten-top">
-            <h4 className='title'>CaseX. XXX</h4>
+            <h4 className='title'>Case9. 10만원 더 아끼면?</h4>
             <p></p>
         </div>
         <div className="case-study-conten-top">
