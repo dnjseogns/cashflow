@@ -194,7 +194,7 @@
 /***************************************************************************************/
 /* chart */
 .cf-right .data-area .chart-btn{display: flex; justify-content: center; margin-top: 10px;}
-.cf-right .data-area .chart-btn>div{margin: 0px 50px;}
+.cf-right .data-area .chart-btn>div{margin: 0px 20px;}
 .cf-right .data-area .chart-btn input{padding-right: 5px; border:0px; border-bottom: 1px solid black; background: white; }
 .cf-right .data-area .chart-btn button{margin-top: 5px; padding: 6px 30px 6px 30px; font-weight: 600; background-color: #427D9D; color: white; border: none; border-radius: 10px;}
 

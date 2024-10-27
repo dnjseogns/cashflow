@@ -1,11 +1,8 @@
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
-import './Cashflow.css';
+// import './Cashflow.css';
 import { Fragment, useEffect, useState } from 'react';
 import {useSelector, useDispatch} from "react-redux";
-import { useCashflowTableData } from './useCashflowTableData.jsx';
-import Mapping from '@/components/common/Mapping.jsx';
 import { toKoreanMoneySimpleUnit } from "@/utils/util.js";
-import { useMenuContext } from './MenuContext.jsx';
 import {SvSave, SvClean} from '@/redux/action/SurveyAction';
 import {CfSave, CfClean} from '@/redux/action/CashflowAction';
 
@@ -15,14 +12,21 @@ const CashflowGraph = ({isExchanged}) => {
     const data = isExchanged ? cashflowData?.exchangedChart : cashflowData.chart;
     const dispatch = useDispatch();
 
-    const legendChartA = cashflowData.legendChartA;
-    const legendChartB = cashflowData.legendChartB;
-    const legendChartC = cashflowData.legendChartC;
+
+    console.log("JSON.stringify(cashflowData)");
+    console.log(JSON.stringify(cashflowData));
+    
+
+    const legendA = cashflowData.chartLegent.nameA;
+    const legendB = cashflowData.chartLegent.nameB;
+    const legendC = cashflowData.chartLegent.nameC;
+    const legendD = cashflowData.chartLegent.nameD;
 
     const [isChartCurVisible, setIsChartCurVisible] = useState(true);
     const isChartAVisible = cashflowData.timelineSaveA.length <= 0 ? false : true;
     const isChartBVisible = cashflowData.timelineSaveB.length <= 0 ? false : true;
     const isChartCVisible = cashflowData.timelineSaveC.length <= 0 ? false : true;
+    const isChartDVisible = cashflowData.timelineSaveD.length <= 0 ? false : true;
 
     const saveChartData = (div) => {
         if(div === "A"){
@@ -31,6 +35,8 @@ const CashflowGraph = ({isExchanged}) => {
             cashflowData.timelineSaveB = cashflowData.timeline;
         }else if(div === "C"){
             cashflowData.timelineSaveC = cashflowData.timeline;
+        }else if(div === "D"){
+            cashflowData.timelineSaveD = cashflowData.timeline;
         }
         dispatch(CfSave(cashflowData));
 
@@ -45,6 +51,8 @@ const CashflowGraph = ({isExchanged}) => {
             cashflowData.timelineSaveB = [];
         }else if(div === "C"){
             cashflowData.timelineSaveC = [];
+        }else if(div === "D"){
+            cashflowData.timelineSaveD = [];
         }
         dispatch(CfSave(cashflowData));
 
@@ -53,13 +61,15 @@ const CashflowGraph = ({isExchanged}) => {
 
     }
 
-    const saveLegendChart = (e, div) => {
+    const saveLegend = (e, div) => {
         if(div === "A"){
-            cashflowData.legendChartA = e.target.value;
+            cashflowData.chartLegent.nameA = e.target.value;
         }else if(div === "B"){
-            cashflowData.legendChartB = e.target.value;
+            cashflowData.chartLegent.nameB = e.target.value;
         }else if(div === "C"){
-            cashflowData.legendChartC = e.target.value;
+            cashflowData.chartLegent.nameC = e.target.value;
+        }else if(div === "D"){
+            cashflowData.chartLegent.nameD = e.target.value;
         }
         dispatch(CfSave(cashflowData));
 
@@ -84,19 +94,22 @@ const CashflowGraph = ({isExchanged}) => {
             {isChartAVisible ? <Line type="monotone" dataKey="totalAssetSaveA" stroke="#FFC658" /> : null}
             {isChartBVisible ? <Line type="monotone" dataKey="totalAssetSaveB" stroke="#8DD1E1" /> : null}
             {isChartCVisible ? <Line type="monotone" dataKey="totalAssetSaveC" stroke="#D0ED57" /> : null}
+            {isChartDVisible ? <Line type="monotone" dataKey="totalAssetSaveD" stroke="#8884d8" /> : null}
             <Legend 
                 payload={[{ value: '현재', type: 'line', id: 'v1',color:"#8884d8" },
-                    { value: legendChartA, type: 'line', id: 'v2',color:"#FFC658" },
-                    { value: legendChartB, type: 'line', id: 'v3',color:"#8DD1E1" },
-                    { value: legendChartC, type: 'line', id: 'v4',color:"#D0ED57" }
+                    { value: legendA, type: 'line', id: 'v2',color:"#FFC658" },
+                    { value: legendB, type: 'line', id: 'v3',color:"#8DD1E1" },
+                    { value: legendC, type: 'line', id: 'v4',color:"#D0ED57" },
+                    { value: legendD, type: 'line', id: 'v5',color:"#8884d8" }
                 ]}
             />
             <Tooltip 
                 labelFormatter={(label) => `나이: ${label}`}
                 formatter={(value, name) => {
-                    if (name === "totalAssetSaveA") return [toKoreanMoneySimpleUnit(value), "A:"+legendChartA];
-                    if (name === "totalAssetSaveB") return [toKoreanMoneySimpleUnit(value), "B:"+legendChartB];
-                    if (name === "totalAssetSaveC") return [toKoreanMoneySimpleUnit(value), "C:"+legendChartC];
+                    if (name === "totalAssetSaveA") return [toKoreanMoneySimpleUnit(value), "A:"+legendA];
+                    if (name === "totalAssetSaveB") return [toKoreanMoneySimpleUnit(value), "B:"+legendB];
+                    if (name === "totalAssetSaveC") return [toKoreanMoneySimpleUnit(value), "C:"+legendC];
+                    if (name === "totalAssetSaveD") return [toKoreanMoneySimpleUnit(value), "D:"+legendD];
                     return [toKoreanMoneySimpleUnit(value), "현재"];
                 }}
             />
@@ -109,25 +122,32 @@ const CashflowGraph = ({isExchanged}) => {
                 <button onClick={()=>{setIsChartCurVisible(!isChartCurVisible)}}>{isChartCurVisible ? "현재데이터 감추기" : "현재데이터 보이기"}</button>
             </div>
             <div>
-                <label>범례A : </label><input value={legendChartA} onChange={(e)=>saveLegendChart(e, "A")}/>
+                <label>범례A : </label><input value={legendA} onChange={(e)=>saveLegend(e, "A")}/>
                 <br/>
                 <button onClick={()=>{saveChartData("A")}}>현재 데이터 → A에 저장하기</button>
                 <br/>
                 <button onClick={()=>{deleteChartData("A")}}>A데이터 삭제</button>
             </div>
             <div>
-                <label>범례B : </label><input value={legendChartB} onChange={(e)=>saveLegendChart(e, "B")}/>
+                <label>범례B : </label><input value={legendB} onChange={(e)=>saveLegend(e, "B")}/>
                 <br/>
                 <button onClick={()=>{saveChartData("B")}}>현재 데이터 → B에 저장하기</button>
                 <br/>
                 <button onClick={()=>{deleteChartData("B")}}>B데이터 삭제</button>
             </div>
             <div>
-                <label>범례C : </label><input value={legendChartC} onChange={(e)=>saveLegendChart(e, "C")}/>
+                <label>범례C : </label><input value={legendC} onChange={(e)=>saveLegend(e, "C")}/>
                 <br/>
                 <button onClick={()=>{saveChartData("C")}}>현재 데이터 → C에 저장하기</button>
                 <br/>
                 <button onClick={()=>{deleteChartData("C")}}>C데이터 삭제</button>
+            </div>
+            <div>
+                <label>범례D : </label><input value={legendD} onChange={(e)=>saveLegend(e, "D")}/>
+                <br/>
+                <button onClick={()=>{saveChartData("D")}}>현재 데이터 → D에 저장하기</button>
+                <br/>
+                <button onClick={()=>{deleteChartData("D")}}>D데이터 삭제</button>
             </div>
         </div>
         </Fragment>

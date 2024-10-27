@@ -2,7 +2,6 @@ import { Fragment } from "react"
 
 const CaseStudySide = ({menuEnum, clickedMenu, setClickedMenu}) => {
 
-
     return (
     <Fragment>
         <div className='left-title'>
@@ -11,7 +10,7 @@ const CaseStudySide = ({menuEnum, clickedMenu, setClickedMenu}) => {
             <ul className={'guide '+ (clickedMenu == menuEnum["세팅"]?"on":null)} onClick={()=>{setClickedMenu(menuEnum["세팅"])}}>세팅값(참고) {clickedMenu == menuEnum["세팅"]?<span>〉</span>:null} </ul>
             
             <ul className={'base '}>사회 이슈
-                <li className={clickedMenu == menuEnum["노인"]?"on":null} onClick={()=>{setClickedMenu(menuEnum["노인"])}}><span>1. 노인빈곤율 74%의 나라</span> {clickedMenu == menuEnum["노인"]?<span>〉</span>:null} </li>
+                <li className={clickedMenu == menuEnum["노인"]?"on":null} onClick={()=>{setClickedMenu(menuEnum["노인"])}}><span>1. 노인빈곤율 OECD 1위</span> {clickedMenu == menuEnum["노인"]?<span>〉</span>:null} </li>
                 <li className={clickedMenu == menuEnum["욜로"]?"on":null} onClick={()=>{setClickedMenu(menuEnum["욜로"])}}><span>2. YOLO로 살면?</span> {clickedMenu == menuEnum["욜로"]?<span>〉</span>:null} </li>
                 {/*  비트코인, 부동산 극단적 */}
                 <li className={clickedMenu == menuEnum["파이"]?"on":null} onClick={()=>{setClickedMenu(menuEnum["파이"])}}><span>3. 파이어족이 되려면?</span> {clickedMenu == menuEnum["파이"]?<span>〉</span>:null} </li>
@@ -30,8 +29,8 @@ const CaseStudySide = ({menuEnum, clickedMenu, setClickedMenu}) => {
 
             <ul className={'base '} onClick={()=>{}}>지출에 관하여
                 <li className={clickedMenu == menuEnum["십만"]?"on":null} onClick={()=>{setClickedMenu(menuEnum["십만"])}}><span>9. 10만원 더 아끼면?</span> {clickedMenu == menuEnum["십만"]?<span>〉</span>:null} </li>
-                <li className={clickedMenu == menuEnum["집사"]?"on":null} onClick={()=>{setClickedMenu(menuEnum["집사"])}}><span>10. 지금 집 사도 되나?</span> {clickedMenu == menuEnum["집사"]?<span>〉</span>:null} </li>
-                <li className={clickedMenu == menuEnum["차사"]?"on":null} onClick={()=>{setClickedMenu(menuEnum["차사"])}}><span>11. 지금 차 사도 되나?</span> {clickedMenu == menuEnum["차사"]?<span>〉</span>:null} </li>
+                <li className={clickedMenu == menuEnum["집사"]?"on":null} onClick={()=>{setClickedMenu(menuEnum["집사"])}}><span>10. 집 사면?</span> {clickedMenu == menuEnum["집사"]?<span>〉</span>:null} </li>
+                <li className={clickedMenu == menuEnum["차사"]?"on":null} onClick={()=>{setClickedMenu(menuEnum["차사"])}}><span>11. 차 사면?</span> {clickedMenu == menuEnum["차사"]?<span>〉</span>:null} </li>
             </ul>
             
 

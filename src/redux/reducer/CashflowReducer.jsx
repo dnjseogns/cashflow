@@ -4,17 +4,20 @@ const initialize = {
     isSaved : false,
     data : 
     {
+        //표
         timeline:[],
+        //표(현재가치)
         exchangedTimeline:[],
-        
+        //저장된 표
         timelineSaveA:[],
         timelineSaveB:[],
         timelineSaveC:[],
-        legendChartA:"Case1",
-        legendChartB:"Case2",
-        legendChartC:"Case3",
-
+        timelineSaveD:[],
+        //차트
         chart:[],
+        //차트범례
+        chartLegent:{nameA:"Case1", nameB:"Case2", nameC:"Case3", nameD:"Case4"},
+        //차트(현재가치)
         exchangedChart:[]
     }
 };

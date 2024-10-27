@@ -2,6 +2,20 @@ import { Fragment, useState } from "react";
 import CaseStudySide from "./CaseStudySide";
 import CaseStudyGraph from "./CaseStudyGraph";
 import "@/components/cashflow/Cashflow.css";
+import Setting from "./content/Setting";
+import Old from "./content/Old";
+import Yolo from "./content/Yolo";
+import Fire from "./content/Fire";
+import Marry from "./content/Marry";
+
+import Baby from "./content/Baby";
+import Parent from "./content/Parent";
+import Bank from "./content/Bank";
+import Company from "./content/Company";
+import Saving from "./content/Saving";
+
+import House from "./content/House";
+import Car from "./content/Car";
 
 const CaseStudy = () => {
     const menuEnum = {
@@ -32,8 +46,22 @@ const CaseStudy = () => {
                 <div className='cf-header'></div>
                 <div className='cf-content'>
                     <article className='data-area'>
-                        <CaseStudyGraph />
+                    {clickedMenu == menuEnum.세팅 ? <Setting><CaseStudyGraph /></Setting> : null}
+                    {clickedMenu == menuEnum.노인 ? <Old><CaseStudyGraph /></Old> : null}
+                    {clickedMenu == menuEnum.욜로 ? <Yolo><CaseStudyGraph /></Yolo> : null}
+                    {clickedMenu == menuEnum.파이 ? <Fire><CaseStudyGraph /></Fire> : null}
+                    {clickedMenu == menuEnum.결혼 ? <Marry><CaseStudyGraph /></Marry> : null}
+                    
+                    {clickedMenu == menuEnum.아기 ? <Baby><CaseStudyGraph /></Baby> : null}
+                    {clickedMenu == menuEnum.부모 ? <Parent><CaseStudyGraph /></Parent> : null}
+                    {clickedMenu == menuEnum.예금 ? <Bank><CaseStudyGraph /></Bank> : null}
+                    {clickedMenu == menuEnum.기업 ? <Company><CaseStudyGraph /></Company> : null}
+                    {clickedMenu == menuEnum.십만 ? <Saving><CaseStudyGraph /></Saving> : null}
+                    
+                    {clickedMenu == menuEnum.집사 ? <House><CaseStudyGraph /></House> : null}
+                    {clickedMenu == menuEnum.차사 ? <Car><CaseStudyGraph /></Car> : null}
                     </article>
+
                 </div>
             </section>
         </div>

@@ -690,6 +690,7 @@ export const useCashflowTableData = () => {
             const totalAssetSaveA = cashflowData.timelineSaveA.find((itemA)=>itemA.age == row.age)?.totalAsset;
             const totalAssetSaveB = cashflowData.timelineSaveB.find((itemB)=>itemB.age == row.age)?.totalAsset;
             const totalAssetSaveC = cashflowData.timelineSaveC.find((itemC)=>itemC.age == row.age)?.totalAsset;
+            const totalAssetSaveD = cashflowData.timelineSaveD.find((itemD)=>itemD.age == row.age)?.totalAsset;
 
             return {
                 age:row.age,
@@ -697,7 +698,8 @@ export const useCashflowTableData = () => {
                 totalAssetCurrent: row.totalAsset? Math.round(row.totalAsset): 0,
                 totalAssetSaveA: totalAssetSaveA? Math.round(totalAssetSaveA): 0,
                 totalAssetSaveB: totalAssetSaveB? Math.round(totalAssetSaveB): 0,
-                totalAssetSaveC: totalAssetSaveC? Math.round(totalAssetSaveC): 0
+                totalAssetSaveC: totalAssetSaveC? Math.round(totalAssetSaveC): 0,
+                totalAssetSaveD: totalAssetSaveD? Math.round(totalAssetSaveD): 0
             };
         });
         cashflowData.chart = newChart;
@@ -714,8 +716,8 @@ export const useCashflowTableData = () => {
         let isCompleted = surveyData.isCompleted;
         let base = surveyData.base;
 
-        console.log("surveyData",surveyData);
-        console.log("cashflowData",cashflowData);
+        // console.log("surveyData",surveyData);
+        // console.log("cashflowData",cashflowData);
 
         const exchangedTimeline = JSON.parse(JSON.stringify(cashflowData)).timeline.map((row)=>{
             const infla = row.inflationStack;

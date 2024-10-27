@@ -1,0 +1,40 @@
+.case-study-conten-top{margin: 20px;}
+.case-study-conten-top .title{font-weight: 600;}
+.case-study-conten-top .note{font-size: 16px;}
+
+.case-study-conten-bottom{margin: 20px; margin-bottom: 100px;}
+.case-study-conten-bottom .title{font-weight: 600;}
+.case-study-conten-bottom .note{font-size: 16px;}
+
+/* button area */
+.cf-right .cf-content .case-btn-area{position:absolute;}
+.cf-right .cf-content .case-btn-area{z-index: 9; top: 0px; right: 0px; margin-top: -1%; margin-right: 2%; }
+.cf-right .cf-content .case-btn-area{background-color: rgba(0,0,0,0.5); border-radius: 10px;}
+.cf-right .cf-content .case-btn-area div{display: inline-block; position: relative;}
+.cf-right .cf-content .case-btn-area .graph-btn::before{
+    content: attr(data-hover); position: absolute; z-index: 1;
+    bottom: -25px; left: -7px; font-size: 14px; font-weight: 600;
+    width: max-content; text-align: center; padding: 5px 5px;
+    visibility: hidden; opacity: 0; transition: opacity 0.5s ease-in-out;
+}
+.cf-right .cf-content .case-btn-area .graph-btn:hover::before{
+    visibility: visible; opacity: 1;
+}
+.cf-right .cf-content .case-btn-area .exchange-btn::before{
+    content: attr(data-hover); position: absolute; z-index: 1;
+    bottom: -25px; left: -10px; font-size: 14px; font-weight: 600;
+    width: max-content; text-align: center; padding: 5px 5px;
+    visibility: hidden; opacity: 0; transition: opacity 0.5s ease-in-out;
+}
+.cf-right .cf-content .case-btn-area .exchange-btn:hover::before{
+    visibility: visible; opacity: 1;
+}
+.cf-right .cf-content .case-btn-area img{margin: 7px; background-color: rgba(255, 255, 255, 0.5); border-radius: 10px; cursor: pointer; border: none;}
+.cf-right .cf-content .case-btn-area img.on{border: 1px solid white; background-color: white;}
+.cf-right .cf-content .case-btn-area img:hover{border: 2px solid rgba(0, 0, 0, 0.5);}
+
+
+/* 캐릭터 정보 */
+.cf-right .cf-content .character-card-wrap{display: flex;}
+.cf-right .cf-content .character-card-wrap .character-card{width: 25%; margin: 5px;}
+.cf-right .cf-content .character-card-wrap .character-card>img{width:300px; margin-bottom: 30px;}
