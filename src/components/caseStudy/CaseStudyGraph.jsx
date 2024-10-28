@@ -24,10 +24,10 @@ const CaseStudyGraph = () => {
 
 
     const legentPayload = [];
-    if(isChartAVisible){legentPayload.push({ value: legendA, type: 'line', id: 'v2',color:"#FFC658" });}
-    if(isChartBVisible){legentPayload.push({ value: legendB, type: 'line', id: 'v3',color:"#8DD1E1" });}
-    if(isChartCVisible){legentPayload.push({ value: legendC, type: 'line', id: 'v4',color:"#D0ED57" });}
-    if(isChartDVisible){legentPayload.push({ value: legendD, type: 'line', id: 'v5',color:"#8884d8" });}
+    if(isChartAVisible){legentPayload.push({ value: "A:"+legendA, type: 'line', id: 'v2',color:"#FFC658" });}
+    if(isChartBVisible){legentPayload.push({ value: "B:"+legendB, type: 'line', id: 'v3',color:"#8DD1E1" });}
+    if(isChartCVisible){legentPayload.push({ value: "C:"+legendC, type: 'line', id: 'v4',color:"#D0ED57" });}
+    if(isChartDVisible){legentPayload.push({ value: "D:"+legendD, type: 'line', id: 'v5',color:"#8884d8" });}
 
     return (
         <Fragment>

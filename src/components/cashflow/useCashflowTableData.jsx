@@ -376,7 +376,7 @@ export const useCashflowTableData = () => {
             if(isCompleted?.[menuEnum.ADD_MARRY] === true){
                 //지출 -> 배우자(partner) 지출
                 if(add.marryYn === "Y" && add.marryAge <= row.age){
-                    row.partnerTotalSpending = Math.round(((row?.carCost??0) + (row?.loanCost??0) + (row?.etcExpense??0)) * (add?.partnerSpendingPercent??100)/100)
+                    row.partnerTotalSpending = Math.round((row?.etcExpense??0) * (add?.partnerSpendingPercent??100)/100)
                 }
             }
             if(isCompleted?.[menuEnum.ADD_BABY] === true 
