@@ -10,7 +10,7 @@ const CashflowGraph = ({isExchanged, isRealEstate}) => {
     const surveyData = useSelector((store) => store.Survey).data;
     const cashflowData = useSelector((store) => store.Cashflow).data;
     let data = isExchanged ? cashflowData?.exchangedChart : cashflowData.chart;
-    if(isRealEstate){
+    if(!isRealEstate){
         let newData = JSON.parse(JSON.stringify(data));
         data = newData.map((item)=>{
             return {...item, totalAssetCurrent:item.noHouseTotalAssetCurrent

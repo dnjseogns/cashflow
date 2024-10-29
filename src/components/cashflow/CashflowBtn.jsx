@@ -32,8 +32,8 @@ function CashflowBtn({isGraph, setIsGraph, isExchanged, setIsExchanged, isRealEs
                 }}/>
         </div>
 
-        <div className="graph-btn" data-hover="부동산 제외">
-            <img className={isRealEstate?"on":""} src={houseImg} alt="부동산 제외" style={{width:"50px"}}
+        <div className="graph-btn" data-hover="부동산 포함">
+            <img className={isRealEstate?"on":""} src={houseImg} alt="부동산 포함" style={{width:"50px"}}
                 onClick={()=>{
                     setIsRealEstate(!isRealEstate);
                 }}/>
