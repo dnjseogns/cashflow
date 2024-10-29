@@ -3,10 +3,10 @@ import { Fragment, useEffect, useState } from 'react';
 import {useSelector, useDispatch} from "react-redux";
 import {CfSave, CfClean} from '@/redux/action/CashflowAction';
 import newCashflowData from "@/components/caseStudy/chartData/NoData.json";
-import 강욜로 from "@/images/강욜로.jpeg";
-import 박투잘 from "@/images/박투잘.jpeg";
-import 오잘나 from "@/images/오잘나.jpeg";
-import 김건실 from "@/images/김건실.jpeg";
+// import 강욜로 from "@/images/강욜로.jpeg";
+// import 박투잘 from "@/images/박투잘.jpeg";
+// import 오잘나 from "@/images/오잘나.jpeg";
+// import 김건실 from "@/images/김건실.jpeg";
 
 const Setting = ({children}) => {
     const dispatch = useDispatch();

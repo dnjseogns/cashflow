@@ -372,7 +372,9 @@ export const useCashflowTableData = () => {
             if(isCompleted?.[menuEnum.MY_SPENDING] === true){
                 //지출 -> 기타소비
                 if(row.age >= 65){
-                    row.etcExpense = Math.round(((my?.etcExpenseMonthly ?? 0) + 150000) * 12 * row.inflationStack) * -1;
+                    row.etcExpense = Math.round((my?.etcExpenseMonthly ?? 0) * 12 * row.inflationStack) * -1;
+                    // 병원비 15만원 더할까 하다가 그냥 냅둠
+                    // row.etcExpense = Math.round(((my?.etcExpenseMonthly ?? 0) + 150000) * 12 * row.inflationStack) * -1;
                 }else{
                     row.etcExpense = Math.round((my?.etcExpenseMonthly ?? 0) * 12 * row.inflationStack) * -1;
                 }
