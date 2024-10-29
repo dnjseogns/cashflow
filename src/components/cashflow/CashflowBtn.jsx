@@ -29,8 +29,6 @@ function CashflowBtn({isGraph, setIsGraph, isExchanged, setIsExchanged, isRealEs
             <img className={isExchanged?"on":""} src={exchangeImg} alt="현재가치로" style={{width:"50px"}}
                 onClick={()=>{
                     setIsExchanged(!isExchanged);
-                    // surveyData.btn.isExchanged = !isExchanged;
-                    // dispatch(SvSave(surveyData));
                 }}/>
         </div>
 
@@ -38,8 +36,6 @@ function CashflowBtn({isGraph, setIsGraph, isExchanged, setIsExchanged, isRealEs
             <img className={isRealEstate?"on":""} src={houseImg} alt="부동산 제외" style={{width:"50px"}}
                 onClick={()=>{
                     setIsRealEstate(!isRealEstate);
-                    // surveyData.btn.isExchanged = !isExchanged;
-                    // dispatch(SvSave(surveyData));
                 }}/>
         </div>
     </Fragment>
