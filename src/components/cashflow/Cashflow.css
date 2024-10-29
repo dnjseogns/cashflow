@@ -66,7 +66,7 @@
 .cf-right .cf-content .cf-btn-area .graph-btn:hover::before{
     visibility: visible; opacity: 1;
 }
-.cf-right .cf-content .cf-btn-area .exchange-btn::before{
+/* .cf-right .cf-content .cf-btn-area .exchange-btn::before{
     content: attr(data-hover); position: absolute; z-index: 1;
     bottom: -25px; left: -10px; font-size: 14px; font-weight: 600;
     width: max-content; text-align: center; padding: 5px 5px;
@@ -74,7 +74,7 @@
 }
 .cf-right .cf-content .cf-btn-area .exchange-btn:hover::before{
     visibility: visible; opacity: 1;
-}
+} */
 .cf-right .cf-content .cf-btn-area img{margin: 7px; background-color: rgba(255, 255, 255, 0.5); border-radius: 10px; cursor: pointer; border: none;}
 .cf-right .cf-content .cf-btn-area img.on{border: 1px solid white; background-color: white;}
 .cf-right .cf-content .cf-btn-area img:hover{border: 2px solid rgba(0, 0, 0, 0.5);}

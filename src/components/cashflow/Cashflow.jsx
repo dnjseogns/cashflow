@@ -15,6 +15,7 @@ function Cashflow(){
 
     const [isGraph, setIsGraph] = useState(false);
     const [isExchanged, setIsExchanged] = useState(false);
+    const [isRealEstate, setIsRealEstate] = useState(false);
 
     return (
     <Fragment>
@@ -30,12 +31,12 @@ function Cashflow(){
                 
                 <article className='data-area'>
                     {isGraph === false
-                    ? <CashflowTable isExchanged={isExchanged}/>
-                    : <CashflowGraph isExchanged={isExchanged}/>}
+                    ? <CashflowTable isExchanged={isExchanged} />
+                    : <CashflowGraph isExchanged={isExchanged} isRealEstate={isRealEstate}/>}
                 </article>
 
                 <div className='cf-btn-area'>
-                    <CashflowBtn isGraph={isGraph} setIsGraph={setIsGraph} isExchanged={isExchanged} setIsExchanged={setIsExchanged}/>
+                    <CashflowBtn isGraph={isGraph} setIsGraph={setIsGraph} isExchanged={isExchanged} setIsExchanged={setIsExchanged} isRealEstate={isRealEstate} setIsRealEstate={setIsRealEstate}/>
                 </div>
             </div>
         </section>

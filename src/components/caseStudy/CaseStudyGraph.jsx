@@ -8,9 +8,22 @@ import CaseStudyBtn from "./CaseStudyBtn";
 const CaseStudyGraph = () => {
     const [isGraph, setIsGraph] = useState(true);
     const [isExchanged, setIsExchanged] = useState(true);
+    const [isRealEstate, setIsRealEstate] = useState(false);
 
     const cashflowData = useSelector((store) => store.Cashflow).data;
-    const data = isExchanged ? cashflowData?.exchangedChart : cashflowData.chart;
+    // const data = isExchanged ? cashflowData?.exchangedChart : cashflowData.chart;
+    let data = isExchanged ? cashflowData?.exchangedChart : cashflowData.chart;
+    if(isRealEstate){
+        let newData = JSON.parse(JSON.stringify(data));
+        data = newData.map((item)=>{
+            return {...item, totalAssetCurrent:item.noHouseTotalAssetCurrent
+                , totalAssetSaveA:item.noHouseTotalAssetSaveA
+                , totalAssetSaveB:item.noHouseTotalAssetSaveB
+                , totalAssetSaveC:item.noHouseTotalAssetSaveC
+                , totalAssetSaveD:item.noHouseTotalAssetSaveD
+            }
+        })
+    }
 
     const legendA = cashflowData.chartLegent.nameA;
     const legendB = cashflowData.chartLegent.nameB;
@@ -35,7 +48,8 @@ const CaseStudyGraph = () => {
         
         <div style={{position:"relative"}}>
             <div className='case-btn-area'>
-                <CaseStudyBtn isGraph={isGraph} setIsGraph={setIsGraph} isExchanged={isExchanged} setIsExchanged={setIsExchanged}/>
+                <CaseStudyBtn isGraph={isGraph} setIsGraph={setIsGraph} isExchanged={isExchanged} setIsExchanged={setIsExchanged} 
+                                isRealEstate={isRealEstate} setIsRealEstate={setIsRealEstate}/>
             </div>
 
             <LineChart width={1580} height={750} 

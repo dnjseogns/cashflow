@@ -371,7 +371,11 @@ export const useCashflowTableData = () => {
             }
             if(isCompleted?.[menuEnum.MY_SPENDING] === true){
                 //지출 -> 기타소비
-                row.etcExpense = Math.round((my?.etcExpenseMonthly ?? 0) * 12 * row.inflationStack) * -1;
+                if(row.age >= 65){
+                    row.etcExpense = Math.round(((my?.etcExpenseMonthly ?? 0) + 150000) * 12 * row.inflationStack) * -1;
+                }else{
+                    row.etcExpense = Math.round((my?.etcExpenseMonthly ?? 0) * 12 * row.inflationStack) * -1;
+                }
             }
             if(isCompleted?.[menuEnum.ADD_MARRY] === true){
                 //지출 -> 배우자(partner) 지출
@@ -380,6 +384,7 @@ export const useCashflowTableData = () => {
                 }
             }
             if(isCompleted?.[menuEnum.ADD_BABY] === true 
+                //지출 -> 양육비
                 && ((add.curBabyYn === "Y" && add.curBabyList.length >= 1) || (add.willBabyYn === "Y" && add.willBabyList.length >= 1))
             ){
                 let babyCost = 0;
@@ -414,6 +419,7 @@ export const useCashflowTableData = () => {
                 row.babyCost = babyCost;
             }
             if(isCompleted?.[menuEnum.ADD_PARENT] === true){
+                //지출->부양비
                 if(add.parentCareYn === "Y"){
                     let parentCost = 0;
                     const parentAge = Number(add.parentCurrentAge) + loopCnt - 1;
@@ -675,6 +681,7 @@ export const useCashflowTableData = () => {
             if(isCompleted?.[menuEnum.MY_ASSET] === true){
                 //누적자산 -> 합계
                 row.totalAsset = (row.assetLoanStack ?? 0) + (row.assetSavingStack ?? 0) + (row.assetInvestStack ?? 0)  + (row.assetHousePriceStack ?? 0);
+                row.noHouseTotalAsset = (row.assetLoanStack ?? 0) + (row.assetSavingStack ?? 0) + (row.assetInvestStack ?? 0);
             }
 
             //결과 쌓기
@@ -691,6 +698,11 @@ export const useCashflowTableData = () => {
             const totalAssetSaveB = cashflowData.timelineSaveB.find((itemB)=>itemB.age == row.age)?.totalAsset;
             const totalAssetSaveC = cashflowData.timelineSaveC.find((itemC)=>itemC.age == row.age)?.totalAsset;
             const totalAssetSaveD = cashflowData.timelineSaveD.find((itemD)=>itemD.age == row.age)?.totalAsset;
+            
+            const noHouseTotalAssetSaveA = cashflowData.timelineSaveA.find((itemA)=>itemA.age == row.age)?.noHouseTotalAsset;
+            const noHouseTotalAssetSaveB = cashflowData.timelineSaveB.find((itemB)=>itemB.age == row.age)?.noHouseTotalAsset;
+            const noHouseTotalAssetSaveC = cashflowData.timelineSaveC.find((itemC)=>itemC.age == row.age)?.noHouseTotalAsset;
+            const noHouseTotalAssetSaveD = cashflowData.timelineSaveD.find((itemD)=>itemD.age == row.age)?.noHouseTotalAsset;
 
             return {
                 age:row.age,
@@ -699,11 +711,15 @@ export const useCashflowTableData = () => {
                 totalAssetSaveA: totalAssetSaveA? Math.round(totalAssetSaveA): 0,
                 totalAssetSaveB: totalAssetSaveB? Math.round(totalAssetSaveB): 0,
                 totalAssetSaveC: totalAssetSaveC? Math.round(totalAssetSaveC): 0,
-                totalAssetSaveD: totalAssetSaveD? Math.round(totalAssetSaveD): 0
+                totalAssetSaveD: totalAssetSaveD? Math.round(totalAssetSaveD): 0,
+                noHouseTotalAssetCurrent: row.noHouseTotalAsset? Math.round(row.noHouseTotalAsset): 0,
+                noHouseTotalAssetSaveA: noHouseTotalAssetSaveA? Math.round(noHouseTotalAssetSaveA): 0,
+                noHouseTotalAssetSaveB: noHouseTotalAssetSaveB? Math.round(noHouseTotalAssetSaveB): 0,
+                noHouseTotalAssetSaveC: noHouseTotalAssetSaveC? Math.round(noHouseTotalAssetSaveC): 0,
+                noHouseTotalAssetSaveD: noHouseTotalAssetSaveD? Math.round(noHouseTotalAssetSaveD): 0
             };
         });
         cashflowData.chart = newChart;
-
 
 
         //결과
@@ -752,6 +768,7 @@ export const useCashflowTableData = () => {
             if(isValueExist(row?.assetInvestStack)){rowResult={...rowResult, assetInvestStack:Math.round(row.assetInvestStack / infla)}}
             if(isValueExist(row?.assetHousePriceStack)){rowResult={...rowResult, assetHousePriceStack:Math.round(row.assetHousePriceStack / infla)}}
             if(isValueExist(row?.totalAsset)){rowResult={...rowResult, totalAsset:Math.round(row.totalAsset / infla)}}
+            if(isValueExist(row?.noHouseTotalAsset)){rowResult={...rowResult, noHouseTotalAsset:Math.round(row.noHouseTotalAsset / infla)}}
             
             return rowResult;
         });
@@ -767,6 +784,13 @@ export const useCashflowTableData = () => {
             if(isValueExist(row?.totalAssetSaveA)){rowResult={...rowResult, totalAssetSaveA:Math.round(row.totalAssetSaveA / infla)}}
             if(isValueExist(row?.totalAssetSaveB)){rowResult={...rowResult, totalAssetSaveB:Math.round(row.totalAssetSaveB / infla)}}
             if(isValueExist(row?.totalAssetSaveC)){rowResult={...rowResult, totalAssetSaveC:Math.round(row.totalAssetSaveC / infla)}}
+            if(isValueExist(row?.totalAssetSaveD)){rowResult={...rowResult, totalAssetSaveD:Math.round(row.totalAssetSaveD / infla)}}
+            
+            if(isValueExist(row?.noHouseTotalAssetCurrent)){rowResult={...rowResult, noHouseTotalAssetCurrent:Math.round(row.noHouseTotalAssetCurrent / infla)}}
+            if(isValueExist(row?.noHouseTotalAssetSaveA)){rowResult={...rowResult, noHouseTotalAssetSaveA:Math.round(row.noHouseTotalAssetSaveA / infla)}}
+            if(isValueExist(row?.noHouseTotalAssetSaveB)){rowResult={...rowResult, noHouseTotalAssetSaveB:Math.round(row.noHouseTotalAssetSaveB / infla)}}
+            if(isValueExist(row?.noHouseTotalAssetSaveC)){rowResult={...rowResult, noHouseTotalAssetSaveC:Math.round(row.noHouseTotalAssetSaveC / infla)}}
+            if(isValueExist(row?.noHouseTotalAssetSaveD)){rowResult={...rowResult, noHouseTotalAssetSaveD:Math.round(row.noHouseTotalAssetSaveD / infla)}}
             
             return rowResult;
         });

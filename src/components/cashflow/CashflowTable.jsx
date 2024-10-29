@@ -98,7 +98,7 @@ function CashflowTable({isExchanged}){
                         <th>합계</th>
 
                         <th>주거비<br/><Mapping txt="(5.ⓐ/ 8.)"/></th>
-                        <th>차량비<br/><Mapping txt="(5.ⓑ/ 9.)"/></th>
+                        <th>차량/교통비<br/><Mapping txt="(5.ⓑ/ 9.)"/></th>
                         <th>대출이자<br/><Mapping txt="(5.ⓒ)"/></th>
                         <th>기타소비<br/><Mapping txt="(5.ⓓ)"/></th>
                         {isPartnerSpendingVisible ? <th>배우자 지출<br/><Mapping txt="(6.)"/></th> : null}

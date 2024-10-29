@@ -6,10 +6,21 @@ import { toKoreanMoneySimpleUnit } from "@/utils/util.js";
 import {SvSave, SvClean} from '@/redux/action/SurveyAction';
 import {CfSave, CfClean} from '@/redux/action/CashflowAction';
 
-const CashflowGraph = ({isExchanged}) => {
+const CashflowGraph = ({isExchanged, isRealEstate}) => {
     const surveyData = useSelector((store) => store.Survey).data;
     const cashflowData = useSelector((store) => store.Cashflow).data;
-    const data = isExchanged ? cashflowData?.exchangedChart : cashflowData.chart;
+    let data = isExchanged ? cashflowData?.exchangedChart : cashflowData.chart;
+    if(isRealEstate){
+        let newData = JSON.parse(JSON.stringify(data));
+        data = newData.map((item)=>{
+            return {...item, totalAssetCurrent:item.noHouseTotalAssetCurrent
+                , totalAssetSaveA:item.noHouseTotalAssetSaveA
+                , totalAssetSaveB:item.noHouseTotalAssetSaveB
+                , totalAssetSaveC:item.noHouseTotalAssetSaveC
+                , totalAssetSaveD:item.noHouseTotalAssetSaveD
+            }
+        })
+    }
     const dispatch = useDispatch();
 
 
@@ -26,7 +37,7 @@ const CashflowGraph = ({isExchanged}) => {
     const isChartAVisible = cashflowData.timelineSaveA.length <= 0 ? false : true;
     const isChartBVisible = cashflowData.timelineSaveB.length <= 0 ? false : true;
     const isChartCVisible = cashflowData.timelineSaveC.length <= 0 ? false : true;
-    const isChartDVisible = cashflowData.timelineSaveD.length <= 0 ? false : true;
+    const isChartDVisible = false;
 
     const saveChartData = (div) => {
         if(div === "A"){
@@ -90,17 +101,17 @@ const CashflowGraph = ({isExchanged}) => {
             <XAxis dataKey="age" />
             {/* <YAxis label={{ value: '단위(원)', angle: 0, position: {x:80,y:-20}}} tickFormatter={toKoreanMoneySimpleUnit}/> */}
             <YAxis tickFormatter={toKoreanMoneySimpleUnit}/>
-            {isChartCurVisible ? <Line type="monotone" dataKey="totalAssetCurrent" stroke="#8884d8" /> : null}
-            {isChartAVisible ? <Line type="monotone" dataKey="totalAssetSaveA" stroke="#FFC658" /> : null}
-            {isChartBVisible ? <Line type="monotone" dataKey="totalAssetSaveB" stroke="#8DD1E1" /> : null}
-            {isChartCVisible ? <Line type="monotone" dataKey="totalAssetSaveC" stroke="#D0ED57" /> : null}
-            {isChartDVisible ? <Line type="monotone" dataKey="totalAssetSaveD" stroke="#8884d8" /> : null}
+            {isChartCurVisible ? <Line type="monotone" dataKey={"totalAssetCurrent"} stroke="#8884d8" /> : null}
+            {isChartAVisible ? <Line type="monotone" dataKey={"totalAssetSaveA"} stroke="#FFC658" /> : null}
+            {isChartBVisible ? <Line type="monotone" dataKey={"totalAssetSaveB"} stroke="#8DD1E1" /> : null}
+            {isChartCVisible ? <Line type="monotone" dataKey={"totalAssetSaveC"} stroke="#D0ED57" /> : null}
+            {/* {isChartDVisible ? <Line type="monotone" dataKey="totalAssetSaveD" stroke="#8884d8" /> : null} */}
             <Legend 
                 payload={[{ value: '현재', type: 'line', id: 'v1',color:"#8884d8" },
                     { value: legendA, type: 'line', id: 'v2',color:"#FFC658" },
                     { value: legendB, type: 'line', id: 'v3',color:"#8DD1E1" },
-                    { value: legendC, type: 'line', id: 'v4',color:"#D0ED57" },
-                    { value: legendD, type: 'line', id: 'v5',color:"#8884d8" }
+                    { value: legendC, type: 'line', id: 'v4',color:"#D0ED57" }
+                    // { value: legendD, type: 'line', id: 'v5',color:"#8884d8" }
                 ]}
             />
             <Tooltip 
@@ -109,7 +120,7 @@ const CashflowGraph = ({isExchanged}) => {
                     if (name === "totalAssetSaveA") return [toKoreanMoneySimpleUnit(value), "A:"+legendA];
                     if (name === "totalAssetSaveB") return [toKoreanMoneySimpleUnit(value), "B:"+legendB];
                     if (name === "totalAssetSaveC") return [toKoreanMoneySimpleUnit(value), "C:"+legendC];
-                    if (name === "totalAssetSaveD") return [toKoreanMoneySimpleUnit(value), "D:"+legendD];
+                    // if (name === "totalAssetSaveD") return [toKoreanMoneySimpleUnit(value), "D:"+legendD];
                     return [toKoreanMoneySimpleUnit(value), "현재"];
                 }}
             />
@@ -142,13 +153,13 @@ const CashflowGraph = ({isExchanged}) => {
                 <br/>
                 <button onClick={()=>{deleteChartData("C")}}>C데이터 삭제</button>
             </div>
-            <div>
+            {/* <div>
                 <label>범례D : </label><input value={legendD} onChange={(e)=>saveLegend(e, "D")}/>
                 <br/>
                 <button onClick={()=>{saveChartData("D")}}>현재 데이터 → D에 저장하기</button>
                 <br/>
                 <button onClick={()=>{deleteChartData("D")}}>D데이터 삭제</button>
-            </div>
+            </div> */}
         </div>
         </Fragment>
     )
