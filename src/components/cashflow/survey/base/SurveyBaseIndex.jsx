@@ -14,7 +14,7 @@ function SurveyBaseIndex({completeBtnClickCnt, commonCompleteLogic}){
     const indexInflation = surveyData.base?.indexInflation ?? "3.0";
     const bankInterest = surveyData.base?.bankInterest ?? "2.7";
     const loanInterest = surveyData.base?.loanInterest ?? "5.0";
-    const realEstateGrouthRate = surveyData.base?.realEstateGrouthRate ?? "4.0";
+    const realEstateGrouthRate = surveyData.base?.realEstateGrouthRate ?? "3.0";
     // const carDepreciationRate = surveyData.base?.carDepreciationRate ?? "15.0";
     const investIncomeRate = surveyData.base?.investIncomeRate ?? "4.0";
 
