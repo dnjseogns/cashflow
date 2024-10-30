@@ -17,7 +17,7 @@ const Marry = ({children}) => {
             <h4 className='title'>Case4. 결혼을 하면?</h4>
             <p>
                 결혼을 하면 돈모으기 좋다고 하던데, 정말일까?
-                <br/>노후 적정 생활비는 부부기준 268만원, 개인기준 165만원으로 개인 생활비가 1.6배 더 많습니다.
+                <br/>노후 적정 생활비는 부부기준 268만원(1인134만원), 개인기준 165만원으로 개인기준 31만원 더 많습니다.
                 <span className='note'> (참고 - https://www.nhis.or.kr/static/alim/paper/oldpaper/202306/sub/section3_3.html)</span>
             </p>
         </div>

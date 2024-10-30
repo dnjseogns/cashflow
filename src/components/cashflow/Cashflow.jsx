@@ -13,8 +13,8 @@ import { useCashflowTableData } from './useCashflowTableData.jsx';
 function Cashflow(){
     useCashflowTableData();
 
-    const [isGraph, setIsGraph] = useState(false);
-    const [isExchanged, setIsExchanged] = useState(false);
+    const [isGraph, setIsGraph] = useState(true);
+    const [isExchanged, setIsExchanged] = useState(true);
     const [isRealEstate, setIsRealEstate] = useState(false);
 
     return (
