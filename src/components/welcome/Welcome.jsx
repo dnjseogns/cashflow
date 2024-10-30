@@ -10,7 +10,7 @@ function Welcome({setIsCalcCashflow, setIsCaseStudy}){
         </p>
         <div className='welcome-btn-wrap'>
           <button onClick={()=>{setIsCalcCashflow(true)}}>100세까지 현금흐름 계산하기</button>
-          <button onClick={()=>{setIsCaseStudy(true)}}>Case Study 현금흐름 비교하기</button>
+          <button onClick={()=>{setIsCaseStudy(true)}}>현금흐름으로 사회이슈 보기</button>
         </div>
         <p style={{marginRight:"0px"}}>
           버전: 1.0 (마지막 수정 : 2024-10-30)
