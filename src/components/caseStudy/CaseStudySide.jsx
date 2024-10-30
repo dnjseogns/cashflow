@@ -20,7 +20,7 @@ const CaseStudySide = ({menuEnum, clickedMenu, setClickedMenu}) => {
             </ul>
 
             <ul className={'base '} onClick={()=>{}}>투자에 관하여
-                <li className={clickedMenu == menuEnum["예금"]?"on":null} onClick={()=>{setClickedMenu(menuEnum["예금"])}}><span>7. 예금만 하면?</span> {clickedMenu == menuEnum["예금"]?<span>〉</span>:null} </li>
+                <li className={clickedMenu == menuEnum["예금"]?"on":null} onClick={()=>{setClickedMenu(menuEnum["예금"])}}><span>7. 수익률 1%의 차이</span> {clickedMenu == menuEnum["예금"]?<span>〉</span>:null} </li>
             </ul>
 
             <ul className={'base '} onClick={()=>{}}>수입에 관하여
@@ -29,7 +29,7 @@ const CaseStudySide = ({menuEnum, clickedMenu, setClickedMenu}) => {
 
             <ul className={'base '} onClick={()=>{}}>지출에 관하여
                 <li className={clickedMenu == menuEnum["십만"]?"on":null} onClick={()=>{setClickedMenu(menuEnum["십만"])}}><span>9. 10만원 더 아끼면?</span> {clickedMenu == menuEnum["십만"]?<span>〉</span>:null} </li>
-                <li className={clickedMenu == menuEnum["집사"]?"on":null} onClick={()=>{setClickedMenu(menuEnum["집사"])}}><span>10. 집 사면?</span> {clickedMenu == menuEnum["집사"]?<span>〉</span>:null} </li>
+                <li className={clickedMenu == menuEnum["집사"]?"on":null} onClick={()=>{setClickedMenu(menuEnum["집사"])}}><span>10. 주택매매 영끌하면?</span> {clickedMenu == menuEnum["집사"]?<span>〉</span>:null} </li>
                 <li className={clickedMenu == menuEnum["차사"]?"on":null} onClick={()=>{setClickedMenu(menuEnum["차사"])}}><span>11. 차 사면?</span> {clickedMenu == menuEnum["차사"]?<span>〉</span>:null} </li>
             </ul>
             

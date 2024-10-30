@@ -23,8 +23,8 @@ const Yolo = ({children}) => {
         {children}
         
         <div className="case-study-conten-bottom">
-            <h4 className='title'>요약</h4>
-            <p>A : 28~55세(초봉2900만,저축10%이상) → 34세(아반떼구매) → 40세(집매매3억) → 55세~65세(재취업,기존연봉60%) → 65세(국민연금수령)</p>
+            <h4 className='title'>시나리오</h4>
+            <p>A : 28~55세(초봉2900만,저축 월30만원 이상) → 34세(아반떼구매) → 40세(집매매3억) → 55세~65세(재취업,기존연봉60%수준) → 65세(국민연금수령)</p>
             
             <h4 className='title'>욜로 이야기</h4>
             <p>

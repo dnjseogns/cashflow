@@ -134,14 +134,14 @@ function SurveyMyFixedAsset({completeBtnClickCnt, commonCompleteLogic}){
     return(
     <Fragment>
         <div>
-            <p className="question">(1) 독립하여 살고 계신가요?</p>
+            <p className="question">(1) 자취 또는 독립하셨나요?</p>
             <p className="radio-wrap">
                 <input type="radio" name="houseYn" id="houseYn_N" value="N" checked={houseYn==="N"?true:false} onChange={(e)=>{surveyOnChange(e,"houseYn")}}/><label htmlFor="houseYn_N">아니오</label>
                 <input type="radio" name="houseYn" id="houseYn_Y" value="Y" checked={houseYn==="Y"?true:false} onChange={(e)=>{surveyOnChange(e,"houseYn")}}/><label htmlFor="houseYn_Y">예</label>
             </p>
             {houseYn === "Y"
             ?<Fragment>
-                <p className="question-add">※ 거주 정보를 입력해주세요.</p>
+                <p className="question-add">(1-1) 거주 정보를 입력해주세요.</p>
                 <table className='survey-table'>
                     <colgroup>
                         {/* <col width={"10%"}/>
@@ -183,7 +183,7 @@ function SurveyMyFixedAsset({completeBtnClickCnt, commonCompleteLogic}){
                     </tbody>
                 </table>
 
-                <p className="question-add">※ {house[0].livingType==="월/전세" ? "보증금" : "주택가"}<i>({toKoreanMoneyUnit(house[0].housePriceTotal)})</i>의 중 대출 정보를 입력해주세요.</p>
+                <p className="question-add">(1-2) {house[0].livingType==="월/전세" ? "보증금" : "주택가"}<i>({toKoreanMoneyUnit(house[0].housePriceTotal)})</i>의 중 대출 정보를 입력해주세요.</p>
                 <p>- 잔여 대출금<Mapping txt="(ⓐ)"/> : <input className='btn1' value={houseLoanPrice.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"houseLoanPrice")}}/>({toKoreanMoneyUnit(houseLoanPrice)})</p>
                 <p>- 대출 금리 : <input className='btn1' value={houseLoanRate} onChange={(e)=>{surveyOnChange(e,"houseLoanRate")}}/>%</p>
             </Fragment>
@@ -200,11 +200,11 @@ function SurveyMyFixedAsset({completeBtnClickCnt, commonCompleteLogic}){
             </p>
         {carYn === "Y"
         ? <Fragment>
-            <p className="question-add">※ 자동차 대출 정보를 입력해주세요.</p>
+            <p className="question-add">(2-1) 자동차 대출 정보를 입력해주세요.</p>
             <p>- 잔여 대출금<Mapping txt="(ⓑ)"/> : <input className='btn1' value={carLoanPrice.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"carLoanPrice")}}/>({toKoreanMoneyUnit(carLoanPrice)})</p>
             <p>- 대출 금리 : <input className='btn1' value={carLoanRate} onChange={(e)=>{surveyOnChange(e,"carLoanRate")}}/>%</p>
 
-            <p className="question-add">※ 월 평균 차량 유지비 입력해주세요.<i style={{fontSize:"14px"}}>(주유비 + 보험료 + 유지보수비 등)</i></p>
+            <p className="question-add">(2-2) 월 평균 차량 유지비 입력해주세요.<i style={{fontSize:"14px"}}>(주유비 + 보험료 + 유지보수비 등)</i></p>
             <p>- <Mapping txt="ⓓ"/> : <input className='btn1' value={carCostMonthly.toLocaleString('ko-KR')} onChange={(e)=>{surveyOnChange(e,"carCostMonthly")}}/>({toKoreanMoneyUnit(carCostMonthly)})</p>
             <p className='note'>※ 차량 가격의 1.5% 이상의 월 유지비가 나옵니다. ex) 3000만원 자동차의 유지비 → 45만원</p>
         </Fragment>
